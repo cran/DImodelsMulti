@@ -1,0 +1,167 @@
+---
+title: "On prediction from multivariate repeated measures DI models"
+output: rmarkdown::html_vignette
+vignette: >
+  %\VignetteIndexEntry{On prediction from multivariate repeated measures DI models}
+  %\VignetteEngine{knitr::rmarkdown}
+  %\VignetteEncoding{UTF-8}
+---
+
+```{css styling, echo=FALSE}
+span.R {
+  font-family: Courier New;
+}
+```
+
+```{r, include = FALSE}
+knitr::opts_chunk$set(
+  collapse = TRUE,
+  comment = "#>"
+)
+
+options(crayon.enabled = TRUE)
+
+ansi_aware_handler <- function(x, options)
+{
+  paste0(
+    "<pre class=\"r-output\"><code>",
+    fansi::sgr_to_html(x = x, warn = FALSE, term.cap = "256"),
+    "</code></pre>"
+  )
+}
+
+old_hooks <- fansi::set_knit_hooks(knitr::knit_hooks,
+                                 which = c("output", "message", "error", "warning"))
+knitr::knit_hooks$set(
+  output = ansi_aware_handler,
+  message = ansi_aware_handler,
+  warning = ansi_aware_handler,
+  error = ansi_aware_handler
+)
+```
+
+```{r setup}
+library(DImodelsMulti)
+```
+
+For this vignette, we will use the final model achieved in the vignette 
+[workflow](DImulti_workflow.html) as an example.
+```{r DImulti_modelEx}
+modelFinal <- DImulti(y = c("Y1", "Y2", "Y3"), eco_func = c("NA", "UN"), time = c("time", "CS"),
+                    unit_IDs = 1, prop = 2:5, data = simMVRM, DImodel = "AV", method = "REML",
+                    estimate_theta = TRUE)
+print(modelFinal)
+```
+
+<h2>Prediction how-to overview </h2>
+
+To predict for any data from this model, which has custom class <span class="R">DImulti</span>, we 
+use the <span class="R">predict()</span> function, which is formatted as below, where object is the
+<span class="R">DImulti</span> model object, <span class="R">newdata</span> is a dataframe or tibble
+containing the community designs that you wish to predict from, if left <span class="R">NULL</span>
+then the data used to train the model will be predicted from instead, and 
+<span class="R">stacked</span> is a boolean which determines whether the output from this function
+will be given in a stacked/long format (<span class="R">TRUE</span>) or wide format 
+(<span class="R">FALSE</span>).
+```{r predict_layout, eval=FALSE}
+predict.DImulti(object, newdata = NULL, stacked = TRUE, ...)
+```
+
+
+The first option for prediction is to simply provide the model object to the function to predict 
+from the dataframe we used to train it (<span class="R">simMVRM</span>). By default, the prediction 
+dataframe is output in a stacked format, as it is more commonly used for plotting than a wide 
+output.
+```{r predict_default}
+head(predict(modelFinal))
+```
+
+If we would rather a wide output, which can be easier to infer from without plotting, we can set
+<span class="R">stacked = FALSE</span>.
+```{r predict_wide}
+head(predict(modelFinal, stacked = FALSE))
+```
+
+We can also provide some subset of the original dataset rather than using it all.
+```{r predict_subset}
+predict(modelFinal, newdata = simMVRM[c(1, 4, 7, 10, 21), ])
+```
+
+Or we can use a dataset which follows the same format as <span class="R">simMVRM</span> but is 
+entirely new data. If no information is supplied for which ecosystem functions or time points from 
+which you wish to predict, then all will be included automatically.
+```{r predict_newSim}
+newSim <- data.frame(plot = c(1, 2),
+                     p1 = c(0.25, 0.6),
+                     p2 = c(0.25, 0.2),
+                     p3 = c(0.25, 0.1),
+                     p4 = c(0.25, 0.1)) 
+
+predict(modelFinal, newdata = newSim)
+```
+
+Otherwise, only the ecosystem functions/time points specified will be predicted from. As our dataset
+is in a wide format, we will need to supply some arbitrary value to our desired ecosystem function 
+column.
+```{r predict_Y1}
+newSim <- data.frame(plot = c(1, 2),
+                     p1 = c(0.25, 0.6),
+                     p2 = c(0.25, 0.2),
+                     p3 = c(0.25, 0.1),
+                     p4 = c(0.25, 0.1),
+                     Y1 = 0) 
+
+predict(modelFinal, newdata = newSim)
+```
+
+In the case that some information is missing from this new data, the function will try to set a 
+value for the column and will inform the user through a warning printed to the console.
+```{r predict_newSim_missingID}
+newSim <- data.frame(p1 = c(0.25, 0.6),
+                     p2 = c(0.25, 0.2),
+                     p3 = c(0.25, 0.1),
+                     p4 = c(0.25, 0.1)) 
+
+predict(modelFinal, newdata = newSim)
+```
+
+<h2>Caution</h2>
+
+<h3>Merging predictions</h3>
+
+You may wish to merge your predictions to your <span class="R">newdata</span> dataframe for 
+plotting, printing, or further analysis.
+As the function <span class="R">DImulti()</span>, and as a consequence, the function 
+<span class="R">predict.DImulti()</span>, sorts the data it is provided, to ensure proper labelling,
+you may not be able to directly use <span class="R">cbind()</span> to append the predictions to
+your dataset. 
+In this case, ensure the unit_IDs column contains unique identifiers for your data rows and that 
+you specify <span class="R">stacked</span> to correctly match your data layout.
+Then use the function <span class="R">merge()</span>.
+```{r predict_newSim_merge}
+newSim <- data.frame(plot = c(1, 2),
+                     p1 = c(0.25, 0.6),
+                     p2 = c(0.25, 0.2),
+                     p3 = c(0.25, 0.1),
+                     p4 = c(0.25, 0.1)) 
+
+preds <- predict(modelFinal, newdata = newSim, stacked = FALSE)
+
+merge(newSim, preds, by = "plot")
+```
+
+
+<h3>Non-unique unit_IDs</h3>
+
+In the case that your <span class="R">newdata</span> contains non-unique unit_IDs values and 
+<span class="R">stacked = FALSE</span>, any rows with common unit_IDs will be aggregated using the
+<span class="R">mean()</span> function.
+```{r predict_newSim_aggregate}
+newSim <- data.frame(plot = c(1, 1),
+                     p1 = c(0.25, 0.6),
+                     p2 = c(0.25, 0.2),
+                     p3 = c(0.25, 0.1),
+                     p4 = c(0.25, 0.1)) 
+
+predict(modelFinal, newdata = newSim, stacked = FALSE)
+```

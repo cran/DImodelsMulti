@@ -1,0 +1,819 @@
+<!DOCTYPE html>
+
+<html>
+
+<head>
+
+<meta charset="utf-8" />
+<meta name="generator" content="pandoc" />
+<meta http-equiv="X-UA-Compatible" content="IE=EDGE" />
+
+<meta name="viewport" content="width=device-width, initial-scale=1" />
+
+
+
+<title>Common errors &amp; warnings encountered in DImulti()</title>
+
+<script>// Pandoc 2.9 adds attributes on both header and div. We remove the former (to
+// be compatible with the behavior of Pandoc < 2.8).
+document.addEventListener('DOMContentLoaded', function(e) {
+  var hs = document.querySelectorAll("div.section[class*='level'] > :first-child");
+  var i, h, a;
+  for (i = 0; i < hs.length; i++) {
+    h = hs[i];
+    if (!/^h[1-6]$/i.test(h.tagName)) continue;  // it should be a header h1-h6
+    a = h.attributes;
+    while (a.length > 0) h.removeAttribute(a[0].name);
+  }
+});
+</script>
+
+<style type="text/css">
+code{white-space: pre-wrap;}
+span.smallcaps{font-variant: small-caps;}
+span.underline{text-decoration: underline;}
+div.column{display: inline-block; vertical-align: top; width: 50%;}
+div.hanging-indent{margin-left: 1.5em; text-indent: -1.5em;}
+ul.task-list{list-style: none;}
+</style>
+
+
+
+<style type="text/css">
+code {
+white-space: pre;
+}
+.sourceCode {
+overflow: visible;
+}
+</style>
+<style type="text/css" data-origin="pandoc">
+pre > code.sourceCode { white-space: pre; position: relative; }
+pre > code.sourceCode > span { display: inline-block; line-height: 1.25; }
+pre > code.sourceCode > span:empty { height: 1.2em; }
+.sourceCode { overflow: visible; }
+code.sourceCode > span { color: inherit; text-decoration: inherit; }
+div.sourceCode { margin: 1em 0; }
+pre.sourceCode { margin: 0; }
+@media screen {
+div.sourceCode { overflow: auto; }
+}
+@media print {
+pre > code.sourceCode { white-space: pre-wrap; }
+pre > code.sourceCode > span { text-indent: -5em; padding-left: 5em; }
+}
+pre.numberSource code
+{ counter-reset: source-line 0; }
+pre.numberSource code > span
+{ position: relative; left: -4em; counter-increment: source-line; }
+pre.numberSource code > span > a:first-child::before
+{ content: counter(source-line);
+position: relative; left: -1em; text-align: right; vertical-align: baseline;
+border: none; display: inline-block;
+-webkit-touch-callout: none; -webkit-user-select: none;
+-khtml-user-select: none; -moz-user-select: none;
+-ms-user-select: none; user-select: none;
+padding: 0 4px; width: 4em;
+color: #aaaaaa;
+}
+pre.numberSource { margin-left: 3em; border-left: 1px solid #aaaaaa; padding-left: 4px; }
+div.sourceCode
+{ }
+@media screen {
+pre > code.sourceCode > span > a:first-child::before { text-decoration: underline; }
+}
+code span.al { color: #ff0000; font-weight: bold; } 
+code span.an { color: #60a0b0; font-weight: bold; font-style: italic; } 
+code span.at { color: #7d9029; } 
+code span.bn { color: #40a070; } 
+code span.bu { color: #008000; } 
+code span.cf { color: #007020; font-weight: bold; } 
+code span.ch { color: #4070a0; } 
+code span.cn { color: #880000; } 
+code span.co { color: #60a0b0; font-style: italic; } 
+code span.cv { color: #60a0b0; font-weight: bold; font-style: italic; } 
+code span.do { color: #ba2121; font-style: italic; } 
+code span.dt { color: #902000; } 
+code span.dv { color: #40a070; } 
+code span.er { color: #ff0000; font-weight: bold; } 
+code span.ex { } 
+code span.fl { color: #40a070; } 
+code span.fu { color: #06287e; } 
+code span.im { color: #008000; font-weight: bold; } 
+code span.in { color: #60a0b0; font-weight: bold; font-style: italic; } 
+code span.kw { color: #007020; font-weight: bold; } 
+code span.op { color: #666666; } 
+code span.ot { color: #007020; } 
+code span.pp { color: #bc7a00; } 
+code span.sc { color: #4070a0; } 
+code span.ss { color: #bb6688; } 
+code span.st { color: #4070a0; } 
+code span.va { color: #19177c; } 
+code span.vs { color: #4070a0; } 
+code span.wa { color: #60a0b0; font-weight: bold; font-style: italic; } 
+</style>
+<script>
+// apply pandoc div.sourceCode style to pre.sourceCode instead
+(function() {
+  var sheets = document.styleSheets;
+  for (var i = 0; i < sheets.length; i++) {
+    if (sheets[i].ownerNode.dataset["origin"] !== "pandoc") continue;
+    try { var rules = sheets[i].cssRules; } catch (e) { continue; }
+    var j = 0;
+    while (j < rules.length) {
+      var rule = rules[j];
+      // check if there is a div.sourceCode rule
+      if (rule.type !== rule.STYLE_RULE || rule.selectorText !== "div.sourceCode") {
+        j++;
+        continue;
+      }
+      var style = rule.style.cssText;
+      // check if color or background-color is set
+      if (rule.style.color === '' && rule.style.backgroundColor === '') {
+        j++;
+        continue;
+      }
+      // replace div.sourceCode by a pre.sourceCode rule
+      sheets[i].deleteRule(j);
+      sheets[i].insertRule('pre.sourceCode{' + style + '}', j);
+    }
+  }
+})();
+</script>
+
+
+
+
+<style type="text/css">body {
+background-color: #fff;
+margin: 1em auto;
+max-width: 700px;
+overflow: visible;
+padding-left: 2em;
+padding-right: 2em;
+font-family: "Open Sans", "Helvetica Neue", Helvetica, Arial, sans-serif;
+font-size: 14px;
+line-height: 1.35;
+}
+#TOC {
+clear: both;
+margin: 0 0 10px 10px;
+padding: 4px;
+width: 400px;
+border: 1px solid #CCCCCC;
+border-radius: 5px;
+background-color: #f6f6f6;
+font-size: 13px;
+line-height: 1.3;
+}
+#TOC .toctitle {
+font-weight: bold;
+font-size: 15px;
+margin-left: 5px;
+}
+#TOC ul {
+padding-left: 40px;
+margin-left: -1.5em;
+margin-top: 5px;
+margin-bottom: 5px;
+}
+#TOC ul ul {
+margin-left: -2em;
+}
+#TOC li {
+line-height: 16px;
+}
+table {
+margin: 1em auto;
+border-width: 1px;
+border-color: #DDDDDD;
+border-style: outset;
+border-collapse: collapse;
+}
+table th {
+border-width: 2px;
+padding: 5px;
+border-style: inset;
+}
+table td {
+border-width: 1px;
+border-style: inset;
+line-height: 18px;
+padding: 5px 5px;
+}
+table, table th, table td {
+border-left-style: none;
+border-right-style: none;
+}
+table thead, table tr.even {
+background-color: #f7f7f7;
+}
+p {
+margin: 0.5em 0;
+}
+blockquote {
+background-color: #f6f6f6;
+padding: 0.25em 0.75em;
+}
+hr {
+border-style: solid;
+border: none;
+border-top: 1px solid #777;
+margin: 28px 0;
+}
+dl {
+margin-left: 0;
+}
+dl dd {
+margin-bottom: 13px;
+margin-left: 13px;
+}
+dl dt {
+font-weight: bold;
+}
+ul {
+margin-top: 0;
+}
+ul li {
+list-style: circle outside;
+}
+ul ul {
+margin-bottom: 0;
+}
+pre, code {
+background-color: #f7f7f7;
+border-radius: 3px;
+color: #333;
+white-space: pre-wrap; 
+}
+pre {
+border-radius: 3px;
+margin: 5px 0px 10px 0px;
+padding: 10px;
+}
+pre:not([class]) {
+background-color: #f7f7f7;
+}
+code {
+font-family: Consolas, Monaco, 'Courier New', monospace;
+font-size: 85%;
+}
+p > code, li > code {
+padding: 2px 0px;
+}
+div.figure {
+text-align: center;
+}
+img {
+background-color: #FFFFFF;
+padding: 2px;
+border: 1px solid #DDDDDD;
+border-radius: 3px;
+border: 1px solid #CCCCCC;
+margin: 0 5px;
+}
+h1 {
+margin-top: 0;
+font-size: 35px;
+line-height: 40px;
+}
+h2 {
+border-bottom: 4px solid #f7f7f7;
+padding-top: 10px;
+padding-bottom: 2px;
+font-size: 145%;
+}
+h3 {
+border-bottom: 2px solid #f7f7f7;
+padding-top: 10px;
+font-size: 120%;
+}
+h4 {
+border-bottom: 1px solid #f7f7f7;
+margin-left: 8px;
+font-size: 105%;
+}
+h5, h6 {
+border-bottom: 1px solid #ccc;
+font-size: 105%;
+}
+a {
+color: #0033dd;
+text-decoration: none;
+}
+a:hover {
+color: #6666ff; }
+a:visited {
+color: #800080; }
+a:visited:hover {
+color: #BB00BB; }
+a[href^="http:"] {
+text-decoration: underline; }
+a[href^="https:"] {
+text-decoration: underline; }
+
+code > span.kw { color: #555; font-weight: bold; } 
+code > span.dt { color: #902000; } 
+code > span.dv { color: #40a070; } 
+code > span.bn { color: #d14; } 
+code > span.fl { color: #d14; } 
+code > span.ch { color: #d14; } 
+code > span.st { color: #d14; } 
+code > span.co { color: #888888; font-style: italic; } 
+code > span.ot { color: #007020; } 
+code > span.al { color: #ff0000; font-weight: bold; } 
+code > span.fu { color: #900; font-weight: bold; } 
+code > span.er { color: #a61717; background-color: #e3d2d2; } 
+</style>
+
+
+
+
+</head>
+
+<body>
+
+
+
+
+<h1 class="title toc-ignore">Common errors &amp; warnings encountered in
+DImulti()</h1>
+
+
+
+<style type="text/css">
+span.R {
+font-family: Courier New;
+}
+span.bad {
+color: red;
+}
+</style>
+<div class="sourceCode" id="cb1"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb1-1"><a href="#cb1-1" tabindex="-1"></a><span class="fu">library</span>(DImodelsMulti)</span>
+<span id="cb1-2"><a href="#cb1-2" tabindex="-1"></a><span class="fu">data</span>(<span class="st">&quot;dataBEL&quot;</span>); <span class="fu">data</span>(<span class="st">&quot;dataSWE&quot;</span>); <span class="fu">data</span>(<span class="st">&quot;simMV&quot;</span>); <span class="fu">data</span>(<span class="st">&quot;simRM&quot;</span>); <span class="fu">data</span>(<span class="st">&quot;simMVRM&quot;</span>)</span></code></pre></div>
+<h2>
+Incorrect argument specifications
+</h2>
+<p>The <span class="R">DImulti()</span> function has a long list of
+possible parameters, which can make it difficult to ensure that all
+arguments supplied are in the requested format. See below for an example
+of each parameter and the included datasets, <span class="R">dataBEL</span>, <span class="R">dataSWE</span>, <span class="R">simMV</span>, <span class="R">simRM</span> and <span class="R">simMVRM</span>, for examples of dataset formatting.</p>
+<h3>
+<span class="R">y</span>
+</h3>
+<p>This is a required argument. It can be passed in three forms, using
+either column names or indices:</p>
+<ul>
+<li><h4>
+Univariate
+</h4></li>
+</ul>
+<p>In this case, we pass a single name or index of a numerical column
+containing the ecosystem function response value. See <span class="R">?dataSWE</span> for an example of a univariate dataset
+suitable for use with DImulti().</p>
+<div class="sourceCode" id="cb2"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb2-1"><a href="#cb2-1" tabindex="-1"></a><span class="fu">DImulti</span>(<span class="at">y =</span> <span class="st">&quot;YIELD&quot;</span>, ..., <span class="at">data =</span> dataSWE)</span>
+<span id="cb2-2"><a href="#cb2-2" tabindex="-1"></a><span class="fu">DImulti</span>(<span class="at">y =</span> <span class="dv">9</span>, ..., <span class="at">data =</span> dataSWE)</span></code></pre></div>
+<pre class="r-output"><code>#&gt;       YIELD
+#&gt; 1  7.774822
+#&gt; 2 10.302994
+#&gt; 3 12.643246
+#&gt; 4 12.174211
+#&gt; 5  9.063782
+#&gt; 6  9.148516
+</code></pre>
+<ul>
+<li><h4>
+Multivariate stacked
+</h4></li>
+</ul>
+<p>In this case, we pass a single name or index of a numerical column
+containing the ecosystem function response value. See <span class="R">?dataBEL</span> for an example of a multivariate stacked
+dataset suitable for use with DImulti().</p>
+<div class="sourceCode" id="cb3"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb3-1"><a href="#cb3-1" tabindex="-1"></a><span class="fu">DImulti</span>(<span class="at">y =</span> <span class="st">&quot;Y&quot;</span>, ..., <span class="at">data =</span> dataBEL)</span>
+<span id="cb3-2"><a href="#cb3-2" tabindex="-1"></a><span class="fu">DImulti</span>(<span class="at">y =</span> <span class="dv">9</span>, ..., <span class="at">data =</span> dataBEL)</span></code></pre></div>
+<pre class="r-output"><code>#&gt;         Y
+#&gt; 1 104.156
+#&gt; 2 100.058
+#&gt; 3  87.996
+#&gt; 4  82.547
+#&gt; 5  89.801
+#&gt; 6  72.239
+</code></pre>
+<ul>
+<li><h4>
+Multivariate wide
+</h4></li>
+</ul>
+<p>In this case, we pass multiple names or indices of numerical columns
+containing the ecosystem function response values. See <span class="R">?simMV</span> for an example of a multivariate wide dataset
+suitable for use with DImulti().</p>
+<div class="sourceCode" id="cb4"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb4-1"><a href="#cb4-1" tabindex="-1"></a><span class="fu">DImulti</span>(<span class="at">y =</span> <span class="fu">c</span>(<span class="st">&quot;Y1&quot;</span>, <span class="st">&quot;Y2&quot;</span>, <span class="st">&quot;Y3&quot;</span>, <span class="st">&quot;Y4&quot;</span>), ..., <span class="at">data =</span> simMV)</span>
+<span id="cb4-2"><a href="#cb4-2" tabindex="-1"></a><span class="fu">DImulti</span>(<span class="at">y =</span> <span class="dv">9</span><span class="sc">:</span><span class="dv">12</span>, ..., <span class="at">data =</span> simMV)</span></code></pre></div>
+<pre class="r-output"><code>#&gt;          Y1       Y2         Y3         Y4
+#&gt; 1  1.880817 5.108158 -1.9712356  4.8247704
+#&gt; 2  7.103477 5.183822 -4.0598298  3.1094539
+#&gt; 3 -1.444736 6.900983  6.3342200  4.9055054
+#&gt; 4 -1.756776 4.784160  5.2155726  5.3583856
+#&gt; 5  5.311257 4.258924 -0.4694982 -2.3078377
+#&gt; 6  5.975319 3.148215  1.9509040 -0.6064387
+</code></pre>
+<h3>
+<span class="R">eco_func</span>
+</h3>
+<p>This is a required argument for multivariate data and excluded for
+univariate data. It can be passed in two forms:</p>
+<ul>
+<li><h4>
+Multivariate stacked
+</h4></li>
+</ul>
+<p>In this case, we pass a vector of size two. The first index contains
+a single column name for the ecosystem function response type, a factor,
+the second contains the autocorrelation structure desired, either <span class="R">“UN”</span> or <span class="R">“CS”</span>. See <span class="R">?dataBEL</span> for an example of a multivariate stacked
+dataset suitable for use with DImulti().</p>
+<div class="sourceCode" id="cb5"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb5-1"><a href="#cb5-1" tabindex="-1"></a><span class="fu">DImulti</span>(<span class="at">eco_func =</span> <span class="fu">c</span>(<span class="st">&quot;Var&quot;</span>, <span class="st">&quot;UN&quot;</span>), ..., <span class="at">data =</span> dataBEL)</span></code></pre></div>
+<pre class="r-output"><code>#&gt;    Var
+#&gt; 1 Sown
+#&gt; 2 Weed
+#&gt; 3    N
+#&gt; 4 Sown
+#&gt; 5 Weed
+#&gt; 6    N
+</code></pre>
+<ul>
+<li><h4>
+Multivariate wide
+</h4></li>
+</ul>
+<p>In this case, we pass a vector of size two. The first index contains
+the string “NA”, the second contains the autocorrelation structure
+desired, either <span class="R">“UN”</span> or <span class="R">“CS”</span>. See <span class="R">?simMV</span> for an example
+of a multivariate stacked dataset suitable for use with DImulti().</p>
+<div class="sourceCode" id="cb6"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb6-1"><a href="#cb6-1" tabindex="-1"></a><span class="fu">DImulti</span>(<span class="at">eco_func =</span> <span class="fu">c</span>(<span class="st">&quot;NA&quot;</span>, <span class="st">&quot;UN&quot;</span>), ..., <span class="at">data =</span> simMV)</span></code></pre></div>
+<h3>
+<span class="R">time</span>
+</h3>
+<p>This is a required argument for repeated measures data and excluded
+for data taken at a single time point. It can be passed in the following
+form:</p>
+<ul>
+<li><h4>
+Repeated Measures
+</h4></li>
+</ul>
+<p>In this case, we pass a vector of size two. The first index contains
+a single column name for the time point reference, a factor, the second
+contains the autocorrelation structure desired, either <span class="R">“UN”</span>, <span class="R">“CS”</span>, or <span class="R">“AR1”</span>. See <span class="R">?dataSWE</span> for an
+example of a repeated measures dataset suitable for use with
+DImulti().</p>
+<div class="sourceCode" id="cb7"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb7-1"><a href="#cb7-1" tabindex="-1"></a><span class="fu">DImulti</span>(<span class="at">time =</span> <span class="fu">c</span>(<span class="st">&quot;YEARN&quot;</span>, <span class="st">&quot;AR1&quot;</span>), ..., <span class="at">data =</span> dataSWE)</span></code></pre></div>
+<pre class="r-output"><code>#&gt;    YEARN
+#&gt; 1      1
+#&gt; 49     2
+#&gt; 97     3
+#&gt; 2      1
+#&gt; 50     2
+#&gt; 98     3
+</code></pre>
+<h3>
+<span class="R">unit_IDs</span>
+</h3>
+<p>This is a required argument for any data.</p>
+<p>It can be passed a column name or index, referencing a unique
+reference for each experimental unit, used for grouping responses from
+different ecosystem functions or time points.</p>
+<div class="sourceCode" id="cb8"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb8-1"><a href="#cb8-1" tabindex="-1"></a><span class="fu">DImulti</span>(<span class="at">unit_IDs =</span> <span class="st">&quot;plot&quot;</span>, ..., <span class="at">data =</span> simMVRM)</span>
+<span id="cb8-2"><a href="#cb8-2" tabindex="-1"></a><span class="fu">DImulti</span>(<span class="at">unit_IDs =</span> <span class="dv">1</span>, ..., <span class="at">data =</span> simMVRM)</span></code></pre></div>
+<pre class="r-output"><code>#&gt;   plot
+#&gt; 1    1
+#&gt; 2    2
+#&gt; 3    3
+#&gt; 4    4
+#&gt; 5    5
+#&gt; 6    6
+</code></pre>
+<h3>
+<span class="R">prop</span>
+</h3>
+<p>This is a required argument for any data.</p>
+<p>It can be passed as a vector of column names or indices, referencing
+the (numerical) initial proportions of any species included in the
+experimental design. In the event that a species is included as a factor
+as opposed to a numerical value, e.g. if it only appears at values 0 or
+1, only the numerical species should be included here, while the factor
+species is passed through the <span class="R">extra_fixed</span>
+parameter. A warning will be printed to the console warning the user of
+not meeting the simplex requirement.</p>
+<div class="sourceCode" id="cb9"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb9-1"><a href="#cb9-1" tabindex="-1"></a><span class="fu">DImulti</span>(<span class="at">unit_IDs =</span> <span class="fu">paste0</span>(<span class="st">&quot;p&quot;</span>, <span class="dv">1</span><span class="sc">:</span><span class="dv">4</span>), ..., <span class="at">data =</span> simMVRM)</span>
+<span id="cb9-2"><a href="#cb9-2" tabindex="-1"></a><span class="fu">DImulti</span>(<span class="at">unit_IDs =</span> <span class="dv">2</span><span class="sc">:</span><span class="dv">5</span>, ..., <span class="at">data =</span> simMVRM)</span></code></pre></div>
+<pre class="r-output"><code>#&gt;   p1 p2 p3 p4
+#&gt; 1  1  0  0  0
+#&gt; 2  1  0  0  0
+#&gt; 3  1  0  0  0
+#&gt; 4  0  1  0  0
+#&gt; 5  0  1  0  0
+#&gt; 6  0  1  0  0
+</code></pre>
+<h3>
+<span class="R">data</span>
+</h3>
+<p>This is a required argument for any data.</p>
+<p>This argument should be a dataframe or tibble which contains all
+columns referenced in the <span class="R">DImulti()</span> call. There
+are some restrictions on columns names allowed in this dataset. An error
+will be printed to the console to inform a user of name changes
+required.</p>
+<div class="sourceCode" id="cb10"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb10-1"><a href="#cb10-1" tabindex="-1"></a><span class="fu">DImulti</span>(..., <span class="at">data =</span> simMVRM)</span>
+<span id="cb10-2"><a href="#cb10-2" tabindex="-1"></a><span class="fu">DImulti</span>(..., <span class="at">data =</span> simMVRM)</span></code></pre></div>
+<pre class="r-output"><code>#&gt;   plot p1 p2 p3 p4         Y1          Y2        Y3 time
+#&gt; 1    1  1  0  0  0 -3.2201614 -0.28424570 4.0353997    1
+#&gt; 2    2  1  0  0  0  0.2166701  0.90917719 0.1719544    1
+#&gt; 3    3  1  0  0  0 -2.1709989  0.04832118 0.6787839    1
+#&gt; 4    4  0  1  0  0  5.3908779  4.08309086 6.5332521    1
+#&gt; 5    5  0  1  0  0  5.2733174  4.29488262 6.2761877    1
+#&gt; 6    6  0  1  0  0  4.1985826  3.57457447 7.0207313    1
+</code></pre>
+<h3>
+<span class="R">DImodel</span>
+</h3>
+<p>This is a required argument for any data.</p>
+<p>This argument should be a single string selected from the list of
+included interaction structures: <span class="R">“STR”</span>, <span class="R">“ID”</span>, <span class="R">“FULL”</span>, <span class="R">“E”</span>, <span class="R">“AV”</span>, <span class="R">“ADD”</span>, <span class="R">“FG”</span>.</p>
+<div class="sourceCode" id="cb11"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb11-1"><a href="#cb11-1" tabindex="-1"></a><span class="fu">DImulti</span>(<span class="at">DImodel =</span> <span class="st">&quot;FULL&quot;</span>, ...)</span>
+<span id="cb11-2"><a href="#cb11-2" tabindex="-1"></a><span class="fu">DImulti</span>(<span class="at">DImodel =</span> <span class="st">&quot;AV&quot;</span>, ...)</span></code></pre></div>
+<h3>
+<span class="R">FG</span>
+</h3>
+<p>This is a required argument if the argument <span class="R">“FG”</span> is passed through <span class="R">DImodel</span>
+and can be excluded otherwise.</p>
+<p>This argument should be a vector of strings, of the same length as
+<span class="R">prop</span>, which maps each species in the experiment
+to a functional grouping.</p>
+<div class="sourceCode" id="cb12"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb12-1"><a href="#cb12-1" tabindex="-1"></a><span class="fu">DImulti</span>(<span class="at">prop =</span> <span class="fu">c</span>(<span class="st">&quot;G1&quot;</span>, <span class="st">&quot;G2&quot;</span>, <span class="st">&quot;L1&quot;</span>, <span class="st">&quot;L2&quot;</span>), <span class="at">DImodel =</span> <span class="st">&quot;FG&quot;</span>, </span>
+<span id="cb12-2"><a href="#cb12-2" tabindex="-1"></a>        <span class="at">FG =</span> <span class="fu">c</span>(<span class="st">&quot;Grass&quot;</span>, <span class="st">&quot;Grass&quot;</span>, <span class="st">&quot;Legume&quot;</span>, <span class="st">&quot;Legume&quot;</span>), ..., <span class="at">data =</span> dataBEL)</span></code></pre></div>
+<h3>
+<span class="R">ID</span>
+</h3>
+<p>This is an optional argument.</p>
+<p>This argument should be a vector of strings, of the same length as
+<span class="R">prop</span>, which maps each species in the experiment
+to a identity grouping, assuming functional redundancy between
+within-group species for their ID effects, this grouping does not affect
+interactions.</p>
+<div class="sourceCode" id="cb13"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb13-1"><a href="#cb13-1" tabindex="-1"></a><span class="fu">DImulti</span>(<span class="at">prop =</span> <span class="fu">c</span>(<span class="st">&quot;G1&quot;</span>, <span class="st">&quot;G2&quot;</span>, <span class="st">&quot;L1&quot;</span>, <span class="st">&quot;L2&quot;</span>), <span class="at">ID =</span> <span class="fu">c</span>(<span class="st">&quot;Grass&quot;</span>, <span class="st">&quot;Grass&quot;</span>, <span class="st">&quot;Legume&quot;</span>, <span class="st">&quot;Legume&quot;</span>), </span>
+<span id="cb13-2"><a href="#cb13-2" tabindex="-1"></a>        ..., <span class="at">data =</span> dataBEL)</span></code></pre></div>
+<h3>
+<span class="R">extra_fixed</span>
+</h3>
+<p>This is an optional argument.</p>
+<p>This parameter can be passed a formula of any additional fixed
+effects to be included, e.g.  treatments. These effects can be easily
+crossed with the automatic DI model formula by prefacing the formula
+passed with <span class="R">1:</span> or <span class="R">1*</span>. See
+<span class="R">?dataSWE</span> for a dataset containing treatments
+suitable for use with <span class="R">DImulti()</span>.</p>
+<div class="sourceCode" id="cb14"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb14-1"><a href="#cb14-1" tabindex="-1"></a><span class="fu">DImulti</span>(<span class="at">extra_fixed =</span> <span class="sc">~</span>DENS, ..., <span class="at">data =</span> dataSWE)</span>
+<span id="cb14-2"><a href="#cb14-2" tabindex="-1"></a><span class="fu">DImulti</span>(<span class="at">extra_fixed =</span> <span class="sc">~</span>DENS <span class="sc">+</span> TREAT, ..., <span class="at">data =</span> dataSWE)</span>
+<span id="cb14-3"><a href="#cb14-3" tabindex="-1"></a><span class="fu">DImulti</span>(<span class="at">extra_fixed =</span> <span class="sc">~</span><span class="dv">1</span><span class="sc">*</span>DENS, ..., <span class="at">data =</span> dataSWE)</span>
+<span id="cb14-4"><a href="#cb14-4" tabindex="-1"></a><span class="fu">DImulti</span>(<span class="at">extra_fixed =</span> <span class="sc">~</span><span class="dv">1</span><span class="sc">:</span>(DENS<span class="sc">+</span>TREAT), ..., <span class="at">data =</span> dataSWE)</span>
+<span id="cb14-5"><a href="#cb14-5" tabindex="-1"></a><span class="fu">DImulti</span>(<span class="at">extra_fixed =</span> <span class="sc">~</span><span class="dv">1</span><span class="sc">:</span>DENS<span class="sc">:</span>TREAT, ..., <span class="at">data =</span> dataSWE)</span></code></pre></div>
+<pre class="r-output"><code>#&gt;   DENS TREAT
+#&gt; 1 High     1
+#&gt; 2 High     1
+#&gt; 3 High     1
+#&gt; 4 High     1
+#&gt; 5 High     1
+#&gt; 6 High     1
+</code></pre>
+<h3>
+<span class="R">estimate_theta</span>
+</h3>
+<p>This is an optional argument.</p>
+<p>This parameter can be passed a boolean value (<span class="R&gt;TRUE&lt;/span&gt; or &lt;span class=" r>FALSE</span>),
+indicating whether the user wants the function to use profile likelihood
+to estimate values for the non-linear parameter <span class="math inline">\(\theta\)</span>. Defaults to &lt;span
+class=“R&gt;FALSE</span>, indicating that estimation will not occur,
+instead fixed values of <span class="math inline">\(\theta\)</span> will
+be used. If <span class="R">“STR”</span> or <span class="R">“ID”</span>
+was passed through the parameter <span class="R">DImodel</span>, then
+setting <span class="R">estimate_theta = TRUE</span> will cause a
+warning to be printed to the console, as <span class="math inline">\(\theta\)</span> only applies to interaction terms,
+which do not exist for those options.</p>
+<div class="sourceCode" id="cb15"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb15-1"><a href="#cb15-1" tabindex="-1"></a><span class="fu">DImulti</span>(<span class="at">estimate_theta =</span> <span class="cn">TRUE</span>, ...)</span>
+<span id="cb15-2"><a href="#cb15-2" tabindex="-1"></a><span class="fu">DImulti</span>(<span class="at">estimate_theta =</span> <span class="cn">FALSE</span>, ...)</span></code></pre></div>
+<h3>
+<span class="R">theta</span>
+</h3>
+<p>This is an optional argument.</p>
+<p>This argument should contain numerical values representing the
+non-linear parameter <span class="math inline">\(\theta\)</span>, which
+will be applied as a power to the products of pairs of species in the
+interaction terms of the model. A single value may be passed, which will
+be applied to each ecosystem function, or a different value may be
+passed for each ecosystem function. If <span class="R">“STR”</span> or
+<span class="R">“ID”</span> was passed through the parameter <span class="R">DImodel</span>, then setting a non-1 value for <span class="R">theta</span> will cause a warning to be printed to the
+console, as <span class="math inline">\(\theta\)</span> only applies to
+interaction terms, which do not exist for those options.</p>
+<div class="sourceCode" id="cb16"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb16-1"><a href="#cb16-1" tabindex="-1"></a><span class="fu">DImulti</span>(<span class="at">theta =</span> <span class="dv">1</span>, ...)</span>
+<span id="cb16-2"><a href="#cb16-2" tabindex="-1"></a><span class="fu">DImulti</span>(<span class="at">theta =</span> <span class="fu">c</span>(<span class="fl">0.5</span>, <span class="dv">1</span>, <span class="fl">1.2</span>), ...)</span></code></pre></div>
+<h3>
+<span class="R">method</span>
+</h3>
+<p>This is an optional argument.</p>
+<p>This parameter is used to change the estimation method used by <span class="R">DImulti()</span>. The options are <span class="R">“REML”</span>, referring to restricted maximum likelihood, and
+<span class="R">“ML”</span>, referring to maximum likelihood. Defaults
+to <span class="R">“REML”</span>.</p>
+<div class="sourceCode" id="cb17"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb17-1"><a href="#cb17-1" tabindex="-1"></a><span class="fu">DImulti</span>(<span class="at">method =</span> <span class="st">&quot;REML&quot;</span>, ...)</span>
+<span id="cb17-2"><a href="#cb17-2" tabindex="-1"></a><span class="fu">DImulti</span>(<span class="at">method =</span> <span class="st">&quot;ML&quot;</span>, ...)</span></code></pre></div>
+<h2>
+Singular fit
+</h2>
+<p>A singular fit error, thrown by <span class="R">nlme::gls()</span>
+when fitting the model, occurs when an element with value of exactly
+zero exists in the fixed effect variance covariance matrix of the model.
+This usually caused by rank deficiency in the model, i.e. two terms
+explaining the same variance. The fix is usually to simplify/change the
+fixed effect terms, be it the interactions structure, treatment terms,
+or theta values. To aid in this change, the fixed effect formula and any
+estimated theta values are printed to the console with the error.</p>
+<p>As an example, we use the dataset <span class="R">dataSWE&lt;/span,
+which is included in this package.</p>
+<p><span class="bad">XXDO NOT
+RUNXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXX</span></p>
+<div class="sourceCode" id="cb18"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb18-1"><a href="#cb18-1" tabindex="-1"></a><span class="fu">DImulti</span>(<span class="at">prop =</span> <span class="dv">5</span><span class="sc">:</span><span class="dv">8</span>, <span class="at">y =</span> <span class="st">&quot;YIELD&quot;</span>, <span class="at">time =</span> <span class="fu">c</span>(<span class="st">&quot;YEARN&quot;</span>, <span class="st">&quot;CS&quot;</span>), <span class="at">unit_IDs =</span> <span class="st">&quot;PLOT&quot;</span>, <span class="at">data =</span> dataSWE, </span>
+<span id="cb18-2"><a href="#cb18-2" tabindex="-1"></a>        <span class="at">DImodel =</span> <span class="st">&quot;ID&quot;</span>, <span class="at">extra_fixed =</span> <span class="sc">~</span>DENS<span class="sc">+</span>TREAT)</span></code></pre></div>
+<pre class="r-output"><code>#&gt; An error has occurred
+</code></pre>
+<pre class="r-output"><code>#&gt; [1] &quot;YIELD ~ 0 + YEARN:((G1_ID+G2_ID+L1_ID+L2_ID )+DENS + TREAT)&quot;
+</code></pre>
+<pre class="r-output"><code>#&gt; Error in glsEstimate(object, control = control): computed &quot;gls&quot; fit is singular, rank 7
+</code></pre>
+<pre class="r-output"><code>#&gt; Error in value[[3L]](cond): 
+#&gt; If the error refers to the fit as &#39;singular&#39; some element of the vcov matrix is 0. Simplifying the model or changing the values of theta supplied can usually fix this issue
+</code></pre>
+<span class="bad">XXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXX</span>
+As we include no theta values or interaction terms, and use the simple
+structure <span class="R">“CS”</span>, compound symmetry, for our
+repeated measure, the only complication in this model is the inclusion
+of the two treatment terms, <span class="R">DENS</span> and <span class="R">TREAT</span>. When multiple treatments are included, it is
+usually good to check that one cannot be inferred from the other,
+e.g. if <span class="R">DENS = High</span> then we know that <span class="R">TREAT = 1</span>. Luckily this is not the case here.
+<pre class="r-output"><code>#&gt;    DENS TREAT
+#&gt; 1  High     1
+#&gt; 16  Low     1
+#&gt; 31 High     2
+#&gt; 40  Low     2
+</code></pre>
+<p>Instead, we change the formatting of our formula, from creating
+intercepts to crossing the treatment with our ID effects, but not each
+other.</p>
+<div class="sourceCode" id="cb19"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb19-1"><a href="#cb19-1" tabindex="-1"></a><span class="fu">DImulti</span>(<span class="at">prop =</span> <span class="dv">5</span><span class="sc">:</span><span class="dv">8</span>, <span class="at">y =</span> <span class="st">&quot;YIELD&quot;</span>, <span class="at">time =</span> <span class="fu">c</span>(<span class="st">&quot;YEARN&quot;</span>, <span class="st">&quot;CS&quot;</span>), <span class="at">unit_IDs =</span> <span class="st">&quot;PLOT&quot;</span>, <span class="at">data =</span> dataSWE, </span>
+<span id="cb19-2"><a href="#cb19-2" tabindex="-1"></a>        <span class="at">DImodel =</span> <span class="st">&quot;ID&quot;</span>, <span class="at">extra_fixed =</span> <span class="sc">~</span><span class="dv">1</span><span class="sc">:</span>(DENS<span class="sc">+</span>TREAT))</span></code></pre></div>
+<pre class="r-output"><code>#&gt; <span style="font-weight: bold;">Note: 
+#&gt; </span><span style="color: #BB00BB; font-weight: bold;">Method Used =</span><span style="font-weight: bold;"> </span><span style="font-weight: bold; text-decoration: underline;">REML</span><span style="font-weight: bold;"> 
+#&gt; </span><span style="color: #BB00BB; font-weight: bold;">Correlation Structure Used = </span>
+</code></pre>
+<pre class="r-output"><code>#&gt; CS (`?nlme::corCompSymm()`)
+</code></pre>
+<pre class="r-output"><code>#&gt; 
+#&gt;  <span style="color: #00BB00; font-weight: bold;">Identity Model</span><span style="color: #BB00BB; font-weight: bold;">
+#&gt; Theta value(s) = </span>1
+#&gt; 
+#&gt; Generalized least squares fit by REML
+#&gt;   Model: YIELD ~ 0 + YEARN:((G1_ID + G2_ID + L1_ID + L2_ID):(DENS + TREAT)) 
+#&gt;       AIC       BIC    logLik 
+#&gt;  883.2454  923.6046 -427.6227 
+#&gt; 
+#&gt;  Repeated Measure Correlation Structure: Compound symmetry
+#&gt;  Formula: ~0 | PLOT 
+#&gt;  Parameter estimate(s):
+#&gt;         Rho 
+#&gt; -0.05881758 
+#&gt; 
+#&gt; 
+#&gt; Table: <span style="font-weight: bold;">Fixed Effect Coefficients</span>
+#&gt; 
+#&gt;                        Beta     Std. Error   t-value   p-value     Signif 
+#&gt; ---------------------  -------  -----------  --------  ----------  -------
+#&gt; YEARN:G1_ID:DENSHigh   +3.282   0.866        3.789     0.0002294   ***    
+#&gt; YEARN:G1_ID:DENSLow    +3.072   0.866        3.546     0.0005419   ***    
+#&gt; YEARN:G1_ID:TREAT2     +0.922   1.034        0.892     0.3743             
+#&gt; YEARN:G2_ID:DENSHigh   +3.774   0.866        4.356     2.637e-05   ***    
+#&gt; YEARN:G2_ID:DENSLow    +3.807   0.866        4.394     2.261e-05   ***    
+#&gt; YEARN:G2_ID:TREAT2     +1.709   1.034        1.653     0.1007             
+#&gt; YEARN:L1_ID:DENSHigh   +3.870   0.866        4.467     1.686e-05   ***    
+#&gt; YEARN:L1_ID:DENSLow    +3.675   0.866        4.241     4.153e-05   ***    
+#&gt; YEARN:L1_ID:TREAT2     +0.691   1.034        0.669     0.5049             
+#&gt; YEARN:L2_ID:DENSHigh   +4.450   0.866        5.136     9.832e-07   ***    
+#&gt; YEARN:L2_ID:DENSLow    +4.512   0.866        5.208     7.143e-07   ***    
+#&gt; YEARN:L2_ID:TREAT2     -0.190   1.034        -0.183    0.8548             
+#&gt; 
+#&gt; Signif codes: 0-0.001 &#39;***&#39;, 0.001-0.01 &#39;**&#39;, 0.01-0.05 &#39;*&#39;, 0.05-0.1 &#39;+&#39;, 0.1-1.0 &#39; &#39;
+#&gt; 
+#&gt; Degrees of freedom: 144 total; 132 residual
+#&gt; Residual standard error: 5.218349 
+#&gt; 
+#&gt; Marginal variance covariance matrix
+#&gt;         1       2       3
+#&gt; 1 27.2310 -1.6017 -1.6017
+#&gt; 2 -1.6017 27.2310 -1.6017
+#&gt; 3 -1.6017 -1.6017 27.2310
+#&gt;   Standard Deviations: 5.2183 5.2183 5.2183
+</code></pre>
+<p>Which has resolved our issue.</p>
+<p>We show another example using the multivariate dataset <span class="R">dataBEL</span> and estimating <span class="math inline">\(\theta\)</span>. We would first set <span class="R">theta = 1</span> and use model selection to choose an
+appropriate interaction structure, which gives us the following model,
+with a functional group structure:</p>
+<div class="sourceCode" id="cb20"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb20-1"><a href="#cb20-1" tabindex="-1"></a>model1 <span class="ot">&lt;-</span> <span class="fu">DImulti</span>(<span class="at">prop =</span> <span class="dv">2</span><span class="sc">:</span><span class="dv">5</span>, <span class="at">y =</span> <span class="st">&quot;Y&quot;</span>, <span class="at">eco_func =</span> <span class="fu">c</span>(<span class="st">&quot;Var&quot;</span>, <span class="st">&quot;UN&quot;</span>), <span class="at">unit_IDs =</span> <span class="dv">1</span>, <span class="at">data =</span> dataBEL,</span>
+<span id="cb20-2"><a href="#cb20-2" tabindex="-1"></a>                  <span class="at">FG =</span> <span class="fu">c</span>(<span class="st">&quot;Grass&quot;</span>, <span class="st">&quot;Grass&quot;</span>, <span class="st">&quot;Leg&quot;</span>, <span class="st">&quot;Leg&quot;</span>), <span class="at">DImodel =</span> <span class="st">&quot;FG&quot;</span>, <span class="at">extra_fixed =</span> <span class="sc">~</span>Density, </span>
+<span id="cb20-3"><a href="#cb20-3" tabindex="-1"></a>                  <span class="at">method =</span> <span class="st">&quot;ML&quot;</span>, <span class="at">theta =</span> <span class="dv">1</span>)</span></code></pre></div>
+<p>Next, we would allow <span class="R">DImulti()</span> to estimate
+<span class="math inline">\(\theta\)</span>. However, this results in
+the fit being singular, as the function estimates a theta value for each
+ecosystem function separately (see the vignette on theta for more
+information), therefore they don’t necessarily work best together.</p>
+<p><span class="bad">XXDO NOT
+RUNXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXX</span></p>
+<div class="sourceCode" id="cb21"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb21-1"><a href="#cb21-1" tabindex="-1"></a><span class="fu">DImulti</span>(<span class="at">prop =</span> <span class="dv">2</span><span class="sc">:</span><span class="dv">5</span>, <span class="at">y =</span> <span class="st">&quot;Y&quot;</span>, <span class="at">eco_func =</span> <span class="fu">c</span>(<span class="st">&quot;Var&quot;</span>, <span class="st">&quot;UN&quot;</span>), <span class="at">unit_IDs =</span> <span class="dv">1</span>, <span class="at">data =</span> dataBEL, </span>
+<span id="cb21-2"><a href="#cb21-2" tabindex="-1"></a>        <span class="at">FG =</span> <span class="fu">c</span>(<span class="st">&quot;Grass&quot;</span>, <span class="st">&quot;Grass&quot;</span>, <span class="st">&quot;Leg&quot;</span>, <span class="st">&quot;Leg&quot;</span>), <span class="at">DImodel =</span> <span class="st">&quot;FG&quot;</span>, <span class="at">extra_fixed =</span> <span class="sc">~</span>Density, </span>
+<span id="cb21-3"><a href="#cb21-3" tabindex="-1"></a>        <span class="at">method =</span> <span class="st">&quot;ML&quot;</span>, <span class="at">estimate_theta =</span> <span class="cn">TRUE</span>)</span></code></pre></div>
+<pre class="r-output"><code>#&gt; An error has occurred
+</code></pre>
+<pre class="r-output"><code>#&gt; [1] &quot;Y ~ 0 +Var:((G1_ID+G2_ID+L1_ID+L2_ID+FG.bfg_Grass_Leg+FG.wfg_Grass+FG.wfg_Leg )+Density)&quot;
+#&gt; Theta:  N:1e-04, Sown:0.1042, Weed:1e-04
+</code></pre>
+<pre class="r-output"><code>#&gt; Error in glsEstimate(object, control = control): computed &quot;gls&quot; fit is singular, rank 23
+</code></pre>
+<pre class="r-output"><code>#&gt; Error in value[[3L]](cond): 
+#&gt; If the error refers to the fit as &#39;singular&#39; some element of the vcov matrix is 0. Simplifying the model or changing the values of theta supplied can usually fix this issue
+</code></pre>
+<p><span class="bad">XXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXX</span></p>
+<p>We can fix this issue by tweaking the theta values estimated, which
+were printed with the error above, and passing them back through the
+parameter <span class="R">theta</span>.</p>
+<div class="sourceCode" id="cb22"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb22-1"><a href="#cb22-1" tabindex="-1"></a>model2 <span class="ot">&lt;-</span> <span class="fu">DImulti</span>(<span class="at">prop =</span> <span class="dv">2</span><span class="sc">:</span><span class="dv">5</span>, <span class="at">y =</span> <span class="st">&quot;Y&quot;</span>, <span class="at">eco_func =</span> <span class="fu">c</span>(<span class="st">&quot;Var&quot;</span>, <span class="st">&quot;UN&quot;</span>), <span class="at">unit_IDs =</span> <span class="dv">1</span>, <span class="at">data =</span> dataBEL,</span>
+<span id="cb22-2"><a href="#cb22-2" tabindex="-1"></a>                  <span class="at">FG =</span> <span class="fu">c</span>(<span class="st">&quot;Grass&quot;</span>, <span class="st">&quot;Grass&quot;</span>, <span class="st">&quot;Leg&quot;</span>, <span class="st">&quot;Leg&quot;</span>), <span class="at">DImodel =</span> <span class="st">&quot;FG&quot;</span>, <span class="at">extra_fixed =</span> <span class="sc">~</span>Density,</span>
+<span id="cb22-3"><a href="#cb22-3" tabindex="-1"></a>                  <span class="at">method =</span> <span class="st">&quot;ML&quot;</span>, <span class="at">theta =</span> <span class="fu">c</span>(<span class="fl">0.01</span>, <span class="fl">0.1</span>, <span class="fl">0.01</span>))</span></code></pre></div>
+<p>The model now fit and we can compare the two to see that despite our
+manually changing <span class="math inline">\(\theta\)</span>, the fit
+is still improved as we used the estimated values as guides. We opt to
+use <span class="R">AICc</span> over <span class="R">AIC</span> for
+comparison as we have a large number of terms and prefer the model with
+a lower value.</p>
+<div class="sourceCode" id="cb23"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb23-1"><a href="#cb23-1" tabindex="-1"></a><span class="fu">AICc</span>(model1); <span class="fu">AICc</span>(model2)</span></code></pre></div>
+<pre class="r-output"><code>#&gt; [1] 652.743
+</code></pre>
+<pre class="r-output"><code>#&gt; [1] 631.0963
+</code></pre>
+<h2>
+Comparing models: ML vs REML
+</h2>
+<p>The optional parameter <span class="R">method</span> in the function
+<span class="R">DImulti()</span> allows a user to change the estimation
+method used, between the default <span class="R">“REML”</span>,
+restricted maximum likelihood, and <span class="R">“ML”</span>, maximum
+likelihood.</p>
+<p><span class="R">“REML”</span> was chosen as the default as it
+provides unbiased estimates, as opposed to <span class="R">“ML”</span>,
+however, <span class="R">“REML”</span> is not appropriate for use with
+model comparison where fixed effects vary between models, as we can see
+from the following warning message:</p>
+<p><span class="bad">XXDO NOT
+RUNXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXX</span></p>
+<div class="sourceCode" id="cb24"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb24-1"><a href="#cb24-1" tabindex="-1"></a>model1 <span class="ot">&lt;-</span> <span class="fu">DImulti</span>(<span class="at">prop =</span> <span class="dv">2</span><span class="sc">:</span><span class="dv">5</span>, <span class="at">y =</span> <span class="st">&quot;Y&quot;</span>, <span class="at">eco_func =</span> <span class="fu">c</span>(<span class="st">&quot;Var&quot;</span>, <span class="st">&quot;UN&quot;</span>), <span class="at">unit_IDs =</span> <span class="dv">1</span>, <span class="at">data =</span> dataBEL,</span>
+<span id="cb24-2"><a href="#cb24-2" tabindex="-1"></a>                  <span class="at">FG =</span> <span class="fu">c</span>(<span class="st">&quot;Grass&quot;</span>, <span class="st">&quot;Grass&quot;</span>, <span class="st">&quot;Leg&quot;</span>, <span class="st">&quot;Leg&quot;</span>), <span class="at">DImodel =</span> <span class="st">&quot;FG&quot;</span>, </span>
+<span id="cb24-3"><a href="#cb24-3" tabindex="-1"></a>                  <span class="at">method =</span> <span class="st">&quot;REML&quot;</span>)</span>
+<span id="cb24-4"><a href="#cb24-4" tabindex="-1"></a></span>
+<span id="cb24-5"><a href="#cb24-5" tabindex="-1"></a>model2 <span class="ot">&lt;-</span> <span class="fu">DImulti</span>(<span class="at">prop =</span> <span class="dv">2</span><span class="sc">:</span><span class="dv">5</span>, <span class="at">y =</span> <span class="st">&quot;Y&quot;</span>, <span class="at">eco_func =</span> <span class="fu">c</span>(<span class="st">&quot;Var&quot;</span>, <span class="st">&quot;UN&quot;</span>), <span class="at">unit_IDs =</span> <span class="dv">1</span>, <span class="at">data =</span> dataBEL,</span>
+<span id="cb24-6"><a href="#cb24-6" tabindex="-1"></a>                  <span class="at">FG =</span> <span class="fu">c</span>(<span class="st">&quot;Grass&quot;</span>, <span class="st">&quot;Grass&quot;</span>, <span class="st">&quot;Leg&quot;</span>, <span class="st">&quot;Leg&quot;</span>), <span class="at">DImodel =</span> <span class="st">&quot;FG&quot;</span>, <span class="at">extra_fixed =</span> <span class="sc">~</span>Density,</span>
+<span id="cb24-7"><a href="#cb24-7" tabindex="-1"></a>                  <span class="at">method =</span> <span class="st">&quot;REML&quot;</span>)</span>
+<span id="cb24-8"><a href="#cb24-8" tabindex="-1"></a></span>
+<span id="cb24-9"><a href="#cb24-9" tabindex="-1"></a><span class="fu">anova</span>(model1, model2)</span></code></pre></div>
+<pre class="r-output"><code>#&gt; Warning in nlme::anova.lme(object = model1, model2): fitted objects with
+#&gt; different fixed effects. REML comparisons are not meaningful.
+</code></pre>
+<pre class="r-output"><code>#&gt;        Model df      AIC      BIC    logLik   Test  L.Ratio p-value
+#&gt; model1     1 27 501.7634 562.0843 -223.8817                        
+#&gt; model2     2 30 488.0671 553.7567 -214.0335 1 vs 2 19.69631   2e-04
+</code></pre>
+<p><span class="bad">XXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXX</span></p>
+<p>In this case, we should use <span class="R">“ML”</span> to fit the
+models for comparison, then refit the chosen model using <span class="R">“REML”</span>, for the unbiased estimates.</p>
+
+
+
+<!-- code folding -->
+
+
+<!-- dynamically load mathjax for compatibility with self-contained -->
+<script>
+  (function () {
+    var script = document.createElement("script");
+    script.type = "text/javascript";
+    script.src  = "https://mathjax.rstudio.com/latest/MathJax.js?config=TeX-AMS-MML_HTMLorMML";
+    document.getElementsByTagName("head")[0].appendChild(script);
+  })();
+</script>
+
+</body>
+</html>
