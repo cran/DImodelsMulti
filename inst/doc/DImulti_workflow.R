@@ -68,6 +68,13 @@ modelAV <- DImulti(y = c("Y1", "Y2", "Y3"), eco_func = c("NA", "UN"), time = c("
 coef(modelAV)
 anova(modelID, modelAV)
 
+## ----DImulti_modelAV_theta----------------------------------------------------
+modelAV_theta <- DImulti(y = c("Y1", "Y2", "Y3"), eco_func = c("NA", "UN"), time = c("time", "CS"),
+                    unit_IDs = 1, prop = 2:5, data = simMVRM, DImodel = "AV", method = "ML",
+                    estimate_theta = TRUE)
+
+anova(modelAV, modelAV_theta)
+
 ## ----DImulti_modelADD---------------------------------------------------------
 modelADD <- DImulti(y = c("Y1", "Y2", "Y3"), eco_func = c("NA", "UN"), time = c("time", "CS"),
                     unit_IDs = 1, prop = 2:5, data = simMVRM, DImodel = "ADD", method = "ML")
@@ -92,17 +99,9 @@ modelAV_ID <- DImulti(y = c("Y1", "Y2", "Y3"), eco_func = c("NA", "UN"), time = 
 summary(modelAV_ID)$tTable
 anova(modelAV_ID, modelAV)
 
-## ----DImulti_modelAV_theta----------------------------------------------------
-modelAV_theta <- DImulti(y = c("Y1", "Y2", "Y3"), eco_func = c("NA", "UN"), time = c("time", "CS"),
-                    unit_IDs = 1, prop = 2:5, data = simMVRM, DImodel = "AV", method = "ML",
-                    estimate_theta = TRUE)
-
-print(modelAV_theta)
-
 ## ----DImulti_modelFinal-------------------------------------------------------
 modelFinal <- DImulti(y = c("Y1", "Y2", "Y3"), eco_func = c("NA", "UN"), time = c("time", "CS"),
-                    unit_IDs = 1, prop = 2:5, data = simMVRM, DImodel = "AV", method = "REML",
-                    estimate_theta = TRUE)
+                    unit_IDs = 1, prop = 2:5, data = simMVRM, DImodel = "AV", method = "REML")
 
 summary(modelFinal)
 

@@ -546,22 +546,22 @@ DImulti <- function(y, eco_func = c("NA", "NA"), time = c("NA", "NA"), unit_IDs,
     stop("One or more of the columns referenced in the parameter 'prop' do not exist in the dataset specified through the 'data' parameter.\n")
   }
 
-  pi_sums <- apply(data[, prop], 1, sum)
-  if(any(pi_sums > 1.0001) | any(pi_sums < 0.9999) & !is.null(extraFixed))
-  {
-    warning("One or more rows have species proportions that do not sum to 1. It is assumed that this is by design with the missing proportions specified through the parameter 'extraFixed', but please ensure this.\n")
-  }
-  else if(any(pi_sums > 1.0001) | any(pi_sums < 0.9999) & is.null(extraFixed))
-  {
-    stop("One or more rows have species proportions that do not sum to 1. Please correct this prior to analysis.\n")
-  }
-  else if(any(pi_sums < 1 & pi_sums > 0.9999) | any(pi_sums > 1 & pi_sums < 1.0001))
-  {
-    Pi_sums <- apply(data[, prop], 1, sum)
-    Pi_sums <- ifelse(Pi_sums == 0, 1, Pi_sums)
-    data[, prop] <- data[, prop] / Pi_sums
-    warning("One or more rows have species proportions that sum to approximately 1, but not exactly 1. This is typically a rounding issue, and has been corrected internally prior to analysis.\n")
-  }
+  # pi_sums <- apply(data[, prop], 1, sum)
+  # if(any(pi_sums > 1.0001) | any(pi_sums < 0.9999) & !is.null(extraFixed))
+  # {
+  #   warning("One or more rows have species proportions that do not sum to 1. It is assumed that this is by design with the missing proportions specified through the parameter 'extra_fixed', but please ensure this.\n")
+  # }
+  # else if(any(pi_sums > 1.0001) | any(pi_sums < 0.9999) & is.null(extraFixed))
+  # {
+  #   stop("One or more rows have species proportions that do not sum to 1. Please correct this prior to analysis.\n")
+  # }
+  # else if(any(pi_sums < 1 & pi_sums > 0.9999) | any(pi_sums > 1 & pi_sums < 1.0001))
+  # {
+  #   Pi_sums <- apply(data[, prop], 1, sum)
+  #   Pi_sums <- ifelse(Pi_sums == 0, 1, Pi_sums)
+  #   data[, prop] <- data[, prop] / Pi_sums
+  #   warning("One or more rows have species proportions that sum to approximately 1, but not exactly 1. This is typically a rounding issue, and has been corrected internally prior to analysis.\n")
+  # }
   #####################
 
   ##FG

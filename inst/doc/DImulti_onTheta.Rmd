@@ -2,7 +2,7 @@
 title: "On the usage and estimation of theta in DImulti()"
 output: rmarkdown::html_vignette
 vignette: >
-  %\VignetteIndexEntry{DImulti_onTheta}
+  %\VignetteIndexEntry{On the usage and estimation of theta in DImulti()}
   %\VignetteEngine{knitr::rmarkdown}
   %\VignetteEncoding{UTF-8}
 ---
