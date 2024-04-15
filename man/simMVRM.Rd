@@ -137,9 +137,7 @@ if(requireNamespace("fansi", quietly = TRUE) &
 # For a more thorough example of the workflow of this package, please see vignette
 # DImulti_workflow using the following code:
 
-\donttest{
-vignette("DImulti_workflow")
-}
+# vignette("DImulti_workflow")
 
 head(simMVRM)
 

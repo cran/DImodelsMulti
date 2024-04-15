@@ -101,9 +101,7 @@ if(requireNamespace("fansi", quietly = TRUE) &
 # For a more thorough example of the workflow of this package, please see vignette
 # DImulti_workflow using the following code:
 
-\donttest{
-vignette("DImulti_workflow")
-}
+# vignette("DImulti_workflow")
 
 #
 # In this example, we repeat the analysis in Dooley et al. 2015.

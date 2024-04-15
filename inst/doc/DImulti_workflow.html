@@ -613,57 +613,64 @@ look at this process. We include the parameter <span class="R">estimate_theta</s
 automatically fit and compare different values of <span class="math inline">\(\theta\)</span>, or if a user has <em>a
 priori</em> information on the nature of the term, they may pass values
 through the parameter <span class="R">theta</span>. We can then test the
-two models against one another using an anova, to see if the theta
-values significantly differ from 1.</p>
+two models against one another using information criteria, to see if the
+theta values significantly differ from 1.</p>
 <div class="sourceCode" id="cb12"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb12-1"><a href="#cb12-1" tabindex="-1"></a>modelAV_theta <span class="ot">&lt;-</span> <span class="fu">DImulti</span>(<span class="at">y =</span> <span class="fu">c</span>(<span class="st">&quot;Y1&quot;</span>, <span class="st">&quot;Y2&quot;</span>, <span class="st">&quot;Y3&quot;</span>), <span class="at">eco_func =</span> <span class="fu">c</span>(<span class="st">&quot;NA&quot;</span>, <span class="st">&quot;UN&quot;</span>), <span class="at">time =</span> <span class="fu">c</span>(<span class="st">&quot;time&quot;</span>, <span class="st">&quot;CS&quot;</span>),</span>
 <span id="cb12-2"><a href="#cb12-2" tabindex="-1"></a>                    <span class="at">unit_IDs =</span> <span class="dv">1</span>, <span class="at">prop =</span> <span class="dv">2</span><span class="sc">:</span><span class="dv">5</span>, <span class="at">data =</span> simMVRM, <span class="at">DImodel =</span> <span class="st">&quot;AV&quot;</span>, <span class="at">method =</span> <span class="st">&quot;ML&quot;</span>,</span>
 <span id="cb12-3"><a href="#cb12-3" tabindex="-1"></a>                    <span class="at">estimate_theta =</span> <span class="cn">TRUE</span>)</span>
 <span id="cb12-4"><a href="#cb12-4" tabindex="-1"></a></span>
-<span id="cb12-5"><a href="#cb12-5" tabindex="-1"></a><span class="fu">anova</span>(modelAV, modelAV_theta)</span></code></pre></div>
-<pre class="r-output"><code>#&gt;               Model df      AIC      BIC    logLik
-#&gt; modelAV           1 31 7921.064 8094.939 -3929.532
-#&gt; modelAV_theta     2 31 7922.467 8096.342 -3930.233
+<span id="cb12-5"><a href="#cb12-5" tabindex="-1"></a>thetaVals <span class="ot">&lt;-</span> modelAV_theta<span class="sc">$</span>theta</span>
+<span id="cb12-6"><a href="#cb12-6" tabindex="-1"></a>thetaVals</span></code></pre></div>
+<pre class="r-output"><code>#&gt;        Y1        Y2        Y3 
+#&gt; 1.0207718 0.8649974 0.9748904
 </code></pre>
-<p>In this case, the inclusion oftheta does not significantly improve
-the model.</p>
+<div class="sourceCode" id="cb13"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb13-1"><a href="#cb13-1" tabindex="-1"></a></span>
+<span id="cb13-2"><a href="#cb13-2" tabindex="-1"></a><span class="fu">AICc</span>(modelAV) </span></code></pre></div>
+<pre class="r-output"><code>#&gt; [1] 7924.065
+</code></pre>
+<div class="sourceCode" id="cb14"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb14-1"><a href="#cb14-1" tabindex="-1"></a><span class="fu">AICc</span>(modelAV_theta)</span></code></pre></div>
+<pre class="r-output"><code>#&gt; [1] 7920.168
+</code></pre>
+<p>In this case, the inclusion of theta does improve the model.</p>
 <p>The next models in the series are not nested within one another, so
 either can be used next but they cannot be compared to one another using
 a likelihood ratio test. As this dataset was simulated without any
 functional groupings, i.e. any groupings would be arbitrary, we choose
 to fit the additive interaction structure, <span class="R">“ADD”</span>.</p>
-<div class="sourceCode" id="cb13"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb13-1"><a href="#cb13-1" tabindex="-1"></a>modelADD <span class="ot">&lt;-</span> <span class="fu">DImulti</span>(<span class="at">y =</span> <span class="fu">c</span>(<span class="st">&quot;Y1&quot;</span>, <span class="st">&quot;Y2&quot;</span>, <span class="st">&quot;Y3&quot;</span>), <span class="at">eco_func =</span> <span class="fu">c</span>(<span class="st">&quot;NA&quot;</span>, <span class="st">&quot;UN&quot;</span>), <span class="at">time =</span> <span class="fu">c</span>(<span class="st">&quot;time&quot;</span>, <span class="st">&quot;CS&quot;</span>),</span>
-<span id="cb13-2"><a href="#cb13-2" tabindex="-1"></a>                    <span class="at">unit_IDs =</span> <span class="dv">1</span>, <span class="at">prop =</span> <span class="dv">2</span><span class="sc">:</span><span class="dv">5</span>, <span class="at">data =</span> simMVRM, <span class="at">DImodel =</span> <span class="st">&quot;ADD&quot;</span>, <span class="at">method =</span> <span class="st">&quot;ML&quot;</span>)</span>
-<span id="cb13-3"><a href="#cb13-3" tabindex="-1"></a></span>
-<span id="cb13-4"><a href="#cb13-4" tabindex="-1"></a>modelADD<span class="sc">$</span>coefficients</span></code></pre></div>
+<div class="sourceCode" id="cb15"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb15-1"><a href="#cb15-1" tabindex="-1"></a>modelADD <span class="ot">&lt;-</span> <span class="fu">DImulti</span>(<span class="at">y =</span> <span class="fu">c</span>(<span class="st">&quot;Y1&quot;</span>, <span class="st">&quot;Y2&quot;</span>, <span class="st">&quot;Y3&quot;</span>), <span class="at">eco_func =</span> <span class="fu">c</span>(<span class="st">&quot;NA&quot;</span>, <span class="st">&quot;UN&quot;</span>), <span class="at">time =</span> <span class="fu">c</span>(<span class="st">&quot;time&quot;</span>, <span class="st">&quot;CS&quot;</span>),</span>
+<span id="cb15-2"><a href="#cb15-2" tabindex="-1"></a>                    <span class="at">unit_IDs =</span> <span class="dv">1</span>, <span class="at">prop =</span> <span class="dv">2</span><span class="sc">:</span><span class="dv">5</span>, <span class="at">data =</span> simMVRM, <span class="at">DImodel =</span> <span class="st">&quot;ADD&quot;</span>, <span class="at">method =</span> <span class="st">&quot;ML&quot;</span>,</span>
+<span id="cb15-3"><a href="#cb15-3" tabindex="-1"></a>                    <span class="at">theta =</span> thetaVals)</span>
+<span id="cb15-4"><a href="#cb15-4" tabindex="-1"></a></span>
+<span id="cb15-5"><a href="#cb15-5" tabindex="-1"></a>modelADD<span class="sc">$</span>coefficients</span></code></pre></div>
 <pre class="r-output"><code>#&gt;  funcY1:time1:p1_ID  funcY2:time1:p1_ID  funcY3:time1:p1_ID  funcY1:time2:p1_ID 
-#&gt;          -1.7457885           0.4067208           0.8362259           0.4538847 
+#&gt;         -1.76823717          0.50808195          0.85988047          0.34006301 
 #&gt;  funcY2:time2:p1_ID  funcY3:time2:p1_ID  funcY1:time1:p2_ID  funcY2:time1:p2_ID 
-#&gt;           3.1240779          -0.5310239           5.0534572           4.4545784 
+#&gt;          3.15759460         -0.45728573          5.05341103          4.51869398 
 #&gt;  funcY3:time1:p2_ID  funcY1:time2:p2_ID  funcY2:time2:p2_ID  funcY3:time2:p2_ID 
-#&gt;           6.5474668           5.0132569           2.7049134           6.6643874 
+#&gt;          6.55729976          4.94274021          2.71009286          6.71132736 
 #&gt;  funcY1:time1:p3_ID  funcY2:time1:p3_ID  funcY3:time1:p3_ID  funcY1:time2:p3_ID 
-#&gt;           2.7631992          -0.6309324           3.1796902           4.1226462 
+#&gt;          2.75607701         -0.52669269          3.20352384          4.02915274 
 #&gt;  funcY2:time2:p3_ID  funcY3:time2:p3_ID  funcY1:time1:p4_ID  funcY2:time1:p4_ID 
-#&gt;          -3.6767150           2.7948178          -1.0133321          -0.1303260 
+#&gt;         -3.63692794          2.84982288         -0.94384681          0.09319263 
 #&gt;  funcY3:time1:p4_ID  funcY1:time2:p4_ID  funcY2:time2:p4_ID  funcY3:time2:p4_ID 
-#&gt;           5.4163504          -2.6210057           1.8101680           3.9438137 
+#&gt;          5.39678568         -2.68037228          1.91080012          3.98197795 
 #&gt; funcY1:time1:p1_add funcY2:time1:p1_add funcY3:time1:p1_add funcY1:time2:p1_add 
-#&gt;           2.6779152           3.8012879           3.4638029          15.8981459 
+#&gt;          2.87439115          2.76386215          3.23757687         16.85055512 
 #&gt; funcY2:time2:p1_add funcY3:time2:p1_add funcY1:time1:p2_add funcY2:time1:p2_add 
-#&gt;           0.6121505           9.3679742           0.3288623           3.2171652 
+#&gt;          0.36675191          8.74665768          0.35963222          2.46298179 
 #&gt; funcY3:time1:p2_add funcY1:time2:p2_add funcY2:time2:p2_add funcY3:time2:p2_add 
-#&gt;           3.7480986          16.8366562           2.3475428          10.0460142 
+#&gt;          3.56352962         17.63222788          1.88168350          9.50590985 
 #&gt; funcY1:time1:p3_add funcY2:time1:p3_add funcY3:time1:p3_add funcY1:time2:p3_add 
-#&gt;           1.0889215           3.5629148           3.5115907          18.0598589 
+#&gt;          1.16196161          2.59855157          3.29199535         18.96823267 
 #&gt; funcY2:time2:p3_add funcY3:time2:p3_add funcY1:time1:p4_add funcY2:time1:p4_add 
-#&gt;           3.6622777          10.1779154           1.9407361           5.5071768 
+#&gt;          2.80801331          9.61394103          1.80523459          3.75439826 
 #&gt; funcY3:time1:p4_add funcY1:time2:p4_add funcY2:time2:p4_add funcY3:time2:p4_add 
-#&gt;           1.4480938          17.3763085           3.0141140           8.1142333
+#&gt;          1.42785123         18.23557620          2.06430493          7.63035189
 </code></pre>
-<div class="sourceCode" id="cb14"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb14-1"><a href="#cb14-1" tabindex="-1"></a><span class="fu">anova</span>(modelAV, modelADD)</span></code></pre></div>
-<pre class="r-output"><code>#&gt;          Model df      AIC      BIC    logLik   Test  L.Ratio p-value
-#&gt; modelAV      1 31 7921.064 8094.939 -3929.532                        
-#&gt; modelADD     2 49 7948.032 8222.867 -3925.016 1 vs 2 9.031852   0.959
+<div class="sourceCode" id="cb16"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb16-1"><a href="#cb16-1" tabindex="-1"></a><span class="fu">anova</span>(modelAV_theta, modelADD)</span></code></pre></div>
+<pre class="r-output"><code>#&gt;               Model df      AIC      BIC    logLik   Test  L.Ratio p-value
+#&gt; modelAV_theta     1 31 7917.167 8091.042 -3927.583                        
+#&gt; modelADD          2 49 7944.076 8218.911 -3923.038 1 vs 2 9.090901  0.9576
 </code></pre>
 <p>In this case, the p-value is greater than our chosen alpha level of
 0.05, therefore we fail to reject the null hypothesis that the added
@@ -677,48 +684,48 @@ contain any such information, example code is included below, where
 model <span class="R">modelAV_treat1</span> includes an intercept for
 <span class="R">treat</span> for each level of ecosystem function and
 time point, while <span class="R">modelAV_treat2</span> crosses <span class="R">treat</span> with each other fixed effect term.</p>
-<div class="sourceCode" id="cb15"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb15-1"><a href="#cb15-1" tabindex="-1"></a>modelAV_treat1 <span class="ot">&lt;-</span> <span class="fu">DImulti</span>(<span class="at">y =</span> <span class="fu">c</span>(<span class="st">&quot;Y1&quot;</span>, <span class="st">&quot;Y2&quot;</span>, <span class="st">&quot;Y3&quot;</span>), <span class="at">eco_func =</span> <span class="fu">c</span>(<span class="st">&quot;NA&quot;</span>, <span class="st">&quot;UN&quot;</span>), <span class="at">time =</span> <span class="fu">c</span>(<span class="st">&quot;time&quot;</span>, <span class="st">&quot;CS&quot;</span>),</span>
-<span id="cb15-2"><a href="#cb15-2" tabindex="-1"></a>                    <span class="at">unit_IDs =</span> <span class="dv">1</span>, <span class="at">prop =</span> <span class="dv">2</span><span class="sc">:</span><span class="dv">5</span>, <span class="at">data =</span> simMVRM, <span class="at">DImodel =</span> <span class="st">&quot;ADD&quot;</span>, <span class="at">method =</span> <span class="st">&quot;ML&quot;</span>,</span>
-<span id="cb15-3"><a href="#cb15-3" tabindex="-1"></a>                    <span class="at">extra_fixed =</span> <span class="sc">~</span>treat)</span>
-<span id="cb15-4"><a href="#cb15-4" tabindex="-1"></a></span>
-<span id="cb15-5"><a href="#cb15-5" tabindex="-1"></a>modelAV_treat2 <span class="ot">&lt;-</span> <span class="fu">DImulti</span>(<span class="at">y =</span> <span class="fu">c</span>(<span class="st">&quot;Y1&quot;</span>, <span class="st">&quot;Y2&quot;</span>, <span class="st">&quot;Y3&quot;</span>), <span class="at">eco_func =</span> <span class="fu">c</span>(<span class="st">&quot;NA&quot;</span>, <span class="st">&quot;UN&quot;</span>), <span class="at">time =</span> <span class="fu">c</span>(<span class="st">&quot;time&quot;</span>, <span class="st">&quot;CS&quot;</span>),</span>
-<span id="cb15-6"><a href="#cb15-6" tabindex="-1"></a>                    <span class="at">unit_IDs =</span> <span class="dv">1</span>, <span class="at">prop =</span> <span class="dv">2</span><span class="sc">:</span><span class="dv">5</span>, <span class="at">data =</span> simMVRM, <span class="at">DImodel =</span> <span class="st">&quot;ADD&quot;</span>, <span class="at">method =</span> <span class="st">&quot;ML&quot;</span>,</span>
-<span id="cb15-7"><a href="#cb15-7" tabindex="-1"></a>                    <span class="at">extra_fixed =</span> <span class="sc">~</span><span class="dv">1</span><span class="sc">:</span>treat)</span></code></pre></div>
+<div class="sourceCode" id="cb17"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb17-1"><a href="#cb17-1" tabindex="-1"></a>modelAV_treat1 <span class="ot">&lt;-</span> <span class="fu">DImulti</span>(<span class="at">y =</span> <span class="fu">c</span>(<span class="st">&quot;Y1&quot;</span>, <span class="st">&quot;Y2&quot;</span>, <span class="st">&quot;Y3&quot;</span>), <span class="at">eco_func =</span> <span class="fu">c</span>(<span class="st">&quot;NA&quot;</span>, <span class="st">&quot;UN&quot;</span>), <span class="at">time =</span> <span class="fu">c</span>(<span class="st">&quot;time&quot;</span>, <span class="st">&quot;CS&quot;</span>),</span>
+<span id="cb17-2"><a href="#cb17-2" tabindex="-1"></a>                    <span class="at">unit_IDs =</span> <span class="dv">1</span>, <span class="at">prop =</span> <span class="dv">2</span><span class="sc">:</span><span class="dv">5</span>, <span class="at">data =</span> simMVRM, <span class="at">DImodel =</span> <span class="st">&quot;ADD&quot;</span>, <span class="at">method =</span> <span class="st">&quot;ML&quot;</span>,</span>
+<span id="cb17-3"><a href="#cb17-3" tabindex="-1"></a>                    <span class="at">theta =</span> thetaVals, <span class="at">extra_fixed =</span> <span class="sc">~</span>treat)</span>
+<span id="cb17-4"><a href="#cb17-4" tabindex="-1"></a></span>
+<span id="cb17-5"><a href="#cb17-5" tabindex="-1"></a>modelAV_treat2 <span class="ot">&lt;-</span> <span class="fu">DImulti</span>(<span class="at">y =</span> <span class="fu">c</span>(<span class="st">&quot;Y1&quot;</span>, <span class="st">&quot;Y2&quot;</span>, <span class="st">&quot;Y3&quot;</span>), <span class="at">eco_func =</span> <span class="fu">c</span>(<span class="st">&quot;NA&quot;</span>, <span class="st">&quot;UN&quot;</span>), <span class="at">time =</span> <span class="fu">c</span>(<span class="st">&quot;time&quot;</span>, <span class="st">&quot;CS&quot;</span>),</span>
+<span id="cb17-6"><a href="#cb17-6" tabindex="-1"></a>                    <span class="at">unit_IDs =</span> <span class="dv">1</span>, <span class="at">prop =</span> <span class="dv">2</span><span class="sc">:</span><span class="dv">5</span>, <span class="at">data =</span> simMVRM, <span class="at">DImodel =</span> <span class="st">&quot;ADD&quot;</span>, <span class="at">method =</span> <span class="st">&quot;ML&quot;</span>,</span>
+<span id="cb17-7"><a href="#cb17-7" tabindex="-1"></a>                    <span class="at">theta =</span> thetaVals, <span class="at">extra_fixed =</span> <span class="sc">~</span><span class="dv">1</span><span class="sc">:</span>treat)</span></code></pre></div>
 <p>The model could also alternatively be simplified here, by adding ID
 grouping, i.e. introducing functional redundancy within species ID
 effects. As <span class="R">simMVRM</span> is simulated with no ID
 grouping in mind, any groups selected would be arbitrary and thus not
 recommended, however, example code for doing so is included below. These
 groupings do not affect the interaction term(s).</p>
-<div class="sourceCode" id="cb16"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb16-1"><a href="#cb16-1" tabindex="-1"></a>modelAV_ID <span class="ot">&lt;-</span> <span class="fu">DImulti</span>(<span class="at">y =</span> <span class="fu">c</span>(<span class="st">&quot;Y1&quot;</span>, <span class="st">&quot;Y2&quot;</span>, <span class="st">&quot;Y3&quot;</span>), <span class="at">eco_func =</span> <span class="fu">c</span>(<span class="st">&quot;NA&quot;</span>, <span class="st">&quot;UN&quot;</span>), <span class="at">time =</span> <span class="fu">c</span>(<span class="st">&quot;time&quot;</span>, <span class="st">&quot;CS&quot;</span>),</span>
-<span id="cb16-2"><a href="#cb16-2" tabindex="-1"></a>                    <span class="at">unit_IDs =</span> <span class="dv">1</span>, <span class="at">prop =</span> <span class="dv">2</span><span class="sc">:</span><span class="dv">5</span>, <span class="at">data =</span> simMVRM, <span class="at">DImodel =</span> <span class="st">&quot;AV&quot;</span>, <span class="at">method =</span> <span class="st">&quot;ML&quot;</span>,</span>
-<span id="cb16-3"><a href="#cb16-3" tabindex="-1"></a>                    <span class="at">ID =</span> <span class="fu">c</span>(<span class="st">&quot;Group1&quot;</span>, <span class="st">&quot;Group1&quot;</span>, <span class="st">&quot;Group2&quot;</span>, <span class="st">&quot;Group2&quot;</span>))</span>
-<span id="cb16-4"><a href="#cb16-4" tabindex="-1"></a></span>
-<span id="cb16-5"><a href="#cb16-5" tabindex="-1"></a><span class="fu">summary</span>(modelAV_ID)<span class="sc">$</span>tTable</span></code></pre></div>
-<pre class="r-output"><code>#&gt;                           Value Std.Error    t-value       p-value
-#&gt; funcY1:time1:Group1  2.05325658 0.4027183  5.0984937  3.746809e-07
-#&gt; funcY2:time1:Group1  2.47586511 0.4027183  6.1478836  9.455616e-10
-#&gt; funcY3:time1:Group1  4.06382972 0.4027183 10.0909990  2.177111e-23
-#&gt; funcY1:time2:Group1  2.93996290 0.4027183  7.3002967  4.124839e-13
-#&gt; funcY2:time2:Group1  2.55464321 0.4027183  6.3434995  2.770319e-10
-#&gt; funcY3:time2:Group1  3.46498531 0.4027183  8.6039932  1.530835e-17
-#&gt; funcY1:time1:Group2  1.47860728 0.4499134  3.2864264  1.032245e-03
-#&gt; funcY2:time1:Group2 -0.09234845 0.4499134 -0.2052583  8.373912e-01
-#&gt; funcY3:time1:Group2  4.31019134 0.4499134  9.5800467  2.758337e-21
-#&gt; funcY1:time2:Group2  1.71752039 0.4499134  3.8174467  1.389462e-04
-#&gt; funcY2:time2:Group2 -1.06208624 0.4499134 -2.3606460  1.833871e-02
-#&gt; funcY3:time2:Group2  3.62910329 0.4499134  8.0662263  1.237208e-15
-#&gt; funcY1:time1:AV      1.78433415 1.3131458  1.3588241  1.743557e-01
-#&gt; funcY2:time1:AV      7.53090954 1.3131458  5.7350141  1.123759e-08
-#&gt; funcY3:time1:AV      5.58613438 1.3131458  4.2540093  2.196750e-05
-#&gt; funcY1:time2:AV     32.85120733 1.3131458 25.0171823 2.164697e-120
-#&gt; funcY2:time2:AV      5.28992229 1.3131458  4.0284349  5.825053e-05
-#&gt; funcY3:time2:AV     18.04688595 1.3131458 13.7432464  3.904223e-41
+<div class="sourceCode" id="cb18"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb18-1"><a href="#cb18-1" tabindex="-1"></a>modelAV_ID <span class="ot">&lt;-</span> <span class="fu">DImulti</span>(<span class="at">y =</span> <span class="fu">c</span>(<span class="st">&quot;Y1&quot;</span>, <span class="st">&quot;Y2&quot;</span>, <span class="st">&quot;Y3&quot;</span>), <span class="at">eco_func =</span> <span class="fu">c</span>(<span class="st">&quot;NA&quot;</span>, <span class="st">&quot;UN&quot;</span>), <span class="at">time =</span> <span class="fu">c</span>(<span class="st">&quot;time&quot;</span>, <span class="st">&quot;CS&quot;</span>),</span>
+<span id="cb18-2"><a href="#cb18-2" tabindex="-1"></a>                    <span class="at">unit_IDs =</span> <span class="dv">1</span>, <span class="at">prop =</span> <span class="dv">2</span><span class="sc">:</span><span class="dv">5</span>, <span class="at">data =</span> simMVRM, <span class="at">DImodel =</span> <span class="st">&quot;AV&quot;</span>, <span class="at">method =</span> <span class="st">&quot;ML&quot;</span>,</span>
+<span id="cb18-3"><a href="#cb18-3" tabindex="-1"></a>                    <span class="at">theta =</span> thetaVals, <span class="at">ID =</span> <span class="fu">c</span>(<span class="st">&quot;Group1&quot;</span>, <span class="st">&quot;Group1&quot;</span>, <span class="st">&quot;Group2&quot;</span>, <span class="st">&quot;Group2&quot;</span>))</span>
+<span id="cb18-4"><a href="#cb18-4" tabindex="-1"></a></span>
+<span id="cb18-5"><a href="#cb18-5" tabindex="-1"></a><span class="fu">summary</span>(modelAV_ID)<span class="sc">$</span>tTable</span></code></pre></div>
+<pre class="r-output"><code>#&gt;                            Value Std.Error     t-value       p-value
+#&gt; funcY1:time1:Group1  2.046125801 0.4028518  5.07910310  4.144693e-07
+#&gt; funcY2:time1:Group1  2.569675414 0.3865981  6.64689141  3.849583e-11
+#&gt; funcY3:time1:Group1  4.082185237 0.4000006 10.20544719  7.138875e-24
+#&gt; funcY1:time2:Group1  2.811864764 0.4028518  6.97989880  4.004113e-12
+#&gt; funcY2:time2:Group1  2.551416081 0.3865981  6.59966062  5.263265e-11
+#&gt; funcY3:time2:Group1  3.514637655 0.4000006  8.78658045  3.250903e-18
+#&gt; funcY1:time1:Group2  1.471220766 0.4496161  3.27217067  1.085437e-03
+#&gt; funcY2:time1:Group2 -0.005768112 0.4333579 -0.01331027  9.893816e-01
+#&gt; funcY3:time1:Group2  4.328268798 0.4472334  9.67787384  1.110630e-21
+#&gt; funcY1:time2:Group2  1.585203853 0.4496161  3.52568266  4.319095e-04
+#&gt; funcY2:time2:Group2 -1.082110264 0.4333579 -2.49703586  1.260356e-02
+#&gt; funcY3:time2:Group2  3.676329091 0.4472334  8.22015702  3.612712e-16
+#&gt; funcY1:time1:AV      1.888198405 1.3666115  1.38166435  1.672293e-01
+#&gt; funcY2:time1:AV      5.509553872 0.9401894  5.86004666  5.399424e-09
+#&gt; funcY3:time1:AV      5.250615197 1.2372345  4.24383172  2.297904e-05
+#&gt; funcY1:time2:AV     34.748700051 1.3666115 25.42690423 8.432489e-124
+#&gt; funcY2:time2:AV      4.108335901 0.9401894  4.36968957  1.308024e-05
+#&gt; funcY3:time2:AV     17.003897471 1.2372345 13.74347133  3.893153e-41
 </code></pre>
-<div class="sourceCode" id="cb17"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb17-1"><a href="#cb17-1" tabindex="-1"></a><span class="fu">anova</span>(modelAV_ID, modelAV)</span></code></pre></div>
+<div class="sourceCode" id="cb19"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb19-1"><a href="#cb19-1" tabindex="-1"></a><span class="fu">anova</span>(modelAV_ID, modelAV)</span></code></pre></div>
 <pre class="r-output"><code>#&gt;            Model df      AIC      BIC    logLik   Test  L.Ratio p-value
-#&gt; modelAV_ID     1 19 8933.063 9039.632 -4447.532                        
-#&gt; modelAV        2 31 7921.064 8094.939 -3929.532 1 vs 2 1035.999  &lt;.0001
+#&gt; modelAV_ID     1 19 8928.581 9035.150 -4445.291                        
+#&gt; modelAV        2 31 7921.064 8094.939 -3929.532 1 vs 2 1031.517  &lt;.0001
 </code></pre>
 <p>As the p-value is lower than 0.05, we reject the null hypothesis and
 continue with the more complex model, without any ID groupings.</p>
@@ -731,94 +738,95 @@ Final model
 <p>As we have concluded our model selection process, the final step
 before interpretation is to refit the chosen model design using the
 method <span class="R">“REML”</span>, for unbiased estimates.</p>
-<div class="sourceCode" id="cb18"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb18-1"><a href="#cb18-1" tabindex="-1"></a>modelFinal <span class="ot">&lt;-</span> <span class="fu">DImulti</span>(<span class="at">y =</span> <span class="fu">c</span>(<span class="st">&quot;Y1&quot;</span>, <span class="st">&quot;Y2&quot;</span>, <span class="st">&quot;Y3&quot;</span>), <span class="at">eco_func =</span> <span class="fu">c</span>(<span class="st">&quot;NA&quot;</span>, <span class="st">&quot;UN&quot;</span>), <span class="at">time =</span> <span class="fu">c</span>(<span class="st">&quot;time&quot;</span>, <span class="st">&quot;CS&quot;</span>),</span>
-<span id="cb18-2"><a href="#cb18-2" tabindex="-1"></a>                    <span class="at">unit_IDs =</span> <span class="dv">1</span>, <span class="at">prop =</span> <span class="dv">2</span><span class="sc">:</span><span class="dv">5</span>, <span class="at">data =</span> simMVRM, <span class="at">DImodel =</span> <span class="st">&quot;AV&quot;</span>, <span class="at">method =</span> <span class="st">&quot;REML&quot;</span>)</span>
-<span id="cb18-3"><a href="#cb18-3" tabindex="-1"></a></span>
-<span id="cb18-4"><a href="#cb18-4" tabindex="-1"></a><span class="fu">summary</span>(modelFinal)</span></code></pre></div>
+<div class="sourceCode" id="cb20"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb20-1"><a href="#cb20-1" tabindex="-1"></a>modelFinal <span class="ot">&lt;-</span> <span class="fu">DImulti</span>(<span class="at">y =</span> <span class="fu">c</span>(<span class="st">&quot;Y1&quot;</span>, <span class="st">&quot;Y2&quot;</span>, <span class="st">&quot;Y3&quot;</span>), <span class="at">eco_func =</span> <span class="fu">c</span>(<span class="st">&quot;NA&quot;</span>, <span class="st">&quot;UN&quot;</span>), <span class="at">time =</span> <span class="fu">c</span>(<span class="st">&quot;time&quot;</span>, <span class="st">&quot;CS&quot;</span>),</span>
+<span id="cb20-2"><a href="#cb20-2" tabindex="-1"></a>                    <span class="at">unit_IDs =</span> <span class="dv">1</span>, <span class="at">prop =</span> <span class="dv">2</span><span class="sc">:</span><span class="dv">5</span>, <span class="at">data =</span> simMVRM, <span class="at">DImodel =</span> <span class="st">&quot;AV&quot;</span>, <span class="at">method =</span> <span class="st">&quot;REML&quot;</span>,</span>
+<span id="cb20-3"><a href="#cb20-3" tabindex="-1"></a>                    <span class="at">theta =</span> thetaVals)</span>
+<span id="cb20-4"><a href="#cb20-4" tabindex="-1"></a></span>
+<span id="cb20-5"><a href="#cb20-5" tabindex="-1"></a><span class="fu">summary</span>(modelFinal)</span></code></pre></div>
 <pre class="r-output"><code>#&gt; Generalized least squares fit by REML
 #&gt;   Model: value ~ 0 + func:time:((p1_ID + p2_ID + p3_ID + p4_ID + AV)) 
 #&gt;   Data: data 
 #&gt;        AIC      BIC    logLik
-#&gt;   7929.642 8103.053 -3933.821
+#&gt;   7927.124 8100.534 -3932.562
 #&gt; 
 #&gt; Correlation Structure: General
 #&gt;  Formula: ~0 | plot 
 #&gt;  Parameter estimate(s):
 #&gt;  Correlation: 
 #&gt;   1      2      3      4      5     
-#&gt; 2  0.316                            
-#&gt; 3  0.612  0.193                     
-#&gt; 4  0.193  0.612  0.316              
-#&gt; 5 -0.311 -0.098 -0.364 -0.115       
-#&gt; 6 -0.098 -0.311 -0.115 -0.364  0.316
+#&gt; 2  0.318                            
+#&gt; 3  0.611  0.194                     
+#&gt; 4  0.194  0.611  0.318              
+#&gt; 5 -0.311 -0.099 -0.364 -0.116       
+#&gt; 6 -0.099 -0.311 -0.116 -0.364  0.318
 #&gt; 
 #&gt; Coefficients:
 #&gt;                       Value Std.Error  t-value p-value
-#&gt; funcY1:time1:p1_ID -1.40735 0.4015386 -3.50490  0.0005
-#&gt; funcY2:time1:p1_ID  0.35355 0.4015386  0.88049  0.3787
-#&gt; funcY3:time1:p1_ID  0.94636 0.4015386  2.35684  0.0185
-#&gt; funcY1:time2:p1_ID  0.14191 0.4015386  0.35342  0.7238
-#&gt; funcY2:time2:p1_ID  2.62969 0.4015386  6.54903  0.0000
-#&gt; funcY3:time2:p1_ID -0.55214 0.4015386 -1.37507  0.1693
-#&gt; funcY1:time1:p2_ID  4.76993 0.3719467 12.82422  0.0000
-#&gt; funcY2:time1:p2_ID  4.27305 0.3719467 11.48835  0.0000
-#&gt; funcY3:time1:p2_ID  6.70377 0.3719467 18.02347  0.0000
-#&gt; funcY1:time2:p2_ID  4.97587 0.3719467 13.37791  0.0000
-#&gt; funcY2:time2:p2_ID  2.70745 0.3719467  7.27915  0.0000
-#&gt; funcY3:time2:p2_ID  6.80556 0.3719467 18.29713  0.0000
-#&gt; funcY1:time1:p3_ID  2.66532 0.4037157  6.60198  0.0000
-#&gt; funcY2:time1:p3_ID -0.76556 0.4037157 -1.89630  0.0581
-#&gt; funcY3:time1:p3_ID  3.32077 0.4037157  8.22551  0.0000
-#&gt; funcY1:time2:p3_ID  4.39352 0.4037157 10.88271  0.0000
-#&gt; funcY2:time2:p3_ID -3.35016 0.4037157 -8.29832  0.0000
-#&gt; funcY3:time2:p3_ID  3.00829 0.4037157  7.45151  0.0000
-#&gt; funcY1:time1:p4_ID -0.89979 0.4534884 -1.98415  0.0474
-#&gt; funcY2:time1:p4_ID  0.32522 0.4534884  0.71715  0.4734
-#&gt; funcY3:time1:p4_ID  4.92428 0.4534884 10.85866  0.0000
-#&gt; funcY1:time2:p4_ID -2.50420 0.4534884 -5.52208  0.0000
-#&gt; funcY2:time2:p4_ID  2.01916 0.4534884  4.45251  0.0000
-#&gt; funcY3:time2:p4_ID  3.54439 0.4534884  7.81583  0.0000
-#&gt; funcY1:time1:AV     2.89177 0.9842718  2.93798  0.0033
-#&gt; funcY2:time1:AV     7.93810 0.9842718  8.06495  0.0000
-#&gt; funcY3:time1:AV     6.18416 0.9842718  6.28298  0.0000
-#&gt; funcY1:time2:AV    34.07984 0.9842718 34.62442  0.0000
-#&gt; funcY2:time2:AV     4.82672 0.9842718  4.90385  0.0000
-#&gt; funcY3:time2:AV    18.94448 0.9842718 19.24720  0.0000
+#&gt; funcY1:time1:p1_ID -1.39779 0.4013020 -3.48313  0.0005
+#&gt; funcY2:time1:p1_ID  0.46946 0.3919317  1.19781  0.2311
+#&gt; funcY3:time1:p1_ID  0.95611 0.3994207  2.39375  0.0168
+#&gt; funcY1:time2:p1_ID  0.06264 0.4013020  0.15610  0.8760
+#&gt; funcY2:time2:p1_ID  2.67366 0.3919317  6.82175  0.0000
+#&gt; funcY3:time2:p1_ID -0.50033 0.3994207 -1.25264  0.2105
+#&gt; funcY1:time1:p2_ID  4.77678 0.3719836 12.84137  0.0000
+#&gt; funcY2:time1:p2_ID  4.39765 0.3625691 12.12913  0.0000
+#&gt; funcY3:time1:p2_ID  6.71595 0.3698618 18.15799  0.0000
+#&gt; funcY1:time2:p2_ID  4.88988 0.3719836 13.14541  0.0000
+#&gt; funcY2:time2:p2_ID  2.76061 0.3625691  7.61403  0.0000
+#&gt; funcY3:time2:p2_ID  6.86181 0.3698618 18.55237  0.0000
+#&gt; funcY1:time1:p3_ID  2.67448 0.4036265  6.62613  0.0000
+#&gt; funcY2:time1:p3_ID -0.63478 0.3928039 -1.61603  0.1062
+#&gt; funcY3:time1:p3_ID  3.33256 0.4013398  8.30359  0.0000
+#&gt; funcY1:time2:p3_ID  4.30388 0.4036265 10.66302  0.0000
+#&gt; funcY2:time2:p3_ID -3.29772 0.3928039 -8.39534  0.0000
+#&gt; funcY3:time2:p3_ID  3.06694 0.4013398  7.64176  0.0000
+#&gt; funcY1:time1:p4_ID -0.88693 0.4528202 -1.95867  0.0503
+#&gt; funcY2:time1:p4_ID  0.42381 0.4448121  0.95278  0.3408
+#&gt; funcY3:time1:p4_ID  4.93027 0.4515411 10.91876  0.0000
+#&gt; funcY1:time2:p4_ID -2.57087 0.4528202 -5.67746  0.0000
+#&gt; funcY2:time2:p4_ID  2.04841 0.4448121  4.60512  0.0000
+#&gt; funcY3:time2:p4_ID  3.58783 0.4515411  7.94575  0.0000
+#&gt; funcY1:time1:AV     2.96892 1.0247246  2.89728  0.0038
+#&gt; funcY2:time1:AV     5.73299 0.7052083  8.12950  0.0000
+#&gt; funcY3:time1:AV     5.85220 0.9251268  6.32583  0.0000
+#&gt; funcY1:time2:AV    35.81655 1.0247246 34.95236  0.0000
+#&gt; funcY2:time2:AV     3.57028 0.7052083  5.06273  0.0000
+#&gt; funcY3:time2:AV    17.84102 0.9251268 19.28494  0.0000
 #&gt; 
-#&gt; Theta values: 1
+#&gt; Theta values: Y1:1.0208, Y2:0.865, Y3:0.9749
 #&gt; 
 #&gt; 
 #&gt;  Correlation: 
 #&gt;                    fY1:1:1 fY2:1:1 fY3:1:1 fY1:2:1 fY2:2:1 fY3:2:1 fY1:1:2
-#&gt; funcY2:time1:p1_ID  0.612                                                 
-#&gt; funcY3:time1:p1_ID -0.311  -0.364                                         
-#&gt; funcY1:time2:p1_ID  0.316   0.193  -0.098                                 
-#&gt; funcY2:time2:p1_ID  0.193   0.316  -0.115   0.612                         
-#&gt; funcY3:time2:p1_ID -0.098  -0.115   0.316  -0.311  -0.364                 
-#&gt; funcY1:time1:p2_ID  0.219   0.134  -0.068   0.069   0.042  -0.021         
-#&gt; funcY2:time1:p2_ID  0.134   0.219  -0.080   0.042   0.069  -0.025   0.612 
-#&gt; funcY3:time1:p2_ID -0.068  -0.080   0.219  -0.021  -0.025   0.069  -0.311 
-#&gt; funcY1:time2:p2_ID  0.069   0.042  -0.021   0.219   0.134  -0.068   0.316 
-#&gt; funcY2:time2:p2_ID  0.042   0.069  -0.025   0.134   0.219  -0.080   0.193 
-#&gt; funcY3:time2:p2_ID -0.021  -0.025   0.069  -0.068  -0.080   0.219  -0.098 
-#&gt; funcY1:time1:p3_ID  0.216   0.132  -0.067   0.068   0.042  -0.021   0.189 
-#&gt; funcY2:time1:p3_ID  0.132   0.216  -0.079   0.042   0.068  -0.025   0.116 
-#&gt; funcY3:time1:p3_ID -0.067  -0.079   0.216  -0.021  -0.025   0.068  -0.059 
-#&gt; funcY1:time2:p3_ID  0.068   0.042  -0.021   0.216   0.132  -0.067   0.060 
-#&gt; funcY2:time2:p3_ID  0.042   0.068  -0.025   0.132   0.216  -0.079   0.037 
-#&gt; funcY3:time2:p3_ID -0.021  -0.025   0.068  -0.067  -0.079   0.216  -0.019 
-#&gt; funcY1:time1:p4_ID  0.267   0.163  -0.083   0.084   0.052  -0.026   0.168 
-#&gt; funcY2:time1:p4_ID  0.163   0.267  -0.097   0.052   0.084  -0.031   0.103 
-#&gt; funcY3:time1:p4_ID -0.083  -0.097   0.267  -0.026  -0.031   0.084  -0.052 
-#&gt; funcY1:time2:p4_ID  0.084   0.052  -0.026   0.267   0.163  -0.083   0.053 
-#&gt; funcY2:time2:p4_ID  0.052   0.084  -0.031   0.163   0.267  -0.097   0.032 
-#&gt; funcY3:time2:p4_ID -0.026  -0.031   0.084  -0.083  -0.097   0.267  -0.016 
-#&gt; funcY1:time1:AV    -0.592  -0.362   0.184  -0.187  -0.115   0.058  -0.554 
-#&gt; funcY2:time1:AV    -0.362  -0.592   0.216  -0.115  -0.187   0.068  -0.339 
-#&gt; funcY3:time1:AV     0.184   0.216  -0.592   0.058   0.068  -0.187   0.172 
-#&gt; funcY1:time2:AV    -0.187  -0.115   0.058  -0.592  -0.362   0.184  -0.175 
-#&gt; funcY2:time2:AV    -0.115  -0.187   0.068  -0.362  -0.592   0.216  -0.107 
-#&gt; funcY3:time2:AV     0.058   0.068  -0.187   0.184   0.216  -0.592   0.054 
+#&gt; funcY2:time1:p1_ID  0.608                                                 
+#&gt; funcY3:time1:p1_ID -0.309  -0.362                                         
+#&gt; funcY1:time2:p1_ID  0.318   0.194  -0.098                                 
+#&gt; funcY2:time2:p1_ID  0.194   0.318  -0.115   0.608                         
+#&gt; funcY3:time2:p1_ID -0.098  -0.115   0.318  -0.309  -0.362                 
+#&gt; funcY1:time1:p2_ID  0.220   0.121  -0.066   0.070   0.039  -0.021         
+#&gt; funcY2:time1:p2_ID  0.118   0.180  -0.069   0.038   0.057  -0.022   0.608 
+#&gt; funcY3:time1:p2_ID -0.065  -0.070   0.212  -0.021  -0.022   0.067  -0.309 
+#&gt; funcY1:time2:p2_ID  0.070   0.039  -0.021   0.220   0.121  -0.066   0.318 
+#&gt; funcY2:time2:p2_ID  0.038   0.057  -0.022   0.118   0.180  -0.069   0.194 
+#&gt; funcY3:time2:p2_ID -0.021  -0.022   0.067  -0.065  -0.070   0.212  -0.098 
+#&gt; funcY1:time1:p3_ID  0.217   0.118  -0.065   0.069   0.038  -0.021   0.190 
+#&gt; funcY2:time1:p3_ID  0.117   0.177  -0.068   0.037   0.056  -0.022   0.101 
+#&gt; funcY3:time1:p3_ID -0.064  -0.069   0.209  -0.021  -0.022   0.067  -0.056 
+#&gt; funcY1:time2:p3_ID  0.069   0.038  -0.021   0.217   0.118  -0.065   0.061 
+#&gt; funcY2:time2:p3_ID  0.037   0.056  -0.022   0.117   0.177  -0.068   0.032 
+#&gt; funcY3:time2:p3_ID -0.021  -0.022   0.067  -0.064  -0.069   0.209  -0.018 
+#&gt; funcY1:time1:p4_ID  0.267   0.149  -0.080   0.085   0.048  -0.026   0.168 
+#&gt; funcY2:time1:p4_ID  0.152   0.236  -0.089   0.048   0.075  -0.028   0.092 
+#&gt; funcY3:time1:p4_ID -0.081  -0.088   0.261  -0.026  -0.028   0.083  -0.050 
+#&gt; funcY1:time2:p4_ID  0.085   0.048  -0.026   0.267   0.149  -0.080   0.054 
+#&gt; funcY2:time2:p4_ID  0.048   0.075  -0.028   0.152   0.236  -0.089   0.029 
+#&gt; funcY3:time2:p4_ID -0.026  -0.028   0.083  -0.081  -0.088   0.261  -0.016 
+#&gt; funcY1:time1:AV    -0.592  -0.341   0.180  -0.189  -0.109   0.057  -0.555 
+#&gt; funcY2:time1:AV    -0.357  -0.565   0.211  -0.114  -0.180   0.067  -0.335 
+#&gt; funcY3:time1:AV     0.181   0.203  -0.587   0.058   0.065  -0.187   0.170 
+#&gt; funcY1:time2:AV    -0.189  -0.109   0.057  -0.592  -0.341   0.180  -0.177 
+#&gt; funcY2:time2:AV    -0.114  -0.180   0.067  -0.357  -0.565   0.211  -0.107 
+#&gt; funcY3:time2:AV     0.058   0.065  -0.187   0.181   0.203  -0.587   0.054 
 #&gt;                    fY2:1:2 fY3:1:2 fY1:2:2 fY2:2:2 fY3:2:2 fY1:1:3 fY2:1:3
 #&gt; funcY2:time1:p1_ID                                                        
 #&gt; funcY3:time1:p1_ID                                                        
@@ -827,28 +835,28 @@ method <span class="R">“REML”</span>, for unbiased estimates.</p>
 #&gt; funcY3:time2:p1_ID                                                        
 #&gt; funcY1:time1:p2_ID                                                        
 #&gt; funcY2:time1:p2_ID                                                        
-#&gt; funcY3:time1:p2_ID -0.364                                                 
-#&gt; funcY1:time2:p2_ID  0.193  -0.098                                         
-#&gt; funcY2:time2:p2_ID  0.316  -0.115   0.612                                 
-#&gt; funcY3:time2:p2_ID -0.115   0.316  -0.311  -0.364                         
-#&gt; funcY1:time1:p3_ID  0.116  -0.059   0.060   0.037  -0.019                 
-#&gt; funcY2:time1:p3_ID  0.189  -0.069   0.037   0.060  -0.022   0.612         
-#&gt; funcY3:time1:p3_ID -0.069   0.189  -0.019  -0.022   0.060  -0.311  -0.364 
-#&gt; funcY1:time2:p3_ID  0.037  -0.019   0.189   0.116  -0.059   0.316   0.193 
-#&gt; funcY2:time2:p3_ID  0.060  -0.022   0.116   0.189  -0.069   0.193   0.316 
-#&gt; funcY3:time2:p3_ID -0.022   0.060  -0.059  -0.069   0.189  -0.098  -0.115 
-#&gt; funcY1:time1:p4_ID  0.103  -0.052   0.053   0.032  -0.016   0.253   0.155 
-#&gt; funcY2:time1:p4_ID  0.168  -0.061   0.032   0.053  -0.019   0.155   0.253 
-#&gt; funcY3:time1:p4_ID -0.061   0.168  -0.016  -0.019   0.053  -0.078  -0.092 
-#&gt; funcY1:time2:p4_ID  0.032  -0.016   0.168   0.103  -0.052   0.080   0.049 
-#&gt; funcY2:time2:p4_ID  0.053  -0.019   0.103   0.168  -0.061   0.049   0.080 
-#&gt; funcY3:time2:p4_ID -0.019   0.053  -0.052  -0.061   0.168  -0.025  -0.029 
-#&gt; funcY1:time1:AV    -0.339   0.172  -0.175  -0.107   0.054  -0.605  -0.371 
-#&gt; funcY2:time1:AV    -0.554   0.202  -0.107  -0.175   0.064  -0.371  -0.605 
-#&gt; funcY3:time1:AV     0.202  -0.554   0.054   0.064  -0.175   0.188   0.220 
-#&gt; funcY1:time2:AV    -0.107   0.054  -0.554  -0.339   0.172  -0.191  -0.117 
-#&gt; funcY2:time2:AV    -0.175   0.064  -0.339  -0.554   0.202  -0.117  -0.191 
-#&gt; funcY3:time2:AV     0.064  -0.175   0.172   0.202  -0.554   0.059   0.070 
+#&gt; funcY3:time1:p2_ID -0.363                                                 
+#&gt; funcY1:time2:p2_ID  0.194  -0.098                                         
+#&gt; funcY2:time2:p2_ID  0.318  -0.115   0.608                                 
+#&gt; funcY3:time2:p2_ID -0.115   0.318  -0.309  -0.363                         
+#&gt; funcY1:time1:p3_ID  0.099  -0.056   0.061   0.032  -0.018                 
+#&gt; funcY2:time1:p3_ID  0.147  -0.059   0.032   0.047  -0.019   0.608         
+#&gt; funcY3:time1:p3_ID -0.058   0.181  -0.018  -0.018   0.058  -0.309  -0.362 
+#&gt; funcY1:time2:p3_ID  0.032  -0.018   0.190   0.099  -0.056   0.318   0.194 
+#&gt; funcY2:time2:p3_ID  0.047  -0.019   0.101   0.147  -0.059   0.194   0.318 
+#&gt; funcY3:time2:p3_ID -0.018   0.058  -0.056  -0.058   0.181  -0.098  -0.115 
+#&gt; funcY1:time1:p4_ID  0.086  -0.049   0.054   0.027  -0.016   0.253   0.139 
+#&gt; funcY2:time1:p4_ID  0.130  -0.053   0.029   0.041  -0.017   0.143   0.219 
+#&gt; funcY3:time1:p4_ID -0.050   0.161  -0.016  -0.016   0.051  -0.076  -0.082 
+#&gt; funcY1:time2:p4_ID  0.027  -0.016   0.168   0.086  -0.049   0.081   0.044 
+#&gt; funcY2:time2:p4_ID  0.041  -0.017   0.092   0.130  -0.053   0.046   0.070 
+#&gt; funcY3:time2:p4_ID -0.016   0.051  -0.050  -0.050   0.161  -0.024  -0.026 
+#&gt; funcY1:time1:AV    -0.314   0.168  -0.177  -0.100   0.053  -0.606  -0.348 
+#&gt; funcY2:time1:AV    -0.521   0.197  -0.107  -0.166   0.063  -0.366  -0.576 
+#&gt; funcY3:time1:AV     0.187  -0.548   0.054   0.060  -0.174   0.185   0.207 
+#&gt; funcY1:time2:AV    -0.100   0.053  -0.555  -0.314   0.168  -0.193  -0.111 
+#&gt; funcY2:time2:AV    -0.166   0.063  -0.335  -0.521   0.197  -0.116  -0.183 
+#&gt; funcY3:time2:AV     0.060  -0.174   0.170   0.187  -0.548   0.059   0.066 
 #&gt;                    fY3:1:3 fY1:2:3 fY2:2:3 fY3:2:3 fY1:1:4 fY2:1:4 fY3:1:4
 #&gt; funcY2:time1:p1_ID                                                        
 #&gt; funcY3:time1:p1_ID                                                        
@@ -865,20 +873,20 @@ method <span class="R">“REML”</span>, for unbiased estimates.</p>
 #&gt; funcY2:time1:p3_ID                                                        
 #&gt; funcY3:time1:p3_ID                                                        
 #&gt; funcY1:time2:p3_ID -0.098                                                 
-#&gt; funcY2:time2:p3_ID -0.115   0.612                                         
-#&gt; funcY3:time2:p3_ID  0.316  -0.311  -0.364                                 
-#&gt; funcY1:time1:p4_ID -0.078   0.080   0.049  -0.025                         
-#&gt; funcY2:time1:p4_ID -0.092   0.049   0.080  -0.029   0.612                 
-#&gt; funcY3:time1:p4_ID  0.253  -0.025  -0.029   0.080  -0.311  -0.364         
-#&gt; funcY1:time2:p4_ID -0.025   0.253   0.155  -0.078   0.316   0.193  -0.098 
-#&gt; funcY2:time2:p4_ID -0.029   0.155   0.253  -0.092   0.193   0.316  -0.115 
-#&gt; funcY3:time2:p4_ID  0.080  -0.078  -0.092   0.253  -0.098  -0.115   0.316 
-#&gt; funcY1:time1:AV     0.188  -0.191  -0.117   0.059  -0.597  -0.366   0.185 
-#&gt; funcY2:time1:AV     0.220  -0.117  -0.191   0.070  -0.366  -0.597   0.218 
-#&gt; funcY3:time1:AV    -0.605   0.059   0.070  -0.191   0.185   0.218  -0.597 
-#&gt; funcY1:time2:AV     0.059  -0.605  -0.371   0.188  -0.189  -0.116   0.059 
-#&gt; funcY2:time2:AV     0.070  -0.371  -0.605   0.220  -0.116  -0.189   0.069 
-#&gt; funcY3:time2:AV    -0.191   0.188   0.220  -0.605   0.059   0.069  -0.189 
+#&gt; funcY2:time2:p3_ID -0.115   0.608                                         
+#&gt; funcY3:time2:p3_ID  0.318  -0.309  -0.362                                 
+#&gt; funcY1:time1:p4_ID -0.076   0.081   0.044  -0.024                         
+#&gt; funcY2:time1:p4_ID -0.084   0.046   0.070  -0.027   0.608                 
+#&gt; funcY3:time1:p4_ID  0.247  -0.024  -0.026   0.079  -0.309  -0.362         
+#&gt; funcY1:time2:p4_ID -0.024   0.253   0.139  -0.076   0.318   0.194  -0.098 
+#&gt; funcY2:time2:p4_ID -0.027   0.143   0.219  -0.084   0.194   0.318  -0.115 
+#&gt; funcY3:time2:p4_ID  0.079  -0.076  -0.082   0.247  -0.098  -0.115   0.318 
+#&gt; funcY1:time1:AV     0.184  -0.193  -0.111   0.058  -0.597  -0.348   0.182 
+#&gt; funcY2:time1:AV     0.216  -0.116  -0.183   0.069  -0.360  -0.577   0.213 
+#&gt; funcY3:time1:AV    -0.600   0.059   0.066  -0.191   0.183   0.207  -0.594 
+#&gt; funcY1:time2:AV     0.058  -0.606  -0.348   0.184  -0.190  -0.111   0.058 
+#&gt; funcY2:time2:AV     0.069  -0.366  -0.576   0.216  -0.115  -0.184   0.068 
+#&gt; funcY3:time2:AV    -0.191   0.185   0.207  -0.600   0.058   0.066  -0.189 
 #&gt;                    fY1:2:4 fY2:2:4 fY3:2:4 fY1:1:A fY2:1:A fY3:1:A fY1:2:A
 #&gt; funcY2:time1:p1_ID                                                        
 #&gt; funcY3:time1:p1_ID                                                        
@@ -901,14 +909,14 @@ method <span class="R">“REML”</span>, for unbiased estimates.</p>
 #&gt; funcY2:time1:p4_ID                                                        
 #&gt; funcY3:time1:p4_ID                                                        
 #&gt; funcY1:time2:p4_ID                                                        
-#&gt; funcY2:time2:p4_ID  0.612                                                 
-#&gt; funcY3:time2:p4_ID -0.311  -0.364                                         
-#&gt; funcY1:time1:AV    -0.189  -0.116   0.059                                 
-#&gt; funcY2:time1:AV    -0.116  -0.189   0.069   0.612                         
-#&gt; funcY3:time1:AV     0.059   0.069  -0.189  -0.311  -0.364                 
-#&gt; funcY1:time2:AV    -0.597  -0.366   0.185   0.316   0.193  -0.098         
-#&gt; funcY2:time2:AV    -0.366  -0.597   0.218   0.193   0.316  -0.115   0.612 
-#&gt; funcY3:time2:AV     0.185   0.218  -0.597  -0.098  -0.115   0.316  -0.311 
+#&gt; funcY2:time2:p4_ID  0.608                                                 
+#&gt; funcY3:time2:p4_ID -0.309  -0.362                                         
+#&gt; funcY1:time1:AV    -0.190  -0.111   0.058                                 
+#&gt; funcY2:time1:AV    -0.115  -0.184   0.068   0.603                         
+#&gt; funcY3:time1:AV     0.058   0.066  -0.189  -0.306  -0.360                 
+#&gt; funcY1:time2:AV    -0.597  -0.348   0.182   0.318   0.192  -0.097         
+#&gt; funcY2:time2:AV    -0.360  -0.577   0.213   0.192   0.318  -0.114   0.603 
+#&gt; funcY3:time2:AV     0.183   0.207  -0.594  -0.097  -0.114   0.318  -0.306 
 #&gt;                    fY2:2:A
 #&gt; funcY2:time1:p1_ID        
 #&gt; funcY3:time1:p1_ID        
@@ -938,13 +946,13 @@ method <span class="R">“REML”</span>, for unbiased estimates.</p>
 #&gt; funcY3:time1:AV           
 #&gt; funcY1:time2:AV           
 #&gt; funcY2:time2:AV           
-#&gt; funcY3:time2:AV    -0.364 
+#&gt; funcY3:time2:AV    -0.360 
 #&gt; 
 #&gt; Standardized residuals:
 #&gt;         Min          Q1         Med          Q3         Max 
-#&gt; -4.15185381 -0.38325721 -0.03474876  0.34079196  6.76705889 
+#&gt; -4.15977769 -0.38670617 -0.03622075  0.34007790  6.72648550 
 #&gt; 
-#&gt; Residual standard error: 1.951116 
+#&gt; Residual standard error: 1.949179 
 #&gt; Degrees of freedom: 2016 total; 1986 residual
 </code></pre>
 <h2>
@@ -966,81 +974,83 @@ include species <span class="R">p1</span> despite its negative effect on
 positive effect on this ecosystem function could also ‘make up’ for this
 fault of species <span class="R">p1</span> (assuming that our goal is
 the maximisation of all ecosystem functions).</p>
-<div class="sourceCode" id="cb19"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb19-1"><a href="#cb19-1" tabindex="-1"></a><span class="fu">summary</span>(modelFinal)<span class="sc">$</span>tTable</span></code></pre></div>
+<div class="sourceCode" id="cb21"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb21-1"><a href="#cb21-1" tabindex="-1"></a><span class="fu">summary</span>(modelFinal)<span class="sc">$</span>tTable</span></code></pre></div>
 <pre class="r-output"><code>#&gt;                         Value Std.Error    t-value       p-value
-#&gt; funcY1:time1:p1_ID -1.4073525 0.4015386 -3.5049000  4.669050e-04
-#&gt; funcY2:time1:p1_ID  0.3535514 0.4015386  0.8804918  3.786995e-01
-#&gt; funcY3:time1:p1_ID  0.9463605 0.4015386  2.3568358  1.852799e-02
-#&gt; funcY1:time2:p1_ID  0.1419124 0.4015386  0.3534217  7.238098e-01
-#&gt; funcY2:time2:p1_ID  2.6296879 0.4015386  6.5490294  7.353689e-11
-#&gt; funcY3:time2:p1_ID -0.5521430 0.4015386 -1.3750684  1.692653e-01
-#&gt; funcY1:time1:p2_ID  4.7699282 0.3719467 12.8242246  3.148646e-36
-#&gt; funcY2:time1:p2_ID  4.2730527 0.3719467 11.4883463  1.273304e-29
-#&gt; funcY3:time1:p2_ID  6.7037708 0.3719467 18.0234710  2.220710e-67
-#&gt; funcY1:time2:p2_ID  4.9758685 0.3719467 13.3779069  3.817966e-39
-#&gt; funcY2:time2:p2_ID  2.7074546 0.3719467  7.2791463  4.816588e-13
-#&gt; funcY3:time2:p2_ID  6.8055585 0.3719467 18.2971329  3.089979e-69
-#&gt; funcY1:time1:p3_ID  2.6653214 0.4037157  6.6019766  5.190973e-11
-#&gt; funcY2:time1:p3_ID -0.7655644 0.4037157 -1.8962959  5.806593e-02
-#&gt; funcY3:time1:p3_ID  3.3207690 0.4037157  8.2255142  3.471705e-16
-#&gt; funcY1:time2:p3_ID  4.3935222 0.4037157 10.8827141  7.839227e-27
-#&gt; funcY2:time2:p3_ID -3.3501635 0.4037157 -8.2983241  1.924768e-16
-#&gt; funcY3:time2:p3_ID  3.0082933 0.4037157  7.4515148  1.369281e-13
-#&gt; funcY1:time1:p4_ID -0.8997879 0.4534884 -1.9841474  4.737686e-02
-#&gt; funcY2:time1:p4_ID  0.3252207 0.4534884  0.7171532  4.733639e-01
-#&gt; funcY3:time1:p4_ID  4.9242752 0.4534884 10.8586564  1.005459e-26
-#&gt; funcY1:time2:p4_ID -2.5041979 0.4534884 -5.5220765  3.790108e-08
-#&gt; funcY2:time2:p4_ID  2.0191631 0.4534884  4.4525128  8.958247e-06
-#&gt; funcY3:time2:p4_ID  3.5443872 0.4534884  7.8158269  8.783494e-15
-#&gt; funcY1:time1:AV     2.8917739 0.9842718  2.9379832  3.341619e-03
-#&gt; funcY2:time1:AV     7.9381038 0.9842718  8.0649511  1.253734e-15
-#&gt; funcY3:time1:AV     6.1841587 0.9842718  6.2829788  4.070422e-10
-#&gt; funcY1:time2:AV    34.0798392 0.9842718 34.6244198 6.175414e-206
-#&gt; funcY2:time2:AV     4.8267227 0.9842718  4.9038515  1.016131e-06
-#&gt; funcY3:time2:AV    18.9444801 0.9842718 19.2472043  7.826545e-76
+#&gt; funcY1:time1:p1_ID -1.3977875 0.4013020 -3.4831313  5.063174e-04
+#&gt; funcY2:time1:p1_ID  0.4694609 0.3919317  1.1978129  2.311328e-01
+#&gt; funcY3:time1:p1_ID  0.9561123 0.3994207  2.3937472  1.676953e-02
+#&gt; funcY1:time2:p1_ID  0.0626416 0.4013020  0.1560959  8.759733e-01
+#&gt; funcY2:time2:p1_ID  2.6736613 0.3919317  6.8217522  1.189860e-11
+#&gt; funcY3:time2:p1_ID -0.5003309 0.3994207 -1.2526413  2.104838e-01
+#&gt; funcY1:time1:p2_ID  4.7767781 0.3719836 12.8413683  2.566641e-36
+#&gt; funcY2:time1:p2_ID  4.3976500 0.3625691 12.1291347  1.029695e-32
+#&gt; funcY3:time1:p2_ID  6.7159482 0.3698618 18.1579939  2.731249e-68
+#&gt; funcY1:time2:p2_ID  4.8898755 0.3719836 13.1454069  6.589848e-38
+#&gt; funcY2:time2:p2_ID  2.7606110 0.3625691  7.6140262  4.081412e-14
+#&gt; funcY3:time2:p2_ID  6.8618119 0.3698618 18.5523674  5.503933e-71
+#&gt; funcY1:time1:p3_ID  2.6744802 0.4036265  6.6261271  4.424727e-11
+#&gt; funcY2:time1:p3_ID -0.6347815 0.3928039 -1.6160268  1.062473e-01
+#&gt; funcY3:time1:p3_ID  3.3325594 0.4013398  8.3035856  1.844114e-16
+#&gt; funcY1:time2:p3_ID  4.3038775 0.4036265 10.6630211  7.474747e-26
+#&gt; funcY2:time2:p3_ID -3.2977208 0.3928039 -8.3953373  8.707329e-17
+#&gt; funcY3:time2:p3_ID  3.0669414 0.4013398  7.6417573  3.311885e-14
+#&gt; funcY1:time1:p4_ID -0.8869260 0.4528202 -1.9586717  5.029102e-02
+#&gt; funcY2:time1:p4_ID  0.4238078 0.4448121  0.9527795  3.408177e-01
+#&gt; funcY3:time1:p4_ID  4.9302708 0.4515411 10.9187639  5.394009e-27
+#&gt; funcY1:time2:p4_ID -2.5708690 0.4528202 -5.6774613  1.568347e-08
+#&gt; funcY2:time2:p4_ID  2.0484108 0.4448121  4.6051152  4.383572e-06
+#&gt; funcY3:time2:p4_ID  3.5878308 0.4515411  7.9457454  3.204545e-15
+#&gt; funcY1:time1:AV     2.9689184 1.0247246  2.8972841  3.805312e-03
+#&gt; funcY2:time1:AV     5.7329924 0.7052083  8.1295019  7.502542e-16
+#&gt; funcY3:time1:AV     5.8521952 0.9251268  6.3258300  3.103520e-10
+#&gt; funcY1:time2:AV    35.8165488 1.0247246 34.9523649 5.122576e-209
+#&gt; funcY2:time2:AV     3.5702802 0.7052083  5.0627312  4.514504e-07
+#&gt; funcY3:time2:AV    17.8410157 0.9251268 19.2849401  4.234834e-76
 </code></pre>
 <p>Next we could examine the variance covariance matrices of the model.
 These can be extracted from the model by either using the function <span class="R">getVarCov()</span> from the R package <span class="R">nlme</span> or by using the <span class="R">$</span> operator
 (the components of a model in R can be viewed using <span class="R">View(model)</span>).</p>
-<div class="sourceCode" id="cb20"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb20-1"><a href="#cb20-1" tabindex="-1"></a>nlme<span class="sc">::</span><span class="fu">getVarCov</span>(modelFinal)</span>
-<span id="cb20-2"><a href="#cb20-2" tabindex="-1"></a></span>
-<span id="cb20-3"><a href="#cb20-3" tabindex="-1"></a>modelFinal<span class="sc">$</span>vcov</span></code></pre></div>
+<div class="sourceCode" id="cb22"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb22-1"><a href="#cb22-1" tabindex="-1"></a>nlme<span class="sc">::</span><span class="fu">getVarCov</span>(modelFinal)</span>
+<span id="cb22-2"><a href="#cb22-2" tabindex="-1"></a></span>
+<span id="cb22-3"><a href="#cb22-3" tabindex="-1"></a>modelFinal<span class="sc">$</span>vcov</span></code></pre></div>
 <pre class="r-output"><code>#&gt; $Multivariate
 #&gt; Marginal variance covariance matrix
 #&gt;         [,1]    [,2]    [,3]
-#&gt; [1,]  4.9140  2.3738 -1.3783
-#&gt; [2,]  2.3738  3.0605 -1.2758
-#&gt; [3,] -1.3783 -1.2758  4.0093
-#&gt;   Standard Deviations: 2.2168 1.7494 2.0023 
+#&gt; [1,]  4.9138  2.3576 -1.3793
+#&gt; [2,]  2.3576  3.0326 -1.2701
+#&gt; [3,] -1.3793 -1.2701  4.0112
+#&gt;   Standard Deviations: 2.2167 1.7414 2.0028 
 #&gt; 
 #&gt; $`Repeated Measure`
 #&gt; Marginal variance covariance matrix
 #&gt;        [,1]   [,2]
-#&gt; [1,] 4.6263 1.4625
-#&gt; [2,] 1.4625 4.6263
-#&gt;   Standard Deviations: 2.1509 2.1509 
+#&gt; [1,] 4.6292 1.4740
+#&gt; [2,] 1.4740 4.6292
+#&gt;   Standard Deviations: 2.1516 2.1516 
 #&gt; 
 #&gt; $Combined
 #&gt; Marginal variance covariance matrix
 #&gt;          Y1:1     Y1:2     Y2:1     Y2:2     Y3:1     Y3:2
-#&gt; Y1:1  3.80690  1.20340  2.33020  0.73662 -1.18210 -0.37368
-#&gt; Y1:2  1.20340  3.80690  0.73662  2.33020 -0.37368 -1.18210
-#&gt; Y2:1  2.33020  0.73662  3.80690  1.20340 -1.38640 -0.43828
-#&gt; Y2:2  0.73662  2.33020  1.20340  3.80690 -0.43828 -1.38640
-#&gt; Y3:1 -1.18210 -0.37368 -1.38640 -0.43828  3.80690  1.20340
-#&gt; Y3:2 -0.37368 -1.18210 -0.43828 -1.38640  1.20340  3.80690
-#&gt;   Standard Deviations: 1.9511 1.9511 1.9511 1.9511 1.9511 1.9511
+#&gt; Y1:1  3.79930  1.20980  2.32040  0.73885 -1.18040 -0.37586
+#&gt; Y1:2  1.20980  3.79930  0.73885  2.32040 -0.37586 -1.18040
+#&gt; Y2:1  2.32040  0.73885  3.79930  1.20980 -1.38350 -0.44053
+#&gt; Y2:2  0.73885  2.32040  1.20980  3.79930 -0.44053 -1.38350
+#&gt; Y3:1 -1.18040 -0.37586 -1.38350 -0.44053  3.79930  1.20980
+#&gt; Y3:2 -0.37586 -1.18040 -0.44053 -1.38350  1.20980  3.79930
+#&gt;   Standard Deviations: 1.9492 1.9492 1.9492 1.9492 1.9492 1.9492
 </code></pre>
 <p>An example of an interpretation that we can make from these variance
-covariance matrices, is that the ecosystem functions <span class="R">Y1</span> and <span class="R">Y3</span></p>
+covariance matrices, is that the ecosystem functions <span class="R">Y1</span> and <span class="R">Y3</span> are negatively
+correlated, therefore would likely result in trade-offs when trying to
+estimated one over the other.</p>
 <p>As multivariate repeated measures DI models can contain a large
 number of fixed effects, they can be difficult to interpret from. Our
 suggestions to circumvent this issue is to first predict from the model
 for community designs of interest, using the predict() function, as seen
 below, see vignette <a href="DImulti_prediction.html">prediction</a> for
 further details on this.</p>
-<div class="sourceCode" id="cb21"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb21-1"><a href="#cb21-1" tabindex="-1"></a>comms <span class="ot">&lt;-</span> simMVRM[<span class="fu">c</span>(<span class="dv">1</span>, <span class="dv">4</span>, <span class="dv">7</span>, <span class="dv">10</span>, <span class="dv">21</span>), ]</span>
-<span id="cb21-2"><a href="#cb21-2" tabindex="-1"></a><span class="fu">print</span>(comms)</span></code></pre></div>
+<div class="sourceCode" id="cb23"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb23-1"><a href="#cb23-1" tabindex="-1"></a>comms <span class="ot">&lt;-</span> simMVRM[<span class="fu">c</span>(<span class="dv">1</span>, <span class="dv">4</span>, <span class="dv">7</span>, <span class="dv">10</span>, <span class="dv">21</span>), ]</span>
+<span id="cb23-2"><a href="#cb23-2" tabindex="-1"></a><span class="fu">print</span>(comms)</span></code></pre></div>
 <pre class="r-output"><code>#&gt;    plot        p1        p2        p3 p4         Y1          Y2       Y3 time
 #&gt; 1     1 1.0000000 0.0000000 0.0000000  0 -3.2201614 -0.28424570 4.035400    1
 #&gt; 4     4 0.0000000 1.0000000 0.0000000  0  5.3908779  4.08309086 6.533252    1
@@ -1048,26 +1058,26 @@ further details on this.</p>
 #&gt; 10   10 0.0000000 0.0000000 0.0000000  1 -0.9378472  0.30317782 6.102071    1
 #&gt; 21   21 0.3333333 0.3333333 0.3333333  0  1.7765221  2.99030627 5.650826    1
 </code></pre>
-<div class="sourceCode" id="cb22"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb22-1"><a href="#cb22-1" tabindex="-1"></a></span>
-<span id="cb22-2"><a href="#cb22-2" tabindex="-1"></a></span>
-<span id="cb22-3"><a href="#cb22-3" tabindex="-1"></a>commPred <span class="ot">&lt;-</span> <span class="fu">predict</span>(modelFinal, <span class="at">newdata =</span> comms)</span>
-<span id="cb22-4"><a href="#cb22-4" tabindex="-1"></a>commPred</span></code></pre></div>
+<div class="sourceCode" id="cb24"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb24-1"><a href="#cb24-1" tabindex="-1"></a></span>
+<span id="cb24-2"><a href="#cb24-2" tabindex="-1"></a></span>
+<span id="cb24-3"><a href="#cb24-3" tabindex="-1"></a>commPred <span class="ot">&lt;-</span> <span class="fu">predict</span>(modelFinal, <span class="at">newdata =</span> comms)</span>
+<span id="cb24-4"><a href="#cb24-4" tabindex="-1"></a>commPred</span></code></pre></div>
 <pre class="r-output"><code>#&gt;    plot     Yvalue Ytype
-#&gt; 1     1 -1.4073525  Y1:1
-#&gt; 2     1  0.3535514  Y2:1
-#&gt; 3     1  0.9463605  Y3:1
-#&gt; 4     4  4.7699282  Y1:1
-#&gt; 5     4  4.2730527  Y2:1
-#&gt; 6     4  6.7037708  Y3:1
-#&gt; 7     7  2.6653214  Y1:1
-#&gt; 8     7 -0.7655644  Y2:1
-#&gt; 9     7  3.3207690  Y3:1
-#&gt; 10   10 -0.8997879  Y1:1
-#&gt; 11   10  0.3252207  Y2:1
-#&gt; 12   10  4.9242752  Y3:1
-#&gt; 13   21  2.9732237  Y1:1
-#&gt; 14   21  3.9330478  Y2:1
-#&gt; 15   21  5.7183530  Y3:1
+#&gt; 1     1 -1.3977875  Y1:1
+#&gt; 2     1  0.4694609  Y2:1
+#&gt; 3     1  0.9561123  Y3:1
+#&gt; 4     4  4.7767781  Y1:1
+#&gt; 5     4  4.3976500  Y2:1
+#&gt; 6     4  6.7159482  Y3:1
+#&gt; 7     7  2.6744802  Y1:1
+#&gt; 8     7 -0.6347815  Y2:1
+#&gt; 9     7  3.3325594  Y3:1
+#&gt; 10   10 -0.8869260  Y1:1
+#&gt; 11   10  0.4238078  Y2:1
+#&gt; 12   10  4.9302708  Y3:1
+#&gt; 13   21  2.9633108  Y1:1
+#&gt; 14   21  3.2365157  Y2:1
+#&gt; 15   21  5.5319074  Y3:1
 </code></pre>
 <p>Then, with these predictions, we can employ summarising metrics, such
 as a multifunctionality index, to summarise our findings while
@@ -1076,9 +1086,9 @@ separately but simultaneously, alla Suter <em>et al</em> 2021. We could
 also use these predictions to generate a plot/graph to display our
 findings, such as a histogram, grouped bar chart, or ternary
 diagram.</p>
-<div class="sourceCode" id="cb23"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb23-1"><a href="#cb23-1" tabindex="-1"></a>ggplot2<span class="sc">::</span><span class="fu">ggplot</span>(commPred, ggplot2<span class="sc">::</span><span class="fu">aes</span>(<span class="at">fill=</span>Ytype, <span class="at">y=</span>Yvalue, <span class="at">x=</span>plot)) <span class="sc">+</span></span>
-<span id="cb23-2"><a href="#cb23-2" tabindex="-1"></a>  ggplot2<span class="sc">::</span><span class="fu">geom_bar</span>(<span class="at">position=</span><span class="st">&quot;dodge&quot;</span>, <span class="at">stat=</span><span class="st">&quot;identity&quot;</span>)</span></code></pre></div>
-<p><img src="data:image/png;base64,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" width="75%" /></p>
+<div class="sourceCode" id="cb25"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb25-1"><a href="#cb25-1" tabindex="-1"></a>ggplot2<span class="sc">::</span><span class="fu">ggplot</span>(commPred, ggplot2<span class="sc">::</span><span class="fu">aes</span>(<span class="at">fill=</span>Ytype, <span class="at">y=</span>Yvalue, <span class="at">x=</span>plot)) <span class="sc">+</span></span>
+<span id="cb25-2"><a href="#cb25-2" tabindex="-1"></a>  ggplot2<span class="sc">::</span><span class="fu">geom_bar</span>(<span class="at">position=</span><span class="st">&quot;dodge&quot;</span>, <span class="at">stat=</span><span class="st">&quot;identity&quot;</span>)</span></code></pre></div>
+<p><img src="data:image/png;base64,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" width="75%" /></p>
 <p>A new R package, <span class="R">DImodelsVis</span>, is in
 development, which will make plotting DI models fit using the R packages
 <span class="R">DImodels</span> or <span class="R">DImodelsMulti</span>

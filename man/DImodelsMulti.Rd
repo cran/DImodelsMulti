@@ -82,10 +82,7 @@ expected contribution of the \eqn{i^{th}} species to the \eqn{k^{th}} response a
 \eqn{t} and is referred to as the \eqn{i^{th}} species' ID effect.
 The value of the nonlinear parameter \eqn{\theta} is allowed to vary between ecosystem functions,
 in turn allowing the fixed effect structure to change across functions, in recognition that the
-nature of the species interactions could change between ecosystem functions. In the main function
-of this package \code{\link{DImulti}}, the \eqn{\theta} values are estimated separately for each
-ecosystem function, therefore are unaffected by the presence of other functions. This may change
-in future updates. \cr
+nature of the species interactions could change between ecosystem functions. \cr
 
 In the case that a dataset contains only a single ecosystem function, the corresponding subscript
 \eqn{k} can simply be removed from the equation, the same can be said for the removal of the

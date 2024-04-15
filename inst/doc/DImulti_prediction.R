@@ -29,8 +29,7 @@ library(DImodelsMulti)
 
 ## ----DImulti_modelEx----------------------------------------------------------
 modelFinal <- DImulti(y = c("Y1", "Y2", "Y3"), eco_func = c("NA", "UN"), time = c("time", "CS"),
-                    unit_IDs = 1, prop = 2:5, data = simMVRM, DImodel = "AV", method = "REML",
-                    estimate_theta = TRUE)
+                    unit_IDs = 1, prop = 2:5, data = simMVRM, DImodel = "AV", method = "REML")
 print(modelFinal)
 
 ## ----predict_layout, eval=FALSE-----------------------------------------------

@@ -372,36 +372,6 @@ model1 <- DImulti(prop = 2:5, y = "Y", eco_func = c("Var", "UN"), unit_IDs = 1, 
                   method = "ML", theta = 1)
 ```
 
-Next, we would allow <span class="R">DImulti()</span> to estimate $\theta$. However, this results in
-the fit being singular, as the function estimates a theta value for each ecosystem function 
-separately (see the vignette on theta for more information), therefore they don't necessarily work
-best together.
-
-<span class="bad">XXDO NOT RUNXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXX</span>
-```{r singular_dataBEL, eval = TRUE, error = TRUE}
-DImulti(prop = 2:5, y = "Y", eco_func = c("Var", "UN"), unit_IDs = 1, data = dataBEL, 
-        FG = c("Grass", "Grass", "Leg", "Leg"), DImodel = "FG", extra_fixed = ~Density, 
-        method = "ML", estimate_theta = TRUE)
-```
-<span class="bad">XXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXX</span>
-
-We can fix this issue by tweaking the theta values estimated, which were printed with the error 
-above, and passing them back through the parameter <span class="R">theta</span>.
-```{r singular_dataBEL_theta, eval = TRUE}
-model2 <- DImulti(prop = 2:5, y = "Y", eco_func = c("Var", "UN"), unit_IDs = 1, data = dataBEL,
-                  FG = c("Grass", "Grass", "Leg", "Leg"), DImodel = "FG", extra_fixed = ~Density,
-                  method = "ML", theta = c(0.01, 0.1, 0.01))
-```
-
-The model now fit and we can compare the two to see that despite our manually changing $\theta$, 
-the fit is still improved as we used the estimated values as guides. We opt to use 
-<span class="R">AICc</span> over <span class="R">AIC</span> for comparison as we have a 
-large number of terms and prefer the model with a lower value.
-```{r singular_dataBEL_compare, eval = TRUE}
-AICc(model1); AICc(model2)
-```
-
-
 
 <h2>Comparing models: ML vs REML </h2>
 

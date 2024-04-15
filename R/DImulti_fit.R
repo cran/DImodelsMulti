@@ -73,12 +73,8 @@
 #' @param estimate_theta By default, \eqn{\theta} (the power parameter on all \code{p_i * p_j}
 #' components of each interaction variable in the model) is set equal to one. Specify
 #' \code{estimate_theta = TRUE} to include the estimation of \eqn{\theta} in the specified model. A
-#' value of \eqn{\theta} will be estimated for each ecosystem function present in the data
-#' separately, possibly changing the fixed effects across functions. In the case of multivariate
-#' data, it is possible the model will be singular, resulting in an error, in this case, the
-#' \eqn{\theta} estimates will be printed to the console. It is recommended to simplify a singular
-#' model, e.g. reduce the number of terms estimated, or change the theta values through parameter
-#' \code{theta}
+#' value of \eqn{\theta} will be estimated for each ecosystem function present in the data,
+#' possibly changing the fixed effects across functions.
 #'
 #' @param theta Users may specify a value of \eqn{\theta} different than 1 to fit the DI model.
 #' Note that if \code{estimate_theta = TRUE}, then \eqn{\theta} will be estimated via maximum
@@ -165,10 +161,7 @@
 #' \eqn{t} and is referred to as the \eqn{i^{th}} species' ID effect.
 #' The value of the nonlinear parameter \eqn{\theta} is allowed to vary between ecosystem functions,
 #' in turn allowing the fixed effect structure to change across functions, in recognition that the
-#' nature of the species interactions could change between ecosystem functions. In the main function
-#' of this package \code{\link{DImulti}}, the \eqn{\theta} values are estimated separately for each
-#' ecosystem function, therefore are unaffected by the presence of other functions. This may change
-#' in future updates. \cr
+#' nature of the species interactions could change between ecosystem functions.\cr
 #'
 #' In the case that a dataset contains only a single ecosystem function, the corresponding subscript
 #' \eqn{k} can simply be removed from the equation, the same can be said for the removal of the
@@ -546,22 +539,22 @@ DImulti <- function(y, eco_func = c("NA", "NA"), time = c("NA", "NA"), unit_IDs,
     stop("One or more of the columns referenced in the parameter 'prop' do not exist in the dataset specified through the 'data' parameter.\n")
   }
 
-  # pi_sums <- apply(data[, prop], 1, sum)
-  # if(any(pi_sums > 1.0001) | any(pi_sums < 0.9999) & !is.null(extraFixed))
-  # {
-  #   warning("One or more rows have species proportions that do not sum to 1. It is assumed that this is by design with the missing proportions specified through the parameter 'extra_fixed', but please ensure this.\n")
-  # }
-  # else if(any(pi_sums > 1.0001) | any(pi_sums < 0.9999) & is.null(extraFixed))
-  # {
-  #   stop("One or more rows have species proportions that do not sum to 1. Please correct this prior to analysis.\n")
-  # }
-  # else if(any(pi_sums < 1 & pi_sums > 0.9999) | any(pi_sums > 1 & pi_sums < 1.0001))
-  # {
-  #   Pi_sums <- apply(data[, prop], 1, sum)
-  #   Pi_sums <- ifelse(Pi_sums == 0, 1, Pi_sums)
-  #   data[, prop] <- data[, prop] / Pi_sums
-  #   warning("One or more rows have species proportions that sum to approximately 1, but not exactly 1. This is typically a rounding issue, and has been corrected internally prior to analysis.\n")
-  # }
+  pi_sums <- apply(data[, prop], 1, sum)
+  if(any(pi_sums > 1.0001) | any(pi_sums < 0.9999) & !is.null(extraFixed))
+  {
+    warning("One or more rows have species proportions that do not sum to 1. It is assumed that this is by design with the missing proportions specified through the parameter 'extra_fixed', but please ensure this.\n")
+  }
+  else if(any(pi_sums > 1.0001) | any(pi_sums < 0.9999) & is.null(extraFixed))
+  {
+    stop("One or more rows have species proportions that do not sum to 1. Please correct this prior to analysis.\n")
+  }
+  else if(any(pi_sums < 1 & pi_sums > 0.9999) | any(pi_sums > 1 & pi_sums < 1.0001))
+  {
+    Pi_sums <- apply(data[, prop], 1, sum)
+    Pi_sums <- ifelse(Pi_sums == 0, 1, Pi_sums)
+    data[, prop] <- data[, prop] / Pi_sums
+    warning("One or more rows have species proportions that sum to approximately 1, but not exactly 1. This is typically a rounding issue, and has been corrected internally prior to analysis.\n")
+  }
   #####################
 
   ##FG
@@ -822,6 +815,14 @@ DImulti <- function(y, eco_func = c("NA", "NA"), time = c("NA", "NA"), unit_IDs,
     Yvalue <- y[1]
   }
 
+  if(Timeflag)
+  {
+    if(is.character(data[, time[1]]) | is.numeric(data[, time[1]]))
+    {
+      data[, time[1]] <- as.factor(data[, time[1]])
+    }
+  }
+
 
   #DImodel parameter checks
   STRflag  <- if("STR"  %in% DImodel) TRUE else FALSE
@@ -912,21 +913,19 @@ DImulti <- function(y, eco_func = c("NA", "NA"), time = c("NA", "NA"), unit_IDs,
       }
       else #split by ecosystem function
       {
-        iCount <- 1
+        # #Remove any mention of ecosystem functions from extraFixed
+        # extraTemp <- gsub(paste0(Yfunc, "\\s*[:|\\*]"), "", extraFixed)
+        # extraTemp <- gsub(paste0("[:|\\*]\\s*", Yfunc), "", extraTemp)
+        # extraTemp <- gsub(paste0("\\+\\s*", Yfunc), "", extraTemp)
 
-        #Remove any mention of ecosystem functions from extraFixed
-        extraTemp <- gsub(paste0(Yfunc, "\\s*[:|\\*]"), "", extraFixed)
-        extraTemp <- gsub(paste0("[:|\\*]\\s*", Yfunc), "", extraTemp)
-        extraTemp <- gsub(paste0("\\+\\s*", Yfunc), "", extraTemp)
+        theta <- estimate_theta(y = Yvalue, eco_func = c(Yfunc, funcCorr), time = time,
+                                unit_IDs = unitIDs, prop = prop, data = data,
+                                DImodel = DImodel, FG = FG, ID = ID, extra_fixed = extra_fixed)
 
-        for(i in unique(data[, Yfunc]))
+        if(any(theta <= 0.1) | any(theta == 1.5))
         {
-          tempModel <- suppressMessages(DImodels::DI(y = Yvalue, prop = prop, FG = FG, DImodel = DImodel, extra_formula = extraTemp,
-                                    data = data[which(data[, Yfunc] == i), ], estimate_theta = TRUE))
-
-          theta[iCount] <- tempModel$coefficients[["theta"]]
-
-          iCount <- iCount + 1
+          warning("One or more values of theta have been estimated close to a boundary,",
+                  "which may indicate lack of fit")
         }
 
         names(theta) <- unique(data[, Yfunc])
@@ -1019,7 +1018,7 @@ DImulti <- function(y, eco_func = c("NA", "NA"), time = c("NA", "NA"), unit_IDs,
 
   ## Grouping IDs ########################################################################################################################################################################
 
-  if(missing(ID))
+  if(missing(ID) | is.null(ID))
   {
     ID <- paste0(prop, "_ID")
   }
@@ -1338,4 +1337,27 @@ DImulti <- function(y, eco_func = c("NA", "NA"), time = c("NA", "NA"), unit_IDs,
 }
 ###########################################################################################################################################################################################
 
+#Internal function for fitting theta estimates for a DImulti model
+#' @keywords internal
+#' @noRd
 
+estimate_theta <- function(y, eco_func, time, unit_IDs,
+                           prop, data, DImodel, FG, ID, extra_fixed)
+{
+
+  theta_Est <- function(thetaVal)
+  {
+    fit <- DImulti(y = y, eco_func = eco_func, time = time,
+                   unit_IDs = unit_IDs, prop = prop, DImodel = DImodel,
+                   FG = FG, ID = ID, extra_fixed = extra_fixed,
+                   theta = thetaVal, method = "ML", data = data)
+
+    return(-as.numeric(stats::logLik(fit)))
+  }
+
+  thetaVals <- stats::optim(c(1, 1, 1), theta_Est, hessian = FALSE,
+                            lower = c(0.01, 0.01, 0.01), upper = c(1.5, 1.5, 1.5),
+                            method = "L-BFGS-B")$par
+
+  return(thetaVals)
+}

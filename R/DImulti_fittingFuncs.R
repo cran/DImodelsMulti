@@ -87,7 +87,7 @@ fit_FULL <- function(formulaStart, formulaEnd, prop, ID, weightGen, corr, method
     error = function(e) {
       message("An error has occurred")
       print(formula)
-      cat("Theta: ", paste(names(theta), round(theta, 4), sep = ":", collapse = ", "))
+      cat("Theta: ", paste(names(theta), round(theta, 4), collapse = ", "))
       message(e, "\n")
       stop("\nIf the error refers to the fit as 'singular' ",
            "some element of the vcov matrix is 0. Simplifying the model ",
@@ -113,7 +113,7 @@ fit_E <- function(formulaStart, formulaEnd, prop, ID, weightGen, corr, method, d
     error = function(e) {
       message("An error has occurred")
       print(formula)
-      cat("Theta: ", paste(names(theta), round(theta, 4), sep = ":", collapse = ", "))
+      cat("Theta: ", paste(names(theta), round(theta, 4), collapse = ", "))
       message(e, "\n")
       stop("\nIf the error refers to the fit as 'singular' ",
            "some element of the vcov matrix is 0. Simplifying the model ",
@@ -139,7 +139,7 @@ fit_AV <- function(formulaStart, formulaEnd, prop, ID, weightGen, corr, method, 
     error = function(e) {
       message("An error has occurred")
       print(formula)
-      cat("Theta: ", paste(names(theta), round(theta, 4), sep = ":", collapse = ", "))
+      cat("Theta: ", paste(names(theta), round(theta, 4), collapse = ", "))
       message(e, "\n")
       stop("\nIf the error refers to the fit as 'singular' ",
            "some element of the vcov matrix is 0. Simplifying the model ",
@@ -165,7 +165,7 @@ fit_ADD <- function(formulaStart, formulaEnd, prop, ID, weightGen, corr, method,
     error = function(e) {
       message("An error has occurred")
       print(formula)
-      cat("Theta: ", paste(names(theta), round(theta, 4), sep = ":", collapse = ", "))
+      cat("Theta: ", paste(names(theta), round(theta, 4), collapse = ", "))
       message(e, "\n")
       stop("\nIf the error refers to the fit as 'singular' ",
            "some element of the vcov matrix is 0. Simplifying the model ",
@@ -191,7 +191,7 @@ fit_FG <- function(formulaStart, formulaEnd, prop, ID, weightGen, corr, method, 
   error = function(e) {
     message("An error has occurred")
     print(formula)
-    cat("Theta: ", paste(names(theta), round(theta, 4), sep = ":", collapse = ", "))
+    cat("Theta: ", paste(names(theta), round(theta, 4), collapse = ", "))
     message(e, "\n")
     stop("\nIf the error refers to the fit as 'singular' ",
          "some element of the vcov matrix is 0. Simplifying the model ",

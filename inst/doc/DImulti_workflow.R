@@ -73,35 +73,41 @@ modelAV_theta <- DImulti(y = c("Y1", "Y2", "Y3"), eco_func = c("NA", "UN"), time
                     unit_IDs = 1, prop = 2:5, data = simMVRM, DImodel = "AV", method = "ML",
                     estimate_theta = TRUE)
 
-anova(modelAV, modelAV_theta)
+thetaVals <- modelAV_theta$theta
+thetaVals
+
+AICc(modelAV) 
+AICc(modelAV_theta)
 
 ## ----DImulti_modelADD---------------------------------------------------------
 modelADD <- DImulti(y = c("Y1", "Y2", "Y3"), eco_func = c("NA", "UN"), time = c("time", "CS"),
-                    unit_IDs = 1, prop = 2:5, data = simMVRM, DImodel = "ADD", method = "ML")
+                    unit_IDs = 1, prop = 2:5, data = simMVRM, DImodel = "ADD", method = "ML",
+                    theta = thetaVals)
 
 modelADD$coefficients
-anova(modelAV, modelADD)
+anova(modelAV_theta, modelADD)
 
 ## ----DImulti_modelADD_treat, eval=FALSE---------------------------------------
 #  modelAV_treat1 <- DImulti(y = c("Y1", "Y2", "Y3"), eco_func = c("NA", "UN"), time = c("time", "CS"),
 #                      unit_IDs = 1, prop = 2:5, data = simMVRM, DImodel = "ADD", method = "ML",
-#                      extra_fixed = ~treat)
+#                      theta = thetaVals, extra_fixed = ~treat)
 #  
 #  modelAV_treat2 <- DImulti(y = c("Y1", "Y2", "Y3"), eco_func = c("NA", "UN"), time = c("time", "CS"),
 #                      unit_IDs = 1, prop = 2:5, data = simMVRM, DImodel = "ADD", method = "ML",
-#                      extra_fixed = ~1:treat)
+#                      theta = thetaVals, extra_fixed = ~1:treat)
 
 ## ----DImulti_modelAV_ID-------------------------------------------------------
 modelAV_ID <- DImulti(y = c("Y1", "Y2", "Y3"), eco_func = c("NA", "UN"), time = c("time", "CS"),
                     unit_IDs = 1, prop = 2:5, data = simMVRM, DImodel = "AV", method = "ML",
-                    ID = c("Group1", "Group1", "Group2", "Group2"))
+                    theta = thetaVals, ID = c("Group1", "Group1", "Group2", "Group2"))
 
 summary(modelAV_ID)$tTable
 anova(modelAV_ID, modelAV)
 
 ## ----DImulti_modelFinal-------------------------------------------------------
 modelFinal <- DImulti(y = c("Y1", "Y2", "Y3"), eco_func = c("NA", "UN"), time = c("time", "CS"),
-                    unit_IDs = 1, prop = 2:5, data = simMVRM, DImodel = "AV", method = "REML")
+                    unit_IDs = 1, prop = 2:5, data = simMVRM, DImodel = "AV", method = "REML",
+                    theta = thetaVals)
 
 summary(modelFinal)
 

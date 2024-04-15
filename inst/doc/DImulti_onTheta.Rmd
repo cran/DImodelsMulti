@@ -84,13 +84,12 @@ FALSE, which is the default for the function.
 
 ```{r thetaOptions, eval = FALSE}
 DImulti(..., theta = c(0.5, 1, 1.2))
-DImulti(..., estimate_theta = TRUE)
-DImulti(..., theta = 1, estimate_theta = FALSE)
+DImulti(..., theta = 1)
 ```
 
 
 Setting a value for theta supplied by a user is a straightforward process thanks to the function
-<span class="R">DI_data()</span> from the parent package <span class="R">DImodels</span> (Moral *et al.*, 2023). We divide the dataset by ecosystem function, as multivariate data can have differing values of theta for each, then pass each subset into the function, specifying the desired $\theta$ value and base interaction structure. The subsets are then binded together again and the dataset is ready for use with theta. 
+<span class="R">DI_data()</span> from the parent package <span class="R">DImodels</span> (Moral *et al.*, 2023). We divide the dataset by ecosystem function, as multivariate data can have differing values of theta for each, then pass each subset into the function, specifying the desired $\theta$ value and base interaction structure. The subsets are then bound together again and the dataset is ready for use with theta. 
 
 The below example would transform the usual format of a full pairwise structure from 
 $\delta_{12}p_{1}p_{2} + \delta_{13}p_{1}p_{3} + \delta_{23}p_{2}p_{3}$ to $\delta_{12}(p_{1}p_{2})^{1.2} + \delta_{13}(p_{1}p_{3})^{1.2} + \delta_{23}(p_{2}p_{3})^{1.2}$.
@@ -100,46 +99,26 @@ DI_data(..., theta = 1.2, what = "FULL")
 ```
 
 
-When theta is estimated, the process is a bit more involved. We perform the same dataset separation 
-by ecosystem function, then fit a univariate DI model (Kirwan *et al.*, 2009), ignoring any repeated measures, using the 
-method <span class="R">DI()</span>, which is also available in the parent package <span class="R">DImodels</span> (Moral *et al.*, 2023). We specify that we wish to estimate theta and specify the interaction  structure desired. This method uses profile likelihood optimisation (Brent, 1973) to find the best fitting value of theta between $0.01$ and $1.5$. Finally, we can extract the coefficient theta from each of our returned models and then use these values as if the user specified them (see above for details).
+When theta is estimated, the process is a bit more involved. We create a function to fit multivariate repeated measures DI models, wrapping <span class="R">DImulti()</span>, which accepts a vector of theta values, one per ecosystem function, and returns the negative log likelihood of the produced model. We then use <span class="R">optim()</span> to minimise the returned value from this function over the space of the allowable values of theta (0.1 to 1.5). 
 
-```{r DI_estimate, eval = FALSE}
-DI(..., estimate_theta = TRUE, DImodel = "FULL")$coefficients[["theta"]]
+After fitting a model where theta is estimated. This model should then be compared to a model with the same fixed effects structure using $\theta = 1$ using information criteria (AIC, BIC, AICc, BICc) to test the significance of the estimated values.
+
+```{r test_theta, eval = FALSE}
+AICc(DImodel)
+AICc(DImodel_theta)
 ```
 
+In the event that the preferred model has an estimated value of theta that differs from 1 but causes fitting issues, e.g., predictions are unrealistic, either in the model used for estimation or a final selected model, set the theta value equal to 1 and continue/redo the analysis.
 
-<h2>Implications of this methodology and suggestions </h2>
+<h2>Implications of this methodology</h2>
+
+The methodology used in this package allows a user to estimate the value of theta for each ecosystem function in the dataset simultaneously using log-likelihood as a measure of model fit quality.
 
 For multivariate and repeated measures DI models, we have allowed the value of theta to vary across ecosystem functions, which in turn allows the change in fixed effects structures to vary across functions. This is not common practice in multivariate regression and so its effects/implications will require further study.
-
-The methodology used in this package involves estimating $\theta$ values separately for 
-each ecosystem function, therefore estimates are each unaffected by the presence of other functions and values. The use of theta in the multivariate space is currently still being researched and so the effect of this method is unknown, but was chosen to minimise computational intensity. 
-
-As each $\theta$ value is optimised for its ecosystem function isolated from other functions/values, it can occur that the function will encounter an error, most commonly a singular fit, when trying to model all functions together. In this event, the function will print the estimated $\theta$ values and it is recommended that they be slightly altered and passed through the function manually by the user rather than using <span class="R">'estimate_theta'</span>. It is also possible that the fixed effects structure, e.g. interaction structure choice or extra fixed effects added, may need to be changed as opposed to theta, therefore we recommend setting <span class="R">theta = 1</span> to select an appropriate fixed effect structure first before estimating theta (Vishwakarma *et al.*, 2023).
-
-In the event that a user wishes to estimate a theta value for multiple ecosystem functions simultaneously, the code below can be used.
-
-```{r optimTheta, eval = FALSE}
-f <- function(theta_val) 
-{
-  fit <- DImulti(prop = 2:5, y = 6:8, eco_func = c("na", "un"), time = c("time", "ar1"),
-                 unit_IDs = 1, theta = theta_val, DImodel = "FULL", method = "ML",
-                 data = simMVRM)
-  
-	return(-as.numeric(logLik(fit)))
-}
-	
-optim(c(1,1,1), f, hessian = FALSE, lower = c(.1,.1,.1), upper = c(1.5,1.5,1.5),
-      method = "L-BFGS-B")
-```
-
-We create a function to fit multivariate repeated measures DI models, wrapping <span class="R">DImulti()</span>, which accepts a vector of theta values, one per ecosystem function, and returns the negative log likelihood of the produced model. We then use <span class="R">optim()</span> to minimise the returned value from this function over the space of the allowable values of theta.
 
 The methodology used in this R package may change in future updates to align with research findings on the topic.
 
  
-
 
 <h2>References</h2>
 

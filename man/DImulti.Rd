@@ -91,12 +91,8 @@ Any terms included will automatically be crossed with the column(s) specified th
 \item{estimate_theta}{By default, \eqn{\theta} (the power parameter on all \code{p_i * p_j}
 components of each interaction variable in the model) is set equal to one. Specify
 \code{estimate_theta = TRUE} to include the estimation of \eqn{\theta} in the specified model. A
-value of \eqn{\theta} will be estimated for each ecosystem function present in the data
-separately, possibly changing the fixed effects across functions. In the case of multivariate
-data, it is possible the model will be singular, resulting in an error, in this case, the
-\eqn{\theta} estimates will be printed to the console. It is recommended to simplify a singular
-model, e.g. reduce the number of terms estimated, or change the theta values through parameter
-\code{theta}}
+value of \eqn{\theta} will be estimated for each ecosystem function present in the data,
+possibly changing the fixed effects across functions.}
 
 \item{theta}{Users may specify a value of \eqn{\theta} different than 1 to fit the DI model.
 Note that if \code{estimate_theta = TRUE}, then \eqn{\theta} will be estimated via maximum
@@ -187,10 +183,7 @@ expected contribution of the \eqn{i^{th}} species to the \eqn{k^{th}} response a
 \eqn{t} and is referred to as the \eqn{i^{th}} species' ID effect.
 The value of the nonlinear parameter \eqn{\theta} is allowed to vary between ecosystem functions,
 in turn allowing the fixed effect structure to change across functions, in recognition that the
-nature of the species interactions could change between ecosystem functions. In the main function
-of this package \code{\link{DImulti}}, the \eqn{\theta} values are estimated separately for each
-ecosystem function, therefore are unaffected by the presence of other functions. This may change
-in future updates. \cr
+nature of the species interactions could change between ecosystem functions.\cr
 
 In the case that a dataset contains only a single ecosystem function, the corresponding subscript
 \eqn{k} can simply be removed from the equation, the same can be said for the removal of the

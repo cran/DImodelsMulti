@@ -442,15 +442,17 @@ DImulti_vcovModels <- function(model, MVflag, funcCorr, timeCorr, formulaStart, 
 
   formulaStartT <- paste0(Yvalue, "~ 0 + ", timeCol, ":((")
   #remove any mention of func
-  formulaEndT <- gsub(paste0(Yfunc, "\\s*[:|\\*]"), "", formulaEnd)
-  formulaEndT <- gsub(paste0("[:|\\*]\\s*", Yfunc), "", formulaEndT)
-  formulaEndT <- gsub(paste0("\\+\\s*", Yfunc), "", formulaEndT)
+  formulaEndT <- formulaEnd
+#  formulaEndT <- gsub(paste0(Yfunc, "\\s*[:|\\*]"), "", formulaEnd)
+#  formulaEndT <- gsub(paste0("[:|\\*]\\s*", Yfunc), "", formulaEndT)
+#  formulaEndT <- gsub(paste0("\\+\\s*", Yfunc), "", formulaEndT)
 
   formulaStartMV <- paste(Yvalue, "~ 0 +", Yfunc, ":((")
   #remove any mention of timeCol
-  formulaEndMV <- gsub(paste0(timeCol, "\\s*[:|\\*]"), "", formulaEnd)
-  formulaEndMV <- gsub(paste0("[:|\\*]\\s*", timeCol), "", formulaEndMV)
-  formulaEndMV <- gsub(paste0("\\+\\s*", timeCol), "", formulaEndMV)
+  formulaEndMV <- formulaEnd
+#  formulaEndMV <- gsub(paste0(timeCol, "\\s*[:|\\*]"), "", formulaEnd)
+#  formulaEndMV <- gsub(paste0("[:|\\*]\\s*", timeCol), "", formulaEndMV)
+#  formulaEndMV <- gsub(paste0("\\+\\s*", timeCol), "", formulaEndMV)
 
 
   if(model == "E") # Prevent partial match of EXPR to E

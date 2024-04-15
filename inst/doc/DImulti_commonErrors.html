@@ -642,14 +642,62 @@ which is included in this package.</p>
 RUNXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXX</span></p>
 <div class="sourceCode" id="cb18"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb18-1"><a href="#cb18-1" tabindex="-1"></a><span class="fu">DImulti</span>(<span class="at">prop =</span> <span class="dv">5</span><span class="sc">:</span><span class="dv">8</span>, <span class="at">y =</span> <span class="st">&quot;YIELD&quot;</span>, <span class="at">time =</span> <span class="fu">c</span>(<span class="st">&quot;YEARN&quot;</span>, <span class="st">&quot;CS&quot;</span>), <span class="at">unit_IDs =</span> <span class="st">&quot;PLOT&quot;</span>, <span class="at">data =</span> dataSWE, </span>
 <span id="cb18-2"><a href="#cb18-2" tabindex="-1"></a>        <span class="at">DImodel =</span> <span class="st">&quot;ID&quot;</span>, <span class="at">extra_fixed =</span> <span class="sc">~</span>DENS<span class="sc">+</span>TREAT)</span></code></pre></div>
-<pre class="r-output"><code>#&gt; An error has occurred
+<pre class="r-output"><code>#&gt; <span style="font-weight: bold;">Note: 
+#&gt; </span><span style="color: #BB00BB; font-weight: bold;">Method Used =</span><span style="font-weight: bold;"> </span><span style="font-weight: bold; text-decoration: underline;">REML</span><span style="font-weight: bold;"> 
+#&gt; </span><span style="color: #BB00BB; font-weight: bold;">Correlation Structure Used = </span>
 </code></pre>
-<pre class="r-output"><code>#&gt; [1] &quot;YIELD ~ 0 + YEARN:((G1_ID+G2_ID+L1_ID+L2_ID )+DENS + TREAT)&quot;
+<pre class="r-output"><code>#&gt; CS (`?nlme::corCompSymm()`)
 </code></pre>
-<pre class="r-output"><code>#&gt; Error in glsEstimate(object, control = control): computed &quot;gls&quot; fit is singular, rank 7
-</code></pre>
-<pre class="r-output"><code>#&gt; Error in value[[3L]](cond): 
-#&gt; If the error refers to the fit as &#39;singular&#39; some element of the vcov matrix is 0. Simplifying the model or changing the values of theta supplied can usually fix this issue
+<pre class="r-output"><code>#&gt; 
+#&gt;  <span style="color: #00BB00; font-weight: bold;">Identity Model</span><span style="color: #BB00BB; font-weight: bold;">
+#&gt; Theta value(s) = </span>1
+#&gt; 
+#&gt; Generalized least squares fit by REML
+#&gt;   Model: YIELD ~ 0 + YEARN:((G1_ID + G2_ID + L1_ID + L2_ID) + DENS + TREAT) 
+#&gt;       AIC       BIC    logLik 
+#&gt;  538.6412  595.3668 -249.3206 
+#&gt; 
+#&gt;  Repeated Measure Correlation Structure: Compound symmetry
+#&gt;  Formula: ~0 | PLOT 
+#&gt;  Parameter estimate(s):
+#&gt;       Rho 
+#&gt; 0.8454513 
+#&gt; 
+#&gt; 
+#&gt; Table: <span style="font-weight: bold;">Fixed Effect Coefficients</span>
+#&gt; 
+#&gt;                  Beta      Std. Error   t-value   p-value     Signif 
+#&gt; ---------------  --------  -----------  --------  ----------  -------
+#&gt; YEARN1:G1_ID     +9.481    1.019        9.306     5.336e-16   ***    
+#&gt; YEARN2:G1_ID     +7.821    1.019        7.677     3.922e-12   ***    
+#&gt; YEARN3:G1_ID     +6.402    1.019        6.284     4.935e-09   ***    
+#&gt; YEARN1:G2_ID     +10.554   1.019        10.359    1.441e-18   ***    
+#&gt; YEARN2:G2_ID     +10.288   1.019        10.098    6.303e-18   ***    
+#&gt; YEARN3:G2_ID     +8.960    1.019        8.794     9.136e-15   ***    
+#&gt; YEARN1:L1_ID     +10.648   1.019        10.451    8.567e-19   ***    
+#&gt; YEARN2:L1_ID     +9.751    1.019        9.571     1.212e-16   ***    
+#&gt; YEARN3:L1_ID     +6.909    1.019        6.781     4.136e-10   ***    
+#&gt; YEARN1:L2_ID     +9.230    1.019        9.060     2.105e-15   ***    
+#&gt; YEARN2:L2_ID     +9.922    1.019        9.739     4.738e-17   ***    
+#&gt; YEARN3:L2_ID     +8.798    1.019        8.635     2.195e-14   ***    
+#&gt; YEARN1:DENSLow   -0.526    0.687        -0.765    0.4454             
+#&gt; YEARN2:DENSLow   -0.286    0.687        -0.417    0.6774             
+#&gt; YEARN3:DENSLow   +0.044    0.687        0.064     0.9488             
+#&gt; YEARN1:TREAT2    +2.218    0.709        3.128     0.002183    **     
+#&gt; YEARN2:TREAT2    +1.900    0.709        2.679     0.008368    **     
+#&gt; YEARN3:TREAT2    +1.524    0.709        2.148     0.03359     *      
+#&gt; 
+#&gt; Signif codes: 0-0.001 &#39;***&#39;, 0.001-0.01 &#39;**&#39;, 0.01-0.05 &#39;*&#39;, 0.05-0.1 &#39;+&#39;, 0.1-1.0 &#39; &#39;
+#&gt; 
+#&gt; Degrees of freedom: 144 total; 126 residual
+#&gt; Residual standard error: 2.378508 
+#&gt; 
+#&gt; Marginal variance covariance matrix
+#&gt;        1      2      3
+#&gt; 1 5.6573 4.7830 4.7830
+#&gt; 2 4.7830 5.6573 4.7830
+#&gt; 3 4.7830 4.7830 5.6573
+#&gt;   Standard Deviations: 2.3785 2.3785 2.3785
 </code></pre>
 <span class="bad">XXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXX</span>
 As we include no theta values or interaction terms, and use the simple
@@ -682,43 +730,67 @@ other.</p>
 #&gt; Generalized least squares fit by REML
 #&gt;   Model: YIELD ~ 0 + YEARN:((G1_ID + G2_ID + L1_ID + L2_ID):(DENS + TREAT)) 
 #&gt;       AIC       BIC    logLik 
-#&gt;  883.2454  923.6046 -427.6227 
+#&gt;  519.2773  621.1983 -221.6386 
 #&gt; 
 #&gt;  Repeated Measure Correlation Structure: Compound symmetry
 #&gt;  Formula: ~0 | PLOT 
 #&gt;  Parameter estimate(s):
-#&gt;         Rho 
-#&gt; -0.05881758 
+#&gt;       Rho 
+#&gt; 0.8390275 
 #&gt; 
 #&gt; 
 #&gt; Table: <span style="font-weight: bold;">Fixed Effect Coefficients</span>
 #&gt; 
-#&gt;                        Beta     Std. Error   t-value   p-value     Signif 
-#&gt; ---------------------  -------  -----------  --------  ----------  -------
-#&gt; YEARN:G1_ID:DENSHigh   +3.282   0.866        3.789     0.0002294   ***    
-#&gt; YEARN:G1_ID:DENSLow    +3.072   0.866        3.546     0.0005419   ***    
-#&gt; YEARN:G1_ID:TREAT2     +0.922   1.034        0.892     0.3743             
-#&gt; YEARN:G2_ID:DENSHigh   +3.774   0.866        4.356     2.637e-05   ***    
-#&gt; YEARN:G2_ID:DENSLow    +3.807   0.866        4.394     2.261e-05   ***    
-#&gt; YEARN:G2_ID:TREAT2     +1.709   1.034        1.653     0.1007             
-#&gt; YEARN:L1_ID:DENSHigh   +3.870   0.866        4.467     1.686e-05   ***    
-#&gt; YEARN:L1_ID:DENSLow    +3.675   0.866        4.241     4.153e-05   ***    
-#&gt; YEARN:L1_ID:TREAT2     +0.691   1.034        0.669     0.5049             
-#&gt; YEARN:L2_ID:DENSHigh   +4.450   0.866        5.136     9.832e-07   ***    
-#&gt; YEARN:L2_ID:DENSLow    +4.512   0.866        5.208     7.143e-07   ***    
-#&gt; YEARN:L2_ID:TREAT2     -0.190   1.034        -0.183    0.8548             
+#&gt;                         Beta      Std. Error   t-value   p-value     Signif 
+#&gt; ----------------------  --------  -----------  --------  ----------  -------
+#&gt; YEARN1:G1_ID:DENSHigh   +9.308    1.623        5.735     8.968e-08   ***    
+#&gt; YEARN2:G1_ID:DENSHigh   +7.706    1.623        4.748     6.341e-06   ***    
+#&gt; YEARN3:G1_ID:DENSHigh   +6.561    1.623        4.043     9.94e-05    ***    
+#&gt; YEARN1:G1_ID:DENSLow    +8.859    1.623        5.459     3.083e-07   ***    
+#&gt; YEARN2:G1_ID:DENSLow    +7.222    1.623        4.450     2.096e-05   ***    
+#&gt; YEARN3:G1_ID:DENSLow    +6.073    1.623        3.742     0.0002941   ***    
+#&gt; YEARN1:G1_ID:TREAT2     +2.506    1.937        1.294     0.1985             
+#&gt; YEARN2:G1_ID:TREAT2     +2.356    1.937        1.217     0.2264             
+#&gt; YEARN3:G1_ID:TREAT2     +1.752    1.937        0.904     0.3678             
+#&gt; YEARN1:G2_ID:DENSHigh   +9.207    1.623        5.673     1.188e-07   ***    
+#&gt; YEARN2:G2_ID:DENSHigh   +8.955    1.623        5.518     2.377e-07   ***    
+#&gt; YEARN3:G2_ID:DENSHigh   +8.093    1.623        4.986     2.361e-06   ***    
+#&gt; YEARN1:G2_ID:DENSLow    +9.191    1.623        5.663     1.242e-07   ***    
+#&gt; YEARN2:G2_ID:DENSLow    +9.301    1.623        5.731     9.142e-08   ***    
+#&gt; YEARN3:G2_ID:DENSLow    +8.016    1.623        4.939     2.882e-06   ***    
+#&gt; YEARN1:G2_ID:TREAT2     +4.548    1.937        2.348     0.02068     *      
+#&gt; YEARN2:G2_ID:TREAT2     +4.067    1.937        2.100     0.03807     *      
+#&gt; YEARN3:G2_ID:TREAT2     +3.502    1.937        1.808     0.0734      +      
+#&gt; YEARN1:L1_ID:DENSHigh   +11.068   1.623        6.820     5.463e-10   ***    
+#&gt; YEARN2:L1_ID:DENSHigh   +10.204   1.623        6.287     7.007e-09   ***    
+#&gt; YEARN3:L1_ID:DENSHigh   +6.909    1.623        4.257     4.429e-05   ***    
+#&gt; YEARN1:L1_ID:DENSLow    +9.914    1.623        6.108     1.619e-08   ***    
+#&gt; YEARN2:L1_ID:DENSLow    +9.188    1.623        5.661     1.251e-07   ***    
+#&gt; YEARN3:L1_ID:DENSLow    +7.157    1.623        4.410     2.453e-05   ***    
+#&gt; YEARN1:L1_ID:TREAT2     +1.993    1.937        1.029     0.3058             
+#&gt; YEARN2:L1_ID:TREAT2     +1.713    1.937        0.884     0.3785             
+#&gt; YEARN3:L1_ID:TREAT2     +1.305    1.937        0.674     0.502              
+#&gt; YEARN1:L2_ID:DENSHigh   +10.330   1.623        6.365     4.847e-09   ***    
+#&gt; YEARN2:L2_ID:DENSHigh   +10.918   1.623        6.727     8.564e-10   ***    
+#&gt; YEARN3:L2_ID:DENSHigh   +9.505    1.623        5.857     5.167e-08   ***    
+#&gt; YEARN1:L2_ID:DENSLow    +9.847    1.623        6.068     1.956e-08   ***    
+#&gt; YEARN2:L2_ID:DENSLow    +10.926   1.623        6.732     8.364e-10   ***    
+#&gt; YEARN3:L2_ID:DENSLow    +9.998    1.623        6.161     1.269e-08   ***    
+#&gt; YEARN1:L2_ID:TREAT2     -0.173    1.937        -0.089    0.9289             
+#&gt; YEARN2:L2_ID:TREAT2     -0.537    1.937        -0.277    0.7822             
+#&gt; YEARN3:L2_ID:TREAT2     -0.464    1.937        -0.240    0.8111             
 #&gt; 
 #&gt; Signif codes: 0-0.001 &#39;***&#39;, 0.001-0.01 &#39;**&#39;, 0.01-0.05 &#39;*&#39;, 0.05-0.1 &#39;+&#39;, 0.1-1.0 &#39; &#39;
 #&gt; 
-#&gt; Degrees of freedom: 144 total; 132 residual
-#&gt; Residual standard error: 5.218349 
+#&gt; Degrees of freedom: 144 total; 108 residual
+#&gt; Residual standard error: 2.483701 
 #&gt; 
 #&gt; Marginal variance covariance matrix
-#&gt;         1       2       3
-#&gt; 1 27.2310 -1.6017 -1.6017
-#&gt; 2 -1.6017 27.2310 -1.6017
-#&gt; 3 -1.6017 -1.6017 27.2310
-#&gt;   Standard Deviations: 5.2183 5.2183 5.2183
+#&gt;        1      2      3
+#&gt; 1 6.1688 5.1758 5.1758
+#&gt; 2 5.1758 6.1688 5.1758
+#&gt; 3 5.1758 5.1758 6.1688
+#&gt;   Standard Deviations: 2.4837 2.4837 2.4837
 </code></pre>
 <p>Which has resolved our issue.</p>
 <p>We show another example using the multivariate dataset <span class="R">dataBEL</span> and estimating <span class="math inline">\(\theta\)</span>. We would first set <span class="R">theta = 1</span> and use model selection to choose an
@@ -727,44 +799,6 @@ with a functional group structure:</p>
 <div class="sourceCode" id="cb20"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb20-1"><a href="#cb20-1" tabindex="-1"></a>model1 <span class="ot">&lt;-</span> <span class="fu">DImulti</span>(<span class="at">prop =</span> <span class="dv">2</span><span class="sc">:</span><span class="dv">5</span>, <span class="at">y =</span> <span class="st">&quot;Y&quot;</span>, <span class="at">eco_func =</span> <span class="fu">c</span>(<span class="st">&quot;Var&quot;</span>, <span class="st">&quot;UN&quot;</span>), <span class="at">unit_IDs =</span> <span class="dv">1</span>, <span class="at">data =</span> dataBEL,</span>
 <span id="cb20-2"><a href="#cb20-2" tabindex="-1"></a>                  <span class="at">FG =</span> <span class="fu">c</span>(<span class="st">&quot;Grass&quot;</span>, <span class="st">&quot;Grass&quot;</span>, <span class="st">&quot;Leg&quot;</span>, <span class="st">&quot;Leg&quot;</span>), <span class="at">DImodel =</span> <span class="st">&quot;FG&quot;</span>, <span class="at">extra_fixed =</span> <span class="sc">~</span>Density, </span>
 <span id="cb20-3"><a href="#cb20-3" tabindex="-1"></a>                  <span class="at">method =</span> <span class="st">&quot;ML&quot;</span>, <span class="at">theta =</span> <span class="dv">1</span>)</span></code></pre></div>
-<p>Next, we would allow <span class="R">DImulti()</span> to estimate
-<span class="math inline">\(\theta\)</span>. However, this results in
-the fit being singular, as the function estimates a theta value for each
-ecosystem function separately (see the vignette on theta for more
-information), therefore they don’t necessarily work best together.</p>
-<p><span class="bad">XXDO NOT
-RUNXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXX</span></p>
-<div class="sourceCode" id="cb21"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb21-1"><a href="#cb21-1" tabindex="-1"></a><span class="fu">DImulti</span>(<span class="at">prop =</span> <span class="dv">2</span><span class="sc">:</span><span class="dv">5</span>, <span class="at">y =</span> <span class="st">&quot;Y&quot;</span>, <span class="at">eco_func =</span> <span class="fu">c</span>(<span class="st">&quot;Var&quot;</span>, <span class="st">&quot;UN&quot;</span>), <span class="at">unit_IDs =</span> <span class="dv">1</span>, <span class="at">data =</span> dataBEL, </span>
-<span id="cb21-2"><a href="#cb21-2" tabindex="-1"></a>        <span class="at">FG =</span> <span class="fu">c</span>(<span class="st">&quot;Grass&quot;</span>, <span class="st">&quot;Grass&quot;</span>, <span class="st">&quot;Leg&quot;</span>, <span class="st">&quot;Leg&quot;</span>), <span class="at">DImodel =</span> <span class="st">&quot;FG&quot;</span>, <span class="at">extra_fixed =</span> <span class="sc">~</span>Density, </span>
-<span id="cb21-3"><a href="#cb21-3" tabindex="-1"></a>        <span class="at">method =</span> <span class="st">&quot;ML&quot;</span>, <span class="at">estimate_theta =</span> <span class="cn">TRUE</span>)</span></code></pre></div>
-<pre class="r-output"><code>#&gt; An error has occurred
-</code></pre>
-<pre class="r-output"><code>#&gt; [1] &quot;Y ~ 0 +Var:((G1_ID+G2_ID+L1_ID+L2_ID+FG.bfg_Grass_Leg+FG.wfg_Grass+FG.wfg_Leg )+Density)&quot;
-#&gt; Theta:  N:1e-04, Sown:0.1042, Weed:1e-04
-</code></pre>
-<pre class="r-output"><code>#&gt; Error in glsEstimate(object, control = control): computed &quot;gls&quot; fit is singular, rank 23
-</code></pre>
-<pre class="r-output"><code>#&gt; Error in value[[3L]](cond): 
-#&gt; If the error refers to the fit as &#39;singular&#39; some element of the vcov matrix is 0. Simplifying the model or changing the values of theta supplied can usually fix this issue
-</code></pre>
-<p><span class="bad">XXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXX</span></p>
-<p>We can fix this issue by tweaking the theta values estimated, which
-were printed with the error above, and passing them back through the
-parameter <span class="R">theta</span>.</p>
-<div class="sourceCode" id="cb22"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb22-1"><a href="#cb22-1" tabindex="-1"></a>model2 <span class="ot">&lt;-</span> <span class="fu">DImulti</span>(<span class="at">prop =</span> <span class="dv">2</span><span class="sc">:</span><span class="dv">5</span>, <span class="at">y =</span> <span class="st">&quot;Y&quot;</span>, <span class="at">eco_func =</span> <span class="fu">c</span>(<span class="st">&quot;Var&quot;</span>, <span class="st">&quot;UN&quot;</span>), <span class="at">unit_IDs =</span> <span class="dv">1</span>, <span class="at">data =</span> dataBEL,</span>
-<span id="cb22-2"><a href="#cb22-2" tabindex="-1"></a>                  <span class="at">FG =</span> <span class="fu">c</span>(<span class="st">&quot;Grass&quot;</span>, <span class="st">&quot;Grass&quot;</span>, <span class="st">&quot;Leg&quot;</span>, <span class="st">&quot;Leg&quot;</span>), <span class="at">DImodel =</span> <span class="st">&quot;FG&quot;</span>, <span class="at">extra_fixed =</span> <span class="sc">~</span>Density,</span>
-<span id="cb22-3"><a href="#cb22-3" tabindex="-1"></a>                  <span class="at">method =</span> <span class="st">&quot;ML&quot;</span>, <span class="at">theta =</span> <span class="fu">c</span>(<span class="fl">0.01</span>, <span class="fl">0.1</span>, <span class="fl">0.01</span>))</span></code></pre></div>
-<p>The model now fit and we can compare the two to see that despite our
-manually changing <span class="math inline">\(\theta\)</span>, the fit
-is still improved as we used the estimated values as guides. We opt to
-use <span class="R">AICc</span> over <span class="R">AIC</span> for
-comparison as we have a large number of terms and prefer the model with
-a lower value.</p>
-<div class="sourceCode" id="cb23"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb23-1"><a href="#cb23-1" tabindex="-1"></a><span class="fu">AICc</span>(model1); <span class="fu">AICc</span>(model2)</span></code></pre></div>
-<pre class="r-output"><code>#&gt; [1] 652.743
-</code></pre>
-<pre class="r-output"><code>#&gt; [1] 631.0963
-</code></pre>
 <h2>
 Comparing models: ML vs REML
 </h2>
@@ -780,15 +814,15 @@ model comparison where fixed effects vary between models, as we can see
 from the following warning message:</p>
 <p><span class="bad">XXDO NOT
 RUNXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXX</span></p>
-<div class="sourceCode" id="cb24"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb24-1"><a href="#cb24-1" tabindex="-1"></a>model1 <span class="ot">&lt;-</span> <span class="fu">DImulti</span>(<span class="at">prop =</span> <span class="dv">2</span><span class="sc">:</span><span class="dv">5</span>, <span class="at">y =</span> <span class="st">&quot;Y&quot;</span>, <span class="at">eco_func =</span> <span class="fu">c</span>(<span class="st">&quot;Var&quot;</span>, <span class="st">&quot;UN&quot;</span>), <span class="at">unit_IDs =</span> <span class="dv">1</span>, <span class="at">data =</span> dataBEL,</span>
-<span id="cb24-2"><a href="#cb24-2" tabindex="-1"></a>                  <span class="at">FG =</span> <span class="fu">c</span>(<span class="st">&quot;Grass&quot;</span>, <span class="st">&quot;Grass&quot;</span>, <span class="st">&quot;Leg&quot;</span>, <span class="st">&quot;Leg&quot;</span>), <span class="at">DImodel =</span> <span class="st">&quot;FG&quot;</span>, </span>
-<span id="cb24-3"><a href="#cb24-3" tabindex="-1"></a>                  <span class="at">method =</span> <span class="st">&quot;REML&quot;</span>)</span>
-<span id="cb24-4"><a href="#cb24-4" tabindex="-1"></a></span>
-<span id="cb24-5"><a href="#cb24-5" tabindex="-1"></a>model2 <span class="ot">&lt;-</span> <span class="fu">DImulti</span>(<span class="at">prop =</span> <span class="dv">2</span><span class="sc">:</span><span class="dv">5</span>, <span class="at">y =</span> <span class="st">&quot;Y&quot;</span>, <span class="at">eco_func =</span> <span class="fu">c</span>(<span class="st">&quot;Var&quot;</span>, <span class="st">&quot;UN&quot;</span>), <span class="at">unit_IDs =</span> <span class="dv">1</span>, <span class="at">data =</span> dataBEL,</span>
-<span id="cb24-6"><a href="#cb24-6" tabindex="-1"></a>                  <span class="at">FG =</span> <span class="fu">c</span>(<span class="st">&quot;Grass&quot;</span>, <span class="st">&quot;Grass&quot;</span>, <span class="st">&quot;Leg&quot;</span>, <span class="st">&quot;Leg&quot;</span>), <span class="at">DImodel =</span> <span class="st">&quot;FG&quot;</span>, <span class="at">extra_fixed =</span> <span class="sc">~</span>Density,</span>
-<span id="cb24-7"><a href="#cb24-7" tabindex="-1"></a>                  <span class="at">method =</span> <span class="st">&quot;REML&quot;</span>)</span>
-<span id="cb24-8"><a href="#cb24-8" tabindex="-1"></a></span>
-<span id="cb24-9"><a href="#cb24-9" tabindex="-1"></a><span class="fu">anova</span>(model1, model2)</span></code></pre></div>
+<div class="sourceCode" id="cb21"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb21-1"><a href="#cb21-1" tabindex="-1"></a>model1 <span class="ot">&lt;-</span> <span class="fu">DImulti</span>(<span class="at">prop =</span> <span class="dv">2</span><span class="sc">:</span><span class="dv">5</span>, <span class="at">y =</span> <span class="st">&quot;Y&quot;</span>, <span class="at">eco_func =</span> <span class="fu">c</span>(<span class="st">&quot;Var&quot;</span>, <span class="st">&quot;UN&quot;</span>), <span class="at">unit_IDs =</span> <span class="dv">1</span>, <span class="at">data =</span> dataBEL,</span>
+<span id="cb21-2"><a href="#cb21-2" tabindex="-1"></a>                  <span class="at">FG =</span> <span class="fu">c</span>(<span class="st">&quot;Grass&quot;</span>, <span class="st">&quot;Grass&quot;</span>, <span class="st">&quot;Leg&quot;</span>, <span class="st">&quot;Leg&quot;</span>), <span class="at">DImodel =</span> <span class="st">&quot;FG&quot;</span>, </span>
+<span id="cb21-3"><a href="#cb21-3" tabindex="-1"></a>                  <span class="at">method =</span> <span class="st">&quot;REML&quot;</span>)</span>
+<span id="cb21-4"><a href="#cb21-4" tabindex="-1"></a></span>
+<span id="cb21-5"><a href="#cb21-5" tabindex="-1"></a>model2 <span class="ot">&lt;-</span> <span class="fu">DImulti</span>(<span class="at">prop =</span> <span class="dv">2</span><span class="sc">:</span><span class="dv">5</span>, <span class="at">y =</span> <span class="st">&quot;Y&quot;</span>, <span class="at">eco_func =</span> <span class="fu">c</span>(<span class="st">&quot;Var&quot;</span>, <span class="st">&quot;UN&quot;</span>), <span class="at">unit_IDs =</span> <span class="dv">1</span>, <span class="at">data =</span> dataBEL,</span>
+<span id="cb21-6"><a href="#cb21-6" tabindex="-1"></a>                  <span class="at">FG =</span> <span class="fu">c</span>(<span class="st">&quot;Grass&quot;</span>, <span class="st">&quot;Grass&quot;</span>, <span class="st">&quot;Leg&quot;</span>, <span class="st">&quot;Leg&quot;</span>), <span class="at">DImodel =</span> <span class="st">&quot;FG&quot;</span>, <span class="at">extra_fixed =</span> <span class="sc">~</span>Density,</span>
+<span id="cb21-7"><a href="#cb21-7" tabindex="-1"></a>                  <span class="at">method =</span> <span class="st">&quot;REML&quot;</span>)</span>
+<span id="cb21-8"><a href="#cb21-8" tabindex="-1"></a></span>
+<span id="cb21-9"><a href="#cb21-9" tabindex="-1"></a><span class="fu">anova</span>(model1, model2)</span></code></pre></div>
 <pre class="r-output"><code>#&gt; Warning in nlme::anova.lme(object = model1, model2): fitted objects with
 #&gt; different fixed effects. REML comparisons are not meaningful.
 </code></pre>

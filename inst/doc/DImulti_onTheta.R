@@ -30,25 +30,12 @@ library(DImodels)
 
 ## ----thetaOptions, eval = FALSE-----------------------------------------------
 #  DImulti(..., theta = c(0.5, 1, 1.2))
-#  DImulti(..., estimate_theta = TRUE)
-#  DImulti(..., theta = 1, estimate_theta = FALSE)
+#  DImulti(..., theta = 1)
 
 ## ----DI_data_value, eval = FALSE----------------------------------------------
 #  DI_data(..., theta = 1.2, what = "FULL")
 
-## ----DI_estimate, eval = FALSE------------------------------------------------
-#  DI(..., estimate_theta = TRUE, DImodel = "FULL")$coefficients[["theta"]]
-
-## ----optimTheta, eval = FALSE-------------------------------------------------
-#  f <- function(theta_val)
-#  {
-#    fit <- DImulti(prop = 2:5, y = 6:8, eco_func = c("na", "un"), time = c("time", "ar1"),
-#                   unit_IDs = 1, theta = theta_val, DImodel = "FULL", method = "ML",
-#                   data = simMVRM)
-#  
-#  	return(-as.numeric(logLik(fit)))
-#  }
-#  	
-#  optim(c(1,1,1), f, hessian = FALSE, lower = c(.1,.1,.1), upper = c(1.5,1.5,1.5),
-#        method = "L-BFGS-B")
+## ----test_theta, eval = FALSE-------------------------------------------------
+#  AICc(DImodel)
+#  AICc(DImodel_theta)
 

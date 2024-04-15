@@ -393,15 +393,14 @@ specifying <span class="R">TRUE</span> through <span class="R">‘estimate_theta
 out” by setting <span class="R">‘theta’</span> equal to 1 and <span class="R">‘estimate_theta’</span> to FALSE, which is the default for the
 function.</p>
 <div class="sourceCode" id="cb2"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb2-1"><a href="#cb2-1" tabindex="-1"></a><span class="fu">DImulti</span>(..., <span class="at">theta =</span> <span class="fu">c</span>(<span class="fl">0.5</span>, <span class="dv">1</span>, <span class="fl">1.2</span>))</span>
-<span id="cb2-2"><a href="#cb2-2" tabindex="-1"></a><span class="fu">DImulti</span>(..., <span class="at">estimate_theta =</span> <span class="cn">TRUE</span>)</span>
-<span id="cb2-3"><a href="#cb2-3" tabindex="-1"></a><span class="fu">DImulti</span>(..., <span class="at">theta =</span> <span class="dv">1</span>, <span class="at">estimate_theta =</span> <span class="cn">FALSE</span>)</span></code></pre></div>
+<span id="cb2-2"><a href="#cb2-2" tabindex="-1"></a><span class="fu">DImulti</span>(..., <span class="at">theta =</span> <span class="dv">1</span>)</span></code></pre></div>
 <p>Setting a value for theta supplied by a user is a straightforward
 process thanks to the function <span class="R">DI_data()</span> from the
 parent package <span class="R">DImodels</span> (Moral <em>et al.</em>,
 2023). We divide the dataset by ecosystem function, as multivariate data
 can have differing values of theta for each, then pass each subset into
 the function, specifying the desired <span class="math inline">\(\theta\)</span> value and base interaction
-structure. The subsets are then binded together again and the dataset is
+structure. The subsets are then bound together again and the dataset is
 ready for use with theta.</p>
 <p>The below example would transform the usual format of a full pairwise
 structure from <span class="math inline">\(\delta_{12}p_{1}p_{2} +
@@ -410,62 +409,35 @@ structure from <span class="math inline">\(\delta_{12}p_{1}p_{2} +
 \delta_{23}(p_{2}p_{3})^{1.2}\)</span>.</p>
 <div class="sourceCode" id="cb3"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb3-1"><a href="#cb3-1" tabindex="-1"></a><span class="fu">DI_data</span>(..., <span class="at">theta =</span> <span class="fl">1.2</span>, <span class="at">what =</span> <span class="st">&quot;FULL&quot;</span>)</span></code></pre></div>
 <p>When theta is estimated, the process is a bit more involved. We
-perform the same dataset separation by ecosystem function, then fit a
-univariate DI model (Kirwan <em>et al.</em>, 2009), ignoring any
-repeated measures, using the method <span class="R">DI()</span>, which
-is also available in the parent package <span class="R">DImodels</span>
-(Moral <em>et al.</em>, 2023). We specify that we wish to estimate theta
-and specify the interaction structure desired. This method uses profile
-likelihood optimisation (Brent, 1973) to find the best fitting value of
-theta between <span class="math inline">\(0.01\)</span> and <span class="math inline">\(1.5\)</span>. Finally, we can extract the
-coefficient theta from each of our returned models and then use these
-values as if the user specified them (see above for details).</p>
-<div class="sourceCode" id="cb4"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb4-1"><a href="#cb4-1" tabindex="-1"></a><span class="fu">DI</span>(..., <span class="at">estimate_theta =</span> <span class="cn">TRUE</span>, <span class="at">DImodel =</span> <span class="st">&quot;FULL&quot;</span>)<span class="sc">$</span>coefficients[[<span class="st">&quot;theta&quot;</span>]]</span></code></pre></div>
+create a function to fit multivariate repeated measures DI models,
+wrapping <span class="R">DImulti()</span>, which accepts a vector of
+theta values, one per ecosystem function, and returns the negative log
+likelihood of the produced model. We then use <span class="R">optim()</span> to minimise the returned value from this
+function over the space of the allowable values of theta (0.1 to
+1.5).</p>
+<p>After fitting a model where theta is estimated. This model should
+then be compared to a model with the same fixed effects structure using
+<span class="math inline">\(\theta = 1\)</span> using information
+criteria (AIC, BIC, AICc, BICc) to test the significance of the
+estimated values.</p>
+<div class="sourceCode" id="cb4"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb4-1"><a href="#cb4-1" tabindex="-1"></a><span class="fu">AICc</span>(DImodel)</span>
+<span id="cb4-2"><a href="#cb4-2" tabindex="-1"></a><span class="fu">AICc</span>(DImodel_theta)</span></code></pre></div>
+<p>In the event that the preferred model has an estimated value of theta
+that differs from 1 but causes fitting issues, e.g., predictions are
+unrealistic, either in the model used for estimation or a final selected
+model, set the theta value equal to 1 and continue/redo the
+analysis.</p>
 <h2>
-Implications of this methodology and suggestions
+Implications of this methodology
 </h2>
+<p>The methodology used in this package allows a user to estimate the
+value of theta for each ecosystem function in the dataset simultaneously
+using log-likelihood as a measure of model fit quality.</p>
 <p>For multivariate and repeated measures DI models, we have allowed the
 value of theta to vary across ecosystem functions, which in turn allows
 the change in fixed effects structures to vary across functions. This is
 not common practice in multivariate regression and so its
 effects/implications will require further study.</p>
-<p>The methodology used in this package involves estimating <span class="math inline">\(\theta\)</span> values separately for each
-ecosystem function, therefore estimates are each unaffected by the
-presence of other functions and values. The use of theta in the
-multivariate space is currently still being researched and so the effect
-of this method is unknown, but was chosen to minimise computational
-intensity.</p>
-<p>As each <span class="math inline">\(\theta\)</span> value is
-optimised for its ecosystem function isolated from other
-functions/values, it can occur that the function will encounter an
-error, most commonly a singular fit, when trying to model all functions
-together. In this event, the function will print the estimated <span class="math inline">\(\theta\)</span> values and it is recommended that
-they be slightly altered and passed through the function manually by the
-user rather than using <span class="R">‘estimate_theta’</span>. It is
-also possible that the fixed effects structure, e.g. interaction
-structure choice or extra fixed effects added, may need to be changed as
-opposed to theta, therefore we recommend setting <span class="R">theta =
-1</span> to select an appropriate fixed effect structure first before
-estimating theta (Vishwakarma <em>et al.</em>, 2023).</p>
-<p>In the event that a user wishes to estimate a theta value for
-multiple ecosystem functions simultaneously, the code below can be
-used.</p>
-<div class="sourceCode" id="cb5"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb5-1"><a href="#cb5-1" tabindex="-1"></a>f <span class="ot">&lt;-</span> <span class="cf">function</span>(theta_val) </span>
-<span id="cb5-2"><a href="#cb5-2" tabindex="-1"></a>{</span>
-<span id="cb5-3"><a href="#cb5-3" tabindex="-1"></a>  fit <span class="ot">&lt;-</span> <span class="fu">DImulti</span>(<span class="at">prop =</span> <span class="dv">2</span><span class="sc">:</span><span class="dv">5</span>, <span class="at">y =</span> <span class="dv">6</span><span class="sc">:</span><span class="dv">8</span>, <span class="at">eco_func =</span> <span class="fu">c</span>(<span class="st">&quot;na&quot;</span>, <span class="st">&quot;un&quot;</span>), <span class="at">time =</span> <span class="fu">c</span>(<span class="st">&quot;time&quot;</span>, <span class="st">&quot;ar1&quot;</span>),</span>
-<span id="cb5-4"><a href="#cb5-4" tabindex="-1"></a>                 <span class="at">unit_IDs =</span> <span class="dv">1</span>, <span class="at">theta =</span> theta_val, <span class="at">DImodel =</span> <span class="st">&quot;FULL&quot;</span>, <span class="at">method =</span> <span class="st">&quot;ML&quot;</span>,</span>
-<span id="cb5-5"><a href="#cb5-5" tabindex="-1"></a>                 <span class="at">data =</span> simMVRM)</span>
-<span id="cb5-6"><a href="#cb5-6" tabindex="-1"></a>  </span>
-<span id="cb5-7"><a href="#cb5-7" tabindex="-1"></a>    <span class="fu">return</span>(<span class="sc">-</span><span class="fu">as.numeric</span>(<span class="fu">logLik</span>(fit)))</span>
-<span id="cb5-8"><a href="#cb5-8" tabindex="-1"></a>}</span>
-<span id="cb5-9"><a href="#cb5-9" tabindex="-1"></a>    </span>
-<span id="cb5-10"><a href="#cb5-10" tabindex="-1"></a><span class="fu">optim</span>(<span class="fu">c</span>(<span class="dv">1</span>,<span class="dv">1</span>,<span class="dv">1</span>), f, <span class="at">hessian =</span> <span class="cn">FALSE</span>, <span class="at">lower =</span> <span class="fu">c</span>(.<span class="dv">1</span>,.<span class="dv">1</span>,.<span class="dv">1</span>), <span class="at">upper =</span> <span class="fu">c</span>(<span class="fl">1.5</span>,<span class="fl">1.5</span>,<span class="fl">1.5</span>),</span>
-<span id="cb5-11"><a href="#cb5-11" tabindex="-1"></a>      <span class="at">method =</span> <span class="st">&quot;L-BFGS-B&quot;</span>)</span></code></pre></div>
-<p>We create a function to fit multivariate repeated measures DI models,
-wrapping <span class="R">DImulti()</span>, which accepts a vector of
-theta values, one per ecosystem function, and returns the negative log
-likelihood of the produced model. We then use <span class="R">optim()</span> to minimise the returned value from this
-function over the space of the allowable values of theta.</p>
 <p>The methodology used in this R package may change in future updates
 to align with research findings on the topic.</p>
 <h2>

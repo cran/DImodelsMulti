@@ -135,19 +135,6 @@ model1 <- DImulti(prop = 2:5, y = "Y", eco_func = c("Var", "UN"), unit_IDs = 1, 
                   FG = c("Grass", "Grass", "Leg", "Leg"), DImodel = "FG", extra_fixed = ~Density, 
                   method = "ML", theta = 1)
 
-## ----singular_dataBEL, eval = TRUE, error = TRUE------------------------------
-DImulti(prop = 2:5, y = "Y", eco_func = c("Var", "UN"), unit_IDs = 1, data = dataBEL, 
-        FG = c("Grass", "Grass", "Leg", "Leg"), DImodel = "FG", extra_fixed = ~Density, 
-        method = "ML", estimate_theta = TRUE)
-
-## ----singular_dataBEL_theta, eval = TRUE--------------------------------------
-model2 <- DImulti(prop = 2:5, y = "Y", eco_func = c("Var", "UN"), unit_IDs = 1, data = dataBEL,
-                  FG = c("Grass", "Grass", "Leg", "Leg"), DImodel = "FG", extra_fixed = ~Density,
-                  method = "ML", theta = c(0.01, 0.1, 0.01))
-
-## ----singular_dataBEL_compare, eval = TRUE------------------------------------
-AICc(model1); AICc(model2)
-
 ## ----comparison_dataBEL, eval = TRUE------------------------------------------
 model1 <- DImulti(prop = 2:5, y = "Y", eco_func = c("Var", "UN"), unit_IDs = 1, data = dataBEL,
                   FG = c("Grass", "Grass", "Leg", "Leg"), DImodel = "FG", 
