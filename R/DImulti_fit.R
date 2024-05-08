@@ -906,7 +906,7 @@ DImulti <- function(y, eco_func = c("NA", "NA"), time = c("NA", "NA"), unit_IDs,
     {
       if(!MVflag) #single value
       {
-        tempModel <- suppressMessages(DImodels::DI(y = Yvalue, prop = prop, FG = FG, DImodel = DImodel, extra_formula = extraFixed, data = data,
+        tempModel <- suppressMessages(DImodels::DI(y = Yvalue, prop = prop, FG = FG, DImodel = DImodel, extra_formula = extra_fixed, data = data,
                                   estimate_theta = TRUE))
 
         theta <- tempModel$coefficients[["theta"]]
@@ -1344,6 +1344,18 @@ DImulti <- function(y, eco_func = c("NA", "NA"), time = c("NA", "NA"), unit_IDs,
 estimate_theta <- function(y, eco_func, time, unit_IDs,
                            prop, data, DImodel, FG, ID, extra_fixed)
 {
+  if(toupper(eco_func[1]) != "NA")
+  {
+    nFunc <- length(unique(data[, eco_func[1]]))
+  }
+  else if(length(y) > 1)
+  {
+    nFunc <- length(y)
+  }
+  else #repeated measures
+  {
+    nFunc <- 1
+  }
 
   theta_Est <- function(thetaVal)
   {
@@ -1355,8 +1367,8 @@ estimate_theta <- function(y, eco_func, time, unit_IDs,
     return(-as.numeric(stats::logLik(fit)))
   }
 
-  thetaVals <- stats::optim(c(1, 1, 1), theta_Est, hessian = FALSE,
-                            lower = c(0.01, 0.01, 0.01), upper = c(1.5, 1.5, 1.5),
+  thetaVals <- stats::optim(rep(1, times = nFunc), theta_Est, hessian = FALSE,
+                            lower = rep(0.01, times = nFunc), upper = rep(1.5, times = nFunc),
                             method = "L-BFGS-B")$par
 
   return(thetaVals)

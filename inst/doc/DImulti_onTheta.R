@@ -39,3 +39,13 @@ library(DImodels)
 #  AICc(DImodel)
 #  AICc(DImodel_theta)
 
+## ----testSep_theta, eval = FALSE----------------------------------------------
+#  AICc(DImodel)
+#  AICc(DImodel_thetaFunc1)
+#  
+#  AICc(DImodel)
+#  AICc(DImodel_thetaFunc2)
+#  
+#  AICc(DImodel)
+#  AICc(DImodel_thetaFunc3)
+

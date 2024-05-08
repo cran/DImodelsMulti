@@ -419,9 +419,21 @@ function over the space of the allowable values of theta (0.1 to
 then be compared to a model with the same fixed effects structure using
 <span class="math inline">\(\theta = 1\)</span> using information
 criteria (AIC, BIC, AICc, BICc) to test the significance of the
-estimated values.</p>
+estimated values. This may be done all at once, as below:</p>
 <div class="sourceCode" id="cb4"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb4-1"><a href="#cb4-1" tabindex="-1"></a><span class="fu">AICc</span>(DImodel)</span>
 <span id="cb4-2"><a href="#cb4-2" tabindex="-1"></a><span class="fu">AICc</span>(DImodel_theta)</span></code></pre></div>
+<p>Or each value of theta should be tested individually while the others
+are held constant at a value of 1.</p>
+<div class="sourceCode" id="cb5"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb5-1"><a href="#cb5-1" tabindex="-1"></a><span class="fu">AICc</span>(DImodel)</span>
+<span id="cb5-2"><a href="#cb5-2" tabindex="-1"></a><span class="fu">AICc</span>(DImodel_thetaFunc1)</span>
+<span id="cb5-3"><a href="#cb5-3" tabindex="-1"></a></span>
+<span id="cb5-4"><a href="#cb5-4" tabindex="-1"></a><span class="fu">AICc</span>(DImodel)</span>
+<span id="cb5-5"><a href="#cb5-5" tabindex="-1"></a><span class="fu">AICc</span>(DImodel_thetaFunc2)</span>
+<span id="cb5-6"><a href="#cb5-6" tabindex="-1"></a></span>
+<span id="cb5-7"><a href="#cb5-7" tabindex="-1"></a><span class="fu">AICc</span>(DImodel)</span>
+<span id="cb5-8"><a href="#cb5-8" tabindex="-1"></a><span class="fu">AICc</span>(DImodel_thetaFunc3)</span></code></pre></div>
+<p>The best method for estimating and testing theta values has not yet
+been thoroughly tested.</p>
 <p>In the event that the preferred model has an estimated value of theta
 that differs from 1 but causes fitting issues, e.g., predictions are
 unrealistic, either in the model used for estimation or a final selected

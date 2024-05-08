@@ -1,4 +1,4 @@
-bf4fbb8a9a28b7642584f37869e7baa9 *DESCRIPTION
+72cc57bd332119b9e1d2d25988b3de03 *DESCRIPTION
 df4f20f7d43c09306b0e1d2c6daedcbd *NAMESPACE
 7c927b3b63d045e498de9be27dd1a593 *R/DImodelsMulti_HelpFile.R
 d41d8cd98f00b204e9800998ecf8427e *R/DImulti_Compos.R
@@ -7,7 +7,7 @@ d41d8cd98f00b204e9800998ecf8427e *R/DImulti_Compos.R
 d41d8cd98f00b204e9800998ecf8427e *R/DImulti_MFIndex.R
 37f5b974d8c29bd1bcf2569d1d4b059c *R/DImulti_classMethods.R
 d41d8cd98f00b204e9800998ecf8427e *R/DImulti_compare.R
-a8c5445ed488059d10c21b72b1f66cc3 *R/DImulti_fit.R
+4e58fa582b5ad3a067cc7fc5bcb465b1 *R/DImulti_fit.R
 2440c4db7612647685c178f929bcc263 *R/DImulti_fittingFuncs.R
 2b79ab8be6181f6a353f4e9f8f45d6a8 *R/DImulti_predict.R
 0866c4b67a258daf5a6f2a7bfd1a7d60 *R/DImulti_simulateData.R
@@ -21,9 +21,9 @@ a8c5445ed488059d10c21b72b1f66cc3 *R/DImulti_fit.R
 b150227f7de64dd7825c17a5bd42f339 *inst/doc/DImulti_commonErrors.R
 4513566562ba1a977814e0072930c9e3 *inst/doc/DImulti_commonErrors.Rmd
 8d3bc32e7354a89b93bc623126132a50 *inst/doc/DImulti_commonErrors.html
-a986d7f4a84efb3aca0b60828cdde894 *inst/doc/DImulti_onTheta.R
-8d3559be81dfccc2812035197c7ae40a *inst/doc/DImulti_onTheta.Rmd
-7edd80b1b64c7e31e424f86dcea919c6 *inst/doc/DImulti_onTheta.html
+b9fb84673cf9091dc4103b0a7cd4f30f *inst/doc/DImulti_onTheta.R
+a0a5ba37799f61e4f5a88bc684d76202 *inst/doc/DImulti_onTheta.Rmd
+f5221ba3d34222803f85eb4523723ae4 *inst/doc/DImulti_onTheta.html
 2f6fdfe9d62514609b0e16403e4832a9 *inst/doc/DImulti_prediction.R
 53bca17f7c21aa03d881472993d128a5 *inst/doc/DImulti_prediction.Rmd
 0bf6f2b9fad56af080f16465cbe3fa62 *inst/doc/DImulti_prediction.html
@@ -50,7 +50,7 @@ e0aae9e8caf53fdd871147f4ffe94ee4 *man/simRM.Rd
 18304bbbf8b6c1a51759cb6d05a8a796 *tests/testthat/test-DImulti_fit.R
 d19c0f5b92ef5d3b4365e9f94f3bf770 *tests/testthat/test-DImulti_predict.R
 4513566562ba1a977814e0072930c9e3 *vignettes/DImulti_commonErrors.Rmd
-8d3559be81dfccc2812035197c7ae40a *vignettes/DImulti_onTheta.Rmd
+a0a5ba37799f61e4f5a88bc684d76202 *vignettes/DImulti_onTheta.Rmd
 53bca17f7c21aa03d881472993d128a5 *vignettes/DImulti_prediction.Rmd
 916ed43e66202a26b29b3080656100c3 *vignettes/DImulti_workflow.Rmd
 3c89acdd7312cf7e715d29ed676af631 *vignettes/Hierarchy.png

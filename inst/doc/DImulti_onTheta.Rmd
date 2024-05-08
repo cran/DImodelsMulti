@@ -101,12 +101,27 @@ DI_data(..., theta = 1.2, what = "FULL")
 
 When theta is estimated, the process is a bit more involved. We create a function to fit multivariate repeated measures DI models, wrapping <span class="R">DImulti()</span>, which accepts a vector of theta values, one per ecosystem function, and returns the negative log likelihood of the produced model. We then use <span class="R">optim()</span> to minimise the returned value from this function over the space of the allowable values of theta (0.1 to 1.5). 
 
-After fitting a model where theta is estimated. This model should then be compared to a model with the same fixed effects structure using $\theta = 1$ using information criteria (AIC, BIC, AICc, BICc) to test the significance of the estimated values.
+After fitting a model where theta is estimated. This model should then be compared to a model with the same fixed effects structure using $\theta = 1$ using information criteria (AIC, BIC, AICc, BICc) to test the significance of the estimated values. This may be done all at once, as below:
 
 ```{r test_theta, eval = FALSE}
 AICc(DImodel)
 AICc(DImodel_theta)
 ```
+
+Or each value of theta should be tested individually while the others are held constant at a value of 1.
+
+```{r testSep_theta, eval = FALSE}
+AICc(DImodel)
+AICc(DImodel_thetaFunc1)
+
+AICc(DImodel)
+AICc(DImodel_thetaFunc2)
+
+AICc(DImodel)
+AICc(DImodel_thetaFunc3)
+```
+
+The best method for estimating and testing theta values has not yet been thoroughly tested. 
 
 In the event that the preferred model has an estimated value of theta that differs from 1 but causes fitting issues, e.g., predictions are unrealistic, either in the model used for estimation or a final selected model, set the theta value equal to 1 and continue/redo the analysis.
 
