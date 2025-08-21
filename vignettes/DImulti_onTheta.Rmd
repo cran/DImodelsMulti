@@ -70,7 +70,7 @@ The value of the nonlinear parameter $\theta$ is allowed to vary between ecosyst
 turn allowing the fixed effect structure to change across functions, in recognition that the nature of the species interactions could change between ecosystem functions.
 
 
-![](Theta.png){width=100%}
+![A figure showing how the DI model fits to the data with varying values of theta](Theta.png){width=100%}
 Image Credit: Connolly *et al.* 2013
 
 
@@ -127,7 +127,7 @@ In the event that the preferred model has an estimated value of theta that diffe
 
 <h2>Implications of this methodology</h2>
 
-The methodology used in this package allows a user to estimate the value of theta for each ecosystem function in the dataset simultaneously using log-likelihood as a measure of model fit quality.
+The methodology used in this package allows a user to estimate the value of theta for each ecosystem function in the dataset one-by-one (single), simultaneously (joint) or ignoring response correlations (univariate) using log-likelihood as a measure of model fit quality.
 
 For multivariate and repeated measures DI models, we have allowed the value of theta to vary across ecosystem functions, which in turn allows the change in fixed effects structures to vary across functions. This is not common practice in multivariate regression and so its effects/implications will require further study.
 

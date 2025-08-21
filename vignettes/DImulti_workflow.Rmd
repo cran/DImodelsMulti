@@ -77,7 +77,7 @@ simMVRM_group
 ```
 
 We can also produce plots to the same effect.
-```{r data_hist, out.width="75%"}
+```{r data_hist, out.width="75%", fig.alt="A histogram of the raw data"}
 hist(simMVRM[which(simMVRM$time == 1), ]$Y1, main = "Y1 at time 1", xlab = "Y1")
 ```
 
@@ -147,7 +147,7 @@ ratio test, through <span class="R">anova()</span>, or information criteria, suc
 <span class="R">AICc()</span> or <span class="R">BICc()</span> should be used in the cased of 
 models with a large number of terms).
 
-![](Hierarchy.png){width=100%}
+![An image from Kirwan et al. 2009 showing the hierarchical order of DI models](Hierarchy.png){width=100%}
 Image Credit: Kirwan *et al.* 2009
 
 We choose to compare these models using a likelihood ratio test, where the null hypothesis states
@@ -300,11 +300,11 @@ nlme::getVarCov(modelFinal)
 ```
 
 An example of an interpretation that we can make from these variance covariance matrices, is that 
-the ecosystem functions <span class="R">Y1</span> and <span class="R">Y3</span> are negatively correlated, therefore would likely result in trade-offs when trying to estimated one over the other.
+the ecosystem functions <span class="R">Y1</span> and <span class="R">Y3</span> are negatively correlated, therefore would likely result in trade-offs when trying to maximise one over the other.
 
 
 As multivariate repeated measures DI models can contain a large number of fixed effects, they can be
-difficult to interpret from. Our suggestions to circumvent this issue is to first predict from the 
+difficult to interpret from. Our suggestion to circumvent this issue is to first predict from the 
 model for community designs of interest, using the predict() function, as seen below, see vignette 
 [prediction](DImulti_prediction.html) for further details on this.
 ```{r DImulti_modelFinal_predict}
@@ -320,12 +320,12 @@ to summarise our findings while maintaining the benefits of having modelled each
 separately but simultaneously, alla Suter *et al* 2021. We could also use these predictions to 
 generate a plot/graph to display our findings, such as a histogram, grouped bar chart, or 
 ternary diagram.
-```{r DImulti_modelFinal_grouped, out.width="75%"}
+```{r DImulti_modelFinal_grouped, out.width="75%", fig.alt="An example histogram"}
 ggplot2::ggplot(commPred, ggplot2::aes(fill=Ytype, y=Yvalue, x=plot)) +
   ggplot2::geom_bar(position="dodge", stat="identity")
 ```
 
-A new R package, <span class="R">DImodelsVis</span>, is in development, which will make plotting
+The R package, <span class="R">DImodelsVis</span>, is available on CRAN and makes plotting
 DI models fit using the R packages <span class="R">DImodels</span> or 
 <span class="R">DImodelsMulti</span> a simple process.
 

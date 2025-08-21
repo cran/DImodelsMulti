@@ -340,7 +340,7 @@ As an example, we use the dataset <span class="R">dataSWE</span, which is includ
 <span class="bad">XXDO NOT RUNXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXX</span>
 ```{r singular_dataSWE, eval = TRUE, error = TRUE}
 DImulti(prop = 5:8, y = "YIELD", time = c("YEARN", "CS"), unit_IDs = "PLOT", data = dataSWE, 
-        DImodel = "ID", extra_fixed = ~DENS+TREAT)
+        DImodel = "ID", extra_fixed = ~DENS+TREAT, method = "REML")
 ```
 <span class="bad">XXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXX</span>
 As we include no theta values or interaction terms, and use the simple structure 
@@ -357,7 +357,7 @@ Instead, we change the formatting of our formula, from creating intercepts to cr
 with our ID effects, but not each other.
 ```{r singular_dataSWE_fix, eval = TRUE}
 DImulti(prop = 5:8, y = "YIELD", time = c("YEARN", "CS"), unit_IDs = "PLOT", data = dataSWE, 
-        DImodel = "ID", extra_fixed = ~1:(DENS+TREAT))
+        DImodel = "ID", extra_fixed = ~1:(DENS+TREAT), method = "REML")
 ```
 Which has resolved our issue.
 

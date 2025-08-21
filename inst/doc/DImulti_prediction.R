@@ -1,4 +1,4 @@
-## ---- include = FALSE---------------------------------------------------------
+## ----include = FALSE----------------------------------------------------------
 knitr::opts_chunk$set(
   collapse = TRUE,
   comment = "#>"
@@ -33,7 +33,7 @@ modelFinal <- DImulti(y = c("Y1", "Y2", "Y3"), eco_func = c("NA", "UN"), time = 
 print(modelFinal)
 
 ## ----predict_layout, eval=FALSE-----------------------------------------------
-#  predict.DImulti(object, newdata = NULL, stacked = TRUE, ...)
+# predict.DImulti(object, newdata = NULL, stacked = TRUE, ...)
 
 ## ----predict_default----------------------------------------------------------
 head(predict(modelFinal))

@@ -17,7 +17,7 @@ each plot at a three time points.
     function recording was measured at}
     \item{\code{PLOT}}{a numeric vector indicating the ID of the experimental unit from which the
     observation was recorded}
-    \item{\code{TREAT}}{a vector of factors with three levels, 1, or 2 indicating the treatment
+    \item{\code{TREAT}}{a vector of factors with two levels, 1 or 2, indicating the treatment
     applied to the plot}
     \item{\code{G1}}{a numeric vector ranging from 0 to 1, the proportion of the species G1}
     \item{\code{G2}}{a numeric vector ranging from 0 to 1, the proportion of the species G2}
@@ -28,20 +28,24 @@ each plot at a three time points.
   }
 }
 \details{
-Data comes from a single site from a wider agrosdiversity experiment conducted in Belgium,
-established in 2002. \cr
-The four species used were Lolium perenne (G1), Phleum pratense (G2), Trifolium pratense (L1), and
+Data comes from a single site from a wider agrodiversity experiment conducted in Sweden. \cr
+The four species used were Lolium perenne (G1), Dactylis glomerata (G2), Trifolium pratense (L1), and
 Trifolium repens (L2). There are two recommended functional groupings: grouping grasses (G1, G2)
 and legumes (L1, L2), or grouping fast-establishing species (G1, L1) and temporally persistent
 species (G2, L2). \cr
 One ecosystem function (aboveground biomass (t DM ha-1)) was recorded by summing recordings from
-four harvests over each year, for three year.
+four harvests over each year, for three years. \cr
+The treatment applied varied the quantity of nitrogen applied (core plots with a quantity of 0 units
+while treated plots had 180 units applied).
 }
 \source{
 Kirwan, L., Connolly, J., Brophy, C., Baadshaug, O.H., Belanger, G., Black, A., Carnus, T., Collins,
-R.P., Cop, J., Delgado, I. and De Vliegher, A., 2014. \cr
+R.P., Cop, J., Delgado, I.,  De Vliegher, A., Elgersma A., Frankow-Lindberg, B., Golinski, P.,
+Grieu, P., Gustavsson, A.M., Helgadóttir, Á., Höglind, M., Huguenin-Elie, O., Jørgensen, M.,
+Kadžiulienė, Ž., Lunnan, T., Lüscher, A., Kurki, P., Porqueddu, C., Sebastia, M.-T., Thumm, U.,
+Walmsley, D., and Finn, J., 2014. \cr
 The Agrodiversity Experiment: three years of data from a multisite study in intensively managed
-grasslands.
+grasslands. \cr
 }
 \references{
 Dooley, A., Isbell, F., Kirwan, L., Connolly, J., Finn, J.A. and Brophy, C., 2015. \cr
@@ -49,12 +53,18 @@ Testing the effects of diversity on ecosystem multifunctionality using a multiva
 Ecology Letters, 18(11), pp.1242-1251. \cr
 
 Kirwan, L., Connolly, J., Brophy, C., Baadshaug, O.H., Belanger, G., Black, A., Carnus, T., Collins,
-R.P., Cop, J., Delgado, I. and De Vliegher, A., 2014. \cr
+R.P., Cop, J., Delgado, I.,  De Vliegher, A., Elgersma A., Frankow-Lindberg, B., Golinski, P.,
+Grieu, P., Gustavsson, A.M., Helgadóttir, Á., Höglind, M., Huguenin-Elie, O., Jørgensen, M.,
+Kadžiulienė, Ž., Lunnan, T., Lüscher, A., Kurki, P., Porqueddu, C., Sebastia, M.-T., Thumm, U.,
+Walmsley, D., and Finn, J., 2014. \cr
 The Agrodiversity Experiment: three years of data from a multisite study in intensively managed
 grasslands. \cr
 
 Finn, J.A., Kirwan, L., Connolly, J., Sebastia, M.T., Helgadottir, A., Baadshaug, O.H.,
-Belanger, G., Black, A., Brophy, C., Collins, R.P. and Cop, J., 2013. \cr
+Belanger, G., Black, A., Brophy, C., Collins, R.P., Cop, J., Dalmannsdóttir, S., Delgado, I.,
+Elgersma, A., Fothergill, M., Frankow-Lindberg, B.E., Ghesquiere, A., Golinska, B., Golinski, P.,
+Grieu, P., Gustavsson, A.M., Höglind, M., Huguenin-Elie, O., Jørgensen, M., Kadziuliene, Z.,
+Kurki, P., Llurba, R., Lunnan, T., Porqueddu, C., Suter, M., Thumm, U., and Lüscher, A., 2013. \cr
 Ecosystem function enhanced by combining four functional types of plant species in intensively
 managed grassland mixtures: a 3-year continental-scale field experiment.\cr
 Journal of Applied Ecology, 50(2), pp.365-375 .\cr

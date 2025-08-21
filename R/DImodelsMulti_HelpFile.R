@@ -127,7 +127,7 @@
 #'  them changes by a factor of \eqn{\rho}. \code{\link[nlme]{corAR1}}
 #' }
 #'
-#' @docType package
+#' @aliases DImodelsMulti-package
 #'
 #' @author Laura Byrne [aut, cre], Rishabh Vishwakarma [aut], Rafael de Andrade Moral [aut],
 #' Caroline Brophy [aut] \cr \cr

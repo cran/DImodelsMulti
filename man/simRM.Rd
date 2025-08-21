@@ -7,7 +7,7 @@ The \code{simRM} dataset was simulated from a repeated measures DI model. It con
 comprising of four species that vary in proportions (\code{p1} - \code{p4}). There is one simulated
 response (\code{Y}), taken at three differing time points, recorded in a stacked data format (one
 row per response value). The data was simulated assuming that there were existing covariances
-between the responses, an additive treatment effect, and both species identity and species
+between the responses and both species identity and species
 interaction effects were present.
 }
 \usage{data("simRM")}
@@ -75,7 +75,10 @@ Testing the effects of diversity on ecosystem multifunctionality using a multiva
 Ecology Letters, 18(11), pp.1242-1251. \cr
 
 Finn, J.A., Kirwan, L., Connolly, J., Sebastia, M.T., Helgadottir, A., Baadshaug, O.H.,
-Belanger, G., Black, A., Brophy, C., Collins, R.P. and Cop, J., 2013. \cr
+Belanger, G., Black, A., Brophy, C., Collins, R.P., Cop, J., Dalmannsdóttir, S., Delgado, I.,
+Elgersma, A., Fothergill, M., Frankow-Lindberg, B.E., Ghesquiere, A., Golinska, B., Golinski, P.,
+Grieu, P., Gustavsson, A.M., Höglind, M., Huguenin-Elie, O., Jørgensen, M., Kadziuliene, Z.,
+Kurki, P., Llurba, R., Lunnan, T., Porqueddu, C., Suter, M., Thumm, U., and Lüscher, A., 2013. \cr
 Ecosystem function enhanced by combining four functional types of plant species in intensively
 managed grassland mixtures: a 3-year continental-scale field experiment.\cr
 Journal of Applied Ecology, 50(2), pp.365-375 .\cr
@@ -215,7 +218,7 @@ RMmodel_CS <- DImulti(y = "Y", time = c("time", "CS"), unit_IDs = "plot",
 
 AICc(RMmodel_theta); AICc(RMmodel_CS)
 
-# We see that they are practically identical, but the AR(1) strcuture is preffered.
+# We see that they are practically identical, but the AR(1) strcuture is preferred.
 
 ##################################################################################################
 #

@@ -1,4 +1,4 @@
-## ---- include=FALSE-----------------------------------------------------------
+## ----include=FALSE------------------------------------------------------------
 knitr::opts_chunk$set(
   collapse = TRUE,
   comment = "#>"
@@ -41,7 +41,7 @@ simMVRM_group <-  dplyr::summarise(dplyr::group_by(simMVRM, time),
                                    MFindex = mean(Y1 + Y2 + Y3))
 simMVRM_group
 
-## ----data_hist, out.width="75%"-----------------------------------------------
+## ----data_hist, out.width="75%", fig.alt="A histogram of the raw data"--------
 hist(simMVRM[which(simMVRM$time == 1), ]$Y1, main = "Y1 at time 1", xlab = "Y1")
 
 ## ----DImulti_modelSTR---------------------------------------------------------
@@ -88,13 +88,13 @@ modelADD$coefficients
 anova(modelAV_theta, modelADD)
 
 ## ----DImulti_modelADD_treat, eval=FALSE---------------------------------------
-#  modelAV_treat1 <- DImulti(y = c("Y1", "Y2", "Y3"), eco_func = c("NA", "UN"), time = c("time", "CS"),
-#                      unit_IDs = 1, prop = 2:5, data = simMVRM, DImodel = "ADD", method = "ML",
-#                      theta = thetaVals, extra_fixed = ~treat)
-#  
-#  modelAV_treat2 <- DImulti(y = c("Y1", "Y2", "Y3"), eco_func = c("NA", "UN"), time = c("time", "CS"),
-#                      unit_IDs = 1, prop = 2:5, data = simMVRM, DImodel = "ADD", method = "ML",
-#                      theta = thetaVals, extra_fixed = ~1:treat)
+# modelAV_treat1 <- DImulti(y = c("Y1", "Y2", "Y3"), eco_func = c("NA", "UN"), time = c("time", "CS"),
+#                     unit_IDs = 1, prop = 2:5, data = simMVRM, DImodel = "ADD", method = "ML",
+#                     theta = thetaVals, extra_fixed = ~treat)
+# 
+# modelAV_treat2 <- DImulti(y = c("Y1", "Y2", "Y3"), eco_func = c("NA", "UN"), time = c("time", "CS"),
+#                     unit_IDs = 1, prop = 2:5, data = simMVRM, DImodel = "ADD", method = "ML",
+#                     theta = thetaVals, extra_fixed = ~1:treat)
 
 ## ----DImulti_modelAV_ID-------------------------------------------------------
 modelAV_ID <- DImulti(y = c("Y1", "Y2", "Y3"), eco_func = c("NA", "UN"), time = c("time", "CS"),
@@ -115,9 +115,9 @@ summary(modelFinal)
 summary(modelFinal)$tTable
 
 ## ----DImulti_modelFinal_varCovs, eval=FALSE-----------------------------------
-#  nlme::getVarCov(modelFinal)
-#  
-#  modelFinal$vcov
+# nlme::getVarCov(modelFinal)
+# 
+# modelFinal$vcov
 
 ## ----DImulti_modelFinal_getVarCov, echo=FALSE---------------------------------
 nlme::getVarCov(modelFinal)
@@ -130,7 +130,7 @@ print(comms)
 commPred <- predict(modelFinal, newdata = comms)
 commPred
 
-## ----DImulti_modelFinal_grouped, out.width="75%"------------------------------
+## ----DImulti_modelFinal_grouped, out.width="75%", fig.alt="An example histogram"----
 ggplot2::ggplot(commPred, ggplot2::aes(fill=Ytype, y=Yvalue, x=plot)) +
   ggplot2::geom_bar(position="dodge", stat="identity")
 

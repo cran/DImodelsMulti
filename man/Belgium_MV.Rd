@@ -1,25 +1,25 @@
-\name{dataBEL}
-\alias{dataBEL}
+\name{Belgium_MV}
+\alias{Belgium_MV}
 \docType{data}
 \title{
-The Belgium dataset
-}
+The multivariate Belgium dataset}
 \description{
 Single site dataset containing thirty experimental units (plots), with four species seeded at two density levels, representing fifteen communities. Three ecosystem function responses are recorded
-for each plot at a single time point. Data is in a stacked format.
+for each plot in a single year. The responses have been linearly transformed to lie on the same scale. Data is in a stacked format.
 }
-\usage{data("dataBEL")}
+\usage{data("Belgium_MV")}
 \format{
-  A data frame with 90 observations on the following 9 variables.
+  A data frame with 150 observations on the following 9 variables.
   \describe{
-    \item{\code{Plot}}{a numeric vector indicating the ID of the experimental unit from which the observation was recorded}
+    \item{\code{YEARN}}{a numeric vector indicating the time point (year) that the ecosystem
+    function recording was measured at}
+    \item{\code{PLOT}}{a numeric vector indicating the ID of the experimental unit from which the observation was recorded}
     \item{\code{G1}}{a numeric vector ranging from 0 to 1, the proportion of the species G1}
     \item{\code{G2}}{a numeric vector ranging from 0 to 1, the proportion of the species G2}
     \item{\code{L1}}{a numeric vector ranging from 0 to 1, the proportion of the species L1}
     \item{\code{L2}}{a numeric vector ranging from 0 to 1, the proportion of the species L2}
-    \item{\code{Density}}{a vector of factors with two levels, -1 or 1, representing the seeding density of the plot}
+    \item{\code{DENS}}{a vector of factors with two levels, -1 or 1, representing the seeding density of the plot}
     \item{\code{Var}}{a character vector indicating the ecosystem function recorded}
-    \item{\code{VarNum}}{a vector of factors with three levels, 1, 2, or 3 indicating the ecosystem function recorded}
     \item{\code{Y}}{a numeric vector indicating the value of the ecosystem function recorded}
   }
 }
@@ -30,10 +30,14 @@ The four species used were Lolium perenne (G1), Phleum pratense (G2), Trifolium 
 Trifolium repens (L2). There are two recommended functional groupings: grouping grasses (G1, G2) and
 legumes (L1, L2), or grouping fast-establishing species (G1, L1) and temporally persistent species
 (G2, L2). \cr
-Three ecosystem functions were recorded by summing recordings from four harvests over the first year
+Three ecosystem functions were recorded by summing recordings from multiple harvests over the years of
 of the experiment: (1) aboveground biomass of sown species (Sown) (t DM ha-1), (2) aboveground
 biomass of weed species (Weed) (t DM ha-1) and (3) the total annual yield of nitrogen in harvested
-aboveground biomass (N) (t DM ha-1).
+aboveground biomass (N) (t DM ha-1). A linear transformation on the response was applied to the
+value 'Y', where they now represent a percentage of the top 10\% of recorded values for
+each function, i.e., each response was multiplied by 100, then divided by the mean of the top three
+readings. \cr
+This dataset was extracted from the dataset 'Belgium'.
 }
 \source{
 Dooley, A., Isbell, F., Kirwan, L., Connolly, J., Finn, J.A. and Brophy, C., 2015. \cr
@@ -77,75 +81,46 @@ to ecosystem function. \cr
 Ecology, 90(8), pp.2032-2038. \cr
 }
 \examples{
-####################################################################################################
-####################################################################################################
-\dontshow{
-## Set up for R markdown for crayon and cli output if user has packages installed
+#How to extra and transform the data from the 'Belgium' dataset
 
-if(requireNamespace("fansi", quietly = TRUE) &
-  requireNamespace("crayon", quietly = TRUE) &
-  requireNamespace("cli", quietly = TRUE))
-{
-  options(crayon.enabled = TRUE)
-  ansi_aware_handler <- function(x, options)
-  {
-    paste0(
-      "<pre class=\"r-output\"><code>",
-      fansi::sgr_to_html(x = x, warn = FALSE, term.cap = "256"),
-      "</code></pre>"
-    )
-  }
-  old_hooks <- fansi::set_knit_hooks(knitr::knit_hooks,
-                                   which = c("output", "message", "error", "warning"))
-  knitr::knit_hooks$set(
-    output = ansi_aware_handler,
-    message = ansi_aware_handler,
-    warning = ansi_aware_handler,
-    error = ansi_aware_handler
-  )
-}
-}
-## Modelling Example
+## Libraries ################################################
+library(reshape2)
+library(dplyr)
+library(DImodelsMulti)
+#############################################################
+## Read in data##################################
+data("Belgium")
 
-# For a more thorough example of the workflow of this package, please see vignette
-# DImulti_workflow using the following code:
+Belgium_MV <- Belgium[which(Belgium$YEARN == 3), ]
 
-# vignette("DImulti_workflow")
+#Top 3 values for each ecosystem function
+top <- Belgium_MV \%>\%
+  arrange(desc(Y)) \%>\%
+  group_by(Var) \%>\%
+  slice(1:3)
 
-#
-# In this example, we repeat the analysis in Dooley et al. 2015.
+#Divide by average of top values
+top <- aggregate(Y ~ Var, data = top, FUN = "mean")
+Belgium_MV$Y <- 100*Belgium_MV$Y
 
-head(dataBEL)
+#Sown
+condition <- which(Belgium_MV$Var == "Sown")
+Belgium_MV$Y[condition] <- Belgium_MV$Y[condition] /
+  top[1, "Y"]
 
-# We begin with the main function DImulti(), passing the initial species proportions column names
-# through 'prop' and the response value column name through 'y'.
-# As the data is in a long or stacked format, we specify the ecosystem function type through the
-# first index of the 'eco_func' parameter, along with specifying that we want an unstructured
-# Sigma for these response types.
-# The experimental unit ID is stored in the column "Plot" and so we pass this to 'unit_IDs'.
-# Rather than estimating the nonlinear parameter theta, we opt to provide a value for each
-# ecosystem function type through the parameter 'theta', which will be applied to the
-# interaction terms as a power. In this case, we use functional group (FG) interactions, which
-# requires an additional argument FG to be provided, specifying which group each species present
-# in 'prop' belongs to. In this case, we group the grasses and the legumes.
-# We include the treatment Density as an additional fixed effect.
-# We opt to use the REML estimation method as we will not be doing any model comparisons.
-# Finally, we specify the data object, dataBEL, through 'data'.
+#N
+condition <- which(Belgium_MV$Var == "N")
+Belgium_MV$Y[condition] <- Belgium_MV$Y[condition] /
+  top[2, "Y"]
 
-belModel <- DImulti(prop = c("G1", "G2", "L1", "L2"), y = "Y", eco_func = c("Var", "un"),
-                     unit_IDs = "Plot", theta = c(0.5, 1, 1.2), DImodel = "FG",
-                     FG = c("Grass", "Grass", "Legume", "Legume"), extra_fixed = ~ Density,
-                     method = "REML", data = dataBEL)
+#Weed
+condition <- which(Belgium_MV$Var == "Weed")
+Belgium_MV$Y[condition] <- Belgium_MV$Y[condition] /
+  top[3, "Y"]
 
-# We can now print the output from our model, stored in belModel with class DImulti.
 
-print(belModel)
-
-# We can also retrieve the variance covariance matrix information from this object.
-
-summary(belModel$corr[[1]])
-nlme::getVarCov(belModel)
-
+Belgium_MV
 
 }
+
 \keyword{datasets}

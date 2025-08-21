@@ -60,7 +60,7 @@
 #' and species 2 and 4 are grouped together: ID could be \code{ID = c("ID1", "ID2", "ID1", "ID2")},
 #' where "ID1" and "ID2" are the names of the ID groups. This changes the identity component of the
 #' model from \code{'beta_1p_1 + beta_2p_2 + beta_3p_3 + beta_4p_4'} to \code{'beta_a(p_1 + p_3) +
-#' beta_b(p_2 + p_4)'}. This grouping does not affect the interaction terms
+#' beta_b(p_2 + p_4)'}. This grouping does not affect the interaction terms.
 #'
 #' @param extra_fixed A formula expression for any additional fixed effect terms. For example,
 #' \code{extra_fixed = ~ Treatment} or \code{extra_fixed = ~ Treatment + Density}. Interactions
@@ -82,12 +82,18 @@
 #' vector of positive non-zero numerical values indicating the value for the non-linear parameter
 #' of the model for each ecosystem function (in alphabetical order, use \code{sort()} to find this)
 #' present in the dataset, changing the fixed effects across functions, or a single value to be used
-#' for all. For example, \code{theta = 0.5} or \code{theta = c(1, 0.5, 1)}
+#' for all. For example, \code{theta = 0.5} or \code{theta = c(1, 0.5, 1)}.
 #'
 #' @param method The string \code{"REML"} or \code{"ML"}, referring to the estimation method to be
-#' used. Defaults to "REML", which is suitable for model comparisons only if the fixed effects are
+#' used. "REML" is suitable for model comparisons only if the fixed effects are
 #' held constant but provides unbiased estimates. If fixed effects are going to be tested between
-#' models, use "ML" for comparisons and then refit the chosen model using "REML"
+#' models, use "ML" for comparisons and then refit the chosen model using "REML".
+#'
+#' @param method_theta The string \code{"single"}, \code{"joint"}, or \code{"univariate"}, referring
+#' to the profiling method to be used. This refers to whether each theta value in a multivariate model
+#' is profiled separately (over a line), all at once (over a surface), or using a series of univariate
+#' DI models. Defaults to "univariate", which has been currently found to be the more
+#' efficient/parsimonious method via simulation study.
 #'
 #' @return \code{DImulti} - a custom class object containing the gls model fit with additional DI
 #' model attributes
@@ -210,7 +216,7 @@
 #'  them changes by a factor of \eqn{\rho}. \code{\link[nlme]{corAR1}}
 #' }
 #'
-#' @docType package
+#'
 #'
 #' @author Laura Byrne [aut, cre], Rishabh Vishwakarma [aut], Rafael de Andrade Moral [aut],
 #' Caroline Brophy [aut] \cr
@@ -482,7 +488,8 @@
 
 DImulti <- function(y, eco_func = c("NA", "NA"), time = c("NA", "NA"), unit_IDs,
                     prop, data, DImodel, FG = NULL, ID = NULL, extra_fixed = NULL,
-                    estimate_theta = FALSE, theta = 1, method = "REML")
+                    estimate_theta = FALSE, theta = 1,
+                    method, method_theta = "univariate")
 {
 
   ##Change Snake to Camel Case to match my coding style ###################################################################################################################################
@@ -490,6 +497,7 @@ DImulti <- function(y, eco_func = c("NA", "NA"), time = c("NA", "NA"), unit_IDs,
   ecoFunc <- eco_func
   extraFixed <- extra_fixed
   estimateTheta <- estimate_theta
+  methodTheta <- tolower(method_theta)
 
   #########################################################################################################################################################################################
 
@@ -608,7 +616,7 @@ DImulti <- function(y, eco_func = c("NA", "NA"), time = c("NA", "NA"), unit_IDs,
   if(!is.null(extraFixed) & plyr::is.formula(extraFixed))
   {
     #change to string for concatenation
-    extraFixed <- trimws(substring(deparse(extraFixed), 2))
+    extraFixed <- paste0(trimws(substring(deparse(extraFixed), 2)), collapse = "")
 
     if(substring(extraFixed, 1, 1) == "1")
     {
@@ -720,7 +728,7 @@ DImulti <- function(y, eco_func = c("NA", "NA"), time = c("NA", "NA"), unit_IDs,
   ##DImodel
   if(length(DImodel) != 1)
   {
-    stop("You must enter a single model type through the parameter 'DImodel")
+    stop("You must enter a single model type through the parameter 'DImodel'")
   }
   if(!(DImodel %in% c("STR", "ID", "FULL", "E", "AV", "ADD", "FG")))
   {
@@ -752,9 +760,20 @@ DImulti <- function(y, eco_func = c("NA", "NA"), time = c("NA", "NA"), unit_IDs,
   #####################
 
   ##method
+  if(length(method) != 1)
+  {
+    stop("You must enter a single model type through the parameter 'method'")
+  }
   if(method != "REML" && method != "ML")
   {
     stop("You must either enter \"REML\" or \"ML\" as a string for the parameter 'method'")
+  }
+  #####################
+
+  ##method_theta
+  if(methodTheta != "single" && methodTheta != "joint" && methodTheta != "univariate")
+  {
+    stop("You must either enter \"single\", \"joint\", or \"univariate\" as a string for the parameter 'method_theta'")
   }
   #####################
 
@@ -920,7 +939,8 @@ DImulti <- function(y, eco_func = c("NA", "NA"), time = c("NA", "NA"), unit_IDs,
 
         theta <- estimate_theta(y = Yvalue, eco_func = c(Yfunc, funcCorr), time = time,
                                 unit_IDs = unitIDs, prop = prop, data = data,
-                                DImodel = DImodel, FG = FG, ID = ID, extra_fixed = extra_fixed)
+                                DImodel = DImodel, FG = FG, ID = ID, extra_fixed = extraFixed,
+                                methodTheta = methodTheta)
 
         if(any(theta <= 0.1) | any(theta == 1.5))
         {
@@ -1291,6 +1311,7 @@ DImulti <- function(y, eco_func = c("NA", "NA"), time = c("NA", "NA"), unit_IDs,
 
   ##Return Models##########################################################################################################################################################################
 
+  model_gls <- model[[1]]
   model <- model[[1]]
 
   attr(model, "estThetas")     <- estimateTheta #Were the theta values estimated?
@@ -1310,6 +1331,7 @@ DImulti <- function(y, eco_func = c("NA", "NA"), time = c("NA", "NA"), unit_IDs,
   attr(model, "Yvalue")        <- Yvalue #stacked column name indicating EF value
   attr(model, "y")             <- y #wide column names for EFs
   attr(model, "data")          <- data #transformed data used for modelling
+  attr(model, "gls")           <- model_gls #the gls verison of the model
 
   model$original_data <- OGdata
   model$theta <- theta
@@ -1342,7 +1364,8 @@ DImulti <- function(y, eco_func = c("NA", "NA"), time = c("NA", "NA"), unit_IDs,
 #' @noRd
 
 estimate_theta <- function(y, eco_func, time, unit_IDs,
-                           prop, data, DImodel, FG, ID, extra_fixed)
+                           prop, data, DImodel, FG, ID, extra_fixed,
+                           methodTheta)
 {
   if(toupper(eco_func[1]) != "NA")
   {
@@ -1357,19 +1380,88 @@ estimate_theta <- function(y, eco_func, time, unit_IDs,
     nFunc <- 1
   }
 
-  theta_Est <- function(thetaVal)
-  {
-    fit <- DImulti(y = y, eco_func = eco_func, time = time,
-                   unit_IDs = unit_IDs, prop = prop, DImodel = DImodel,
-                   FG = FG, ID = ID, extra_fixed = extra_fixed,
-                   theta = thetaVal, method = "ML", data = data)
 
-    return(-as.numeric(stats::logLik(fit)))
+  if(methodTheta == "joint")
+  {
+    theta_Est <- function(thetaVal)
+    {
+      fit <- DImulti(y = y, eco_func = eco_func, time = time,
+                     unit_IDs = unit_IDs, prop = prop, DImodel = DImodel,
+                     FG = FG, ID = ID, extra_fixed = extra_fixed,
+                     theta = thetaVal, method = "ML", data = data)
+
+      return(-as.numeric(stats::logLik(fit)))
+    }
+
+    thetaVals <- stats::optim(rep(1, times = nFunc), theta_Est, hessian = FALSE,
+                              lower = rep(0.01, times = nFunc), upper = rep(1.5, times = nFunc),
+                              method = "L-BFGS-B")$par
+
+    return(thetaVals)
+  }
+  else if(methodTheta == "single")
+  {
+    theta_Est <- function(thetaVal)
+    {
+      thetaVal_temp <- rep(1, times = nFunc)
+      thetaVal_temp[i] <- thetaVal
+
+      fit <- DImulti(y = y, eco_func = eco_func, time = time,
+                     unit_IDs = unit_IDs, prop = prop, DImodel = DImodel,
+                     FG = FG, ID = ID, extra_fixed = extra_fixed,
+                     theta = thetaVal_temp, method = "ML", data = data)
+
+      return(-as.numeric(stats::logLik(fit)))
+    }
+
+    thetaVals <- c()
+
+    for(i in 1:nFunc)
+    {
+      thetaVals <- c(thetaVals, stats::optim(1, theta_Est, hessian = FALSE,
+                                            lower = 0.01,
+                                            upper = 1.5,
+                                            method = "L-BFGS-B")$par)
+    }
+
+    return(thetaVals)
+  }
+  else #univariate
+  {
+
+    thetaVals <- c()
+
+    tempData <- data
+
+    if(!is.null(extra_fixed))
+    {
+      extra_fixed_temp <- deparse(extra_fixed)
+
+      #Remove any mention of ecosystem functions from extra_fixed
+      extraTemp <- gsub(paste0(eco_func[1], "\\s*[:|\\*]"), "", extra_fixed_temp)
+      extraTemp <- gsub(paste0("[:|\\*]\\s*", eco_func[1]), "", extraTemp)
+      extraTemp <- gsub(paste0("\\+\\s*", eco_func[1]), "", extraTemp)
+
+      extraTemp <- stats::formula(extraTemp)
+    }
+    else
+    {
+      extraTemp <- NULL
+    }
+
+    for(i in 1:nFunc)
+    {
+      tempData <- data[which(data[, eco_func[1]] == unique(data[, eco_func[1]])[i]), ]
+
+
+      tempModel <- suppressMessages(DImodels::DI(y = y, prop = prop, FG = FG, DImodel = DImodel, extra_formula = extraTemp,
+                                                 data = tempData, estimate_theta = TRUE))
+
+      thetaVals <- c(thetaVals, tempModel$coefficients[["theta"]])
+    }
+
+    return(thetaVals)
   }
 
-  thetaVals <- stats::optim(rep(1, times = nFunc), theta_Est, hessian = FALSE,
-                            lower = rep(0.01, times = nFunc), upper = rep(1.5, times = nFunc),
-                            method = "L-BFGS-B")$par
-
-  return(thetaVals)
+  return(NA)
 }

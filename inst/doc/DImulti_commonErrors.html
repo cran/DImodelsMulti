@@ -49,7 +49,7 @@ overflow: visible;
 </style>
 <style type="text/css" data-origin="pandoc">
 pre > code.sourceCode { white-space: pre; position: relative; }
-pre > code.sourceCode > span { display: inline-block; line-height: 1.25; }
+pre > code.sourceCode > span { line-height: 1.25; }
 pre > code.sourceCode > span:empty { height: 1.2em; }
 .sourceCode { overflow: visible; }
 code.sourceCode > span { color: inherit; text-decoration: inherit; }
@@ -60,7 +60,7 @@ div.sourceCode { overflow: auto; }
 }
 @media print {
 pre > code.sourceCode { white-space: pre-wrap; }
-pre > code.sourceCode > span { text-indent: -5em; padding-left: 5em; }
+pre > code.sourceCode > span { display: inline-block; text-indent: -5em; padding-left: 5em; }
 }
 pre.numberSource code
 { counter-reset: source-line 0; }
@@ -641,14 +641,10 @@ which is included in this package.</p>
 <p><span class="bad">XXDO NOT
 RUNXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXX</span></p>
 <div class="sourceCode" id="cb18"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb18-1"><a href="#cb18-1" tabindex="-1"></a><span class="fu">DImulti</span>(<span class="at">prop =</span> <span class="dv">5</span><span class="sc">:</span><span class="dv">8</span>, <span class="at">y =</span> <span class="st">&quot;YIELD&quot;</span>, <span class="at">time =</span> <span class="fu">c</span>(<span class="st">&quot;YEARN&quot;</span>, <span class="st">&quot;CS&quot;</span>), <span class="at">unit_IDs =</span> <span class="st">&quot;PLOT&quot;</span>, <span class="at">data =</span> dataSWE, </span>
-<span id="cb18-2"><a href="#cb18-2" tabindex="-1"></a>        <span class="at">DImodel =</span> <span class="st">&quot;ID&quot;</span>, <span class="at">extra_fixed =</span> <span class="sc">~</span>DENS<span class="sc">+</span>TREAT)</span></code></pre></div>
+<span id="cb18-2"><a href="#cb18-2" tabindex="-1"></a>        <span class="at">DImodel =</span> <span class="st">&quot;ID&quot;</span>, <span class="at">extra_fixed =</span> <span class="sc">~</span>DENS<span class="sc">+</span>TREAT, <span class="at">method =</span> <span class="st">&quot;REML&quot;</span>)</span></code></pre></div>
 <pre class="r-output"><code>#&gt; <span style="font-weight: bold;">Note: 
 #&gt; </span><span style="color: #BB00BB; font-weight: bold;">Method Used =</span><span style="font-weight: bold;"> </span><span style="font-weight: bold; text-decoration: underline;">REML</span><span style="font-weight: bold;"> 
-#&gt; </span><span style="color: #BB00BB; font-weight: bold;">Correlation Structure Used = </span>
-</code></pre>
-<pre class="r-output"><code>#&gt; CS (`?nlme::corCompSymm()`)
-</code></pre>
-<pre class="r-output"><code>#&gt; 
+#&gt; </span><span style="color: #BB00BB; font-weight: bold;">Correlation Structure Used = </span><span style="font-weight: bold; text-decoration: underline;">CS</span>
 #&gt;  <span style="color: #00BB00; font-weight: bold;">Identity Model</span><span style="color: #BB00BB; font-weight: bold;">
 #&gt; Theta value(s) = </span>1
 #&gt; 
@@ -716,14 +712,10 @@ e.g. if <span class="R">DENS = High</span> then we know that <span class="R">TR
 intercepts to crossing the treatment with our ID effects, but not each
 other.</p>
 <div class="sourceCode" id="cb19"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb19-1"><a href="#cb19-1" tabindex="-1"></a><span class="fu">DImulti</span>(<span class="at">prop =</span> <span class="dv">5</span><span class="sc">:</span><span class="dv">8</span>, <span class="at">y =</span> <span class="st">&quot;YIELD&quot;</span>, <span class="at">time =</span> <span class="fu">c</span>(<span class="st">&quot;YEARN&quot;</span>, <span class="st">&quot;CS&quot;</span>), <span class="at">unit_IDs =</span> <span class="st">&quot;PLOT&quot;</span>, <span class="at">data =</span> dataSWE, </span>
-<span id="cb19-2"><a href="#cb19-2" tabindex="-1"></a>        <span class="at">DImodel =</span> <span class="st">&quot;ID&quot;</span>, <span class="at">extra_fixed =</span> <span class="sc">~</span><span class="dv">1</span><span class="sc">:</span>(DENS<span class="sc">+</span>TREAT))</span></code></pre></div>
+<span id="cb19-2"><a href="#cb19-2" tabindex="-1"></a>        <span class="at">DImodel =</span> <span class="st">&quot;ID&quot;</span>, <span class="at">extra_fixed =</span> <span class="sc">~</span><span class="dv">1</span><span class="sc">:</span>(DENS<span class="sc">+</span>TREAT), <span class="at">method =</span> <span class="st">&quot;REML&quot;</span>)</span></code></pre></div>
 <pre class="r-output"><code>#&gt; <span style="font-weight: bold;">Note: 
 #&gt; </span><span style="color: #BB00BB; font-weight: bold;">Method Used =</span><span style="font-weight: bold;"> </span><span style="font-weight: bold; text-decoration: underline;">REML</span><span style="font-weight: bold;"> 
-#&gt; </span><span style="color: #BB00BB; font-weight: bold;">Correlation Structure Used = </span>
-</code></pre>
-<pre class="r-output"><code>#&gt; CS (`?nlme::corCompSymm()`)
-</code></pre>
-<pre class="r-output"><code>#&gt; 
+#&gt; </span><span style="color: #BB00BB; font-weight: bold;">Correlation Structure Used = </span><span style="font-weight: bold; text-decoration: underline;">CS</span>
 #&gt;  <span style="color: #00BB00; font-weight: bold;">Identity Model</span><span style="color: #BB00BB; font-weight: bold;">
 #&gt; Theta value(s) = </span>1
 #&gt; 

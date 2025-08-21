@@ -86,7 +86,10 @@ Testing the effects of diversity on ecosystem multifunctionality using a multiva
 Ecology Letters, 18(11), pp.1242-1251. \cr
 
 Finn, J.A., Kirwan, L., Connolly, J., Sebastia, M.T., Helgadottir, A., Baadshaug, O.H.,
-Belanger, G., Black, A., Brophy, C., Collins, R.P. and Cop, J., 2013. \cr
+Belanger, G., Black, A., Brophy, C., Collins, R.P., Cop, J., Dalmannsdóttir, S., Delgado, I.,
+Elgersma, A., Fothergill, M., Frankow-Lindberg, B.E., Ghesquiere, A., Golinska, B., Golinski, P.,
+Grieu, P., Gustavsson, A.M., Höglind, M., Huguenin-Elie, O., Jørgensen, M., Kadziuliene, Z.,
+Kurki, P., Llurba, R., Lunnan, T., Porqueddu, C., Suter, M., Thumm, U., and Lüscher, A., 2013. \cr
 Ecosystem function enhanced by combining four functional types of plant species in intensively
 managed grassland mixtures: a 3-year continental-scale field experiment.\cr
 Journal of Applied Ecology, 50(2), pp.365-375 .\cr

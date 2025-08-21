@@ -49,7 +49,7 @@ overflow: visible;
 </style>
 <style type="text/css" data-origin="pandoc">
 pre > code.sourceCode { white-space: pre; position: relative; }
-pre > code.sourceCode > span { display: inline-block; line-height: 1.25; }
+pre > code.sourceCode > span { line-height: 1.25; }
 pre > code.sourceCode > span:empty { height: 1.2em; }
 .sourceCode { overflow: visible; }
 code.sourceCode > span { color: inherit; text-decoration: inherit; }
@@ -60,7 +60,7 @@ div.sourceCode { overflow: auto; }
 }
 @media print {
 pre > code.sourceCode { white-space: pre-wrap; }
-pre > code.sourceCode > span { text-indent: -5em; padding-left: 5em; }
+pre > code.sourceCode > span { display: inline-block; text-indent: -5em; padding-left: 5em; }
 }
 pre.numberSource code
 { counter-reset: source-line 0; }
@@ -354,11 +354,7 @@ vignette <a href="DImulti_workflow.html">workflow</a> as an example.</p>
 <span id="cb2-3"><a href="#cb2-3" tabindex="-1"></a><span class="fu">print</span>(modelFinal)</span></code></pre></div>
 <pre class="r-output"><code>#&gt; <span style="font-weight: bold;">Note: 
 #&gt; </span><span style="color: #BB00BB; font-weight: bold;">Method Used =</span><span style="font-weight: bold;"> </span><span style="font-weight: bold; text-decoration: underline;">REML</span><span style="font-weight: bold;"> 
-#&gt; </span><span style="color: #BB00BB; font-weight: bold;">Correlation Structure Used = </span>
-</code></pre>
-<pre class="r-output"><code>#&gt; UN (`?nlme::corSymm()`) @ CS (`?nlme::corCompSymm()`)
-</code></pre>
-<pre class="r-output"><code>#&gt; 
+#&gt; </span><span style="color: #BB00BB; font-weight: bold;">Correlation Structure Used = </span><span style="font-weight: bold; text-decoration: underline;">UN@CS</span>
 #&gt;  <span style="color: #00BB00; font-weight: bold;">Average Term Model</span><span style="color: #BB00BB; font-weight: bold;">
 #&gt; Theta value(s) = </span>1
 #&gt; 
