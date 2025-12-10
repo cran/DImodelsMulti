@@ -33,6 +33,9 @@ For each experimental unit included there must be recordings of either: \cr
 (multivariate repeated measures). \cr
 Ecosystem functions may be stored in a long or wide format while repeated measures must be stored
 in a long format. \cr
+Additionally, by calling the function DImultiApp(), you can interact with the
+provided R Shiny app, which aids in fitting and visualising multivariate or
+repeated measures models through a user-friendly interface. \cr
 
 \strong{Introduction to multivariate & repeated measures Diversity-Interactions models} \cr
 
@@ -374,7 +377,8 @@ SIAM Journal on Numerical Analysis, 10(2), pp.327-344. \cr
 }
 \seealso{
 This package:
-   \code{\link{DImulti}} \cr
+   \code{\link{DImulti}},
+   \code{\link{DImultiApp}} \cr
    Example datasets:
    \code{\link[DImodelsMulti]{dataBEL}},
    \code{\link[DImodelsMulti]{dataSWE}},

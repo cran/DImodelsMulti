@@ -39,6 +39,7 @@ predict.DImulti <- function(object, newdata = NULL, stacked = TRUE, ...)
   {
     objData <- TRUE
     newdata <- attr(object, "data")
+
   }
   else if(attr(object, "MVflag"))
   {
@@ -125,7 +126,6 @@ predict.DImulti <- function(object, newdata = NULL, stacked = TRUE, ...)
     singleRow <- TRUE
     newdata <- rbind(newdata, newdata)
   }
-
 
   missing <- c()
   #Check if all needed props are included
@@ -251,8 +251,6 @@ predict.DImulti <- function(object, newdata = NULL, stacked = TRUE, ...)
   #   print(newdata)
   # }
 
-
-
   #ID grouping
   ID_name_check(ID = attr(object, "IDs"), prop = attr(object, "props"), FG = attr(object, "FGs"))
   grouped_ID <- group_IDs(data = newdata, prop = attr(object, "props"), ID = attr(object, "IDs"))
@@ -315,14 +313,34 @@ predict.DImulti <- function(object, newdata = NULL, stacked = TRUE, ...)
   dataMod <- stats::model.frame(formula = form, data = newdata,
                                 drop.unused.levels = TRUE, xlev = lapply(contr, rownames))
   N <- nrow(dataMod)
+
   if (length(all.vars(form)) > 0)
   {
-    X <- stats::model.matrix(form, dataMod, contr)
-  }
+    tryCatch(
+    {
+      #Try
+      suppressWarnings(X <- stats::model.matrix(form, dataMod, contr))
+    },
+    error = function(cond){
+      message(conditionMessage(cond))
+      stop("If the above message refers to contrasts, please ensure that",
+      " all character columns are converted to factors, with all levels set",
+      " (including those not being predicted from), prior to prediction")
+      NA
+    },
+    warning = function(cond){
+      message(conditionMessage(cond))
+      NA
+    },
+    finally = function(cond){
+      NA
+    }
+  )}
   else
   {
     X <- array(1, c(N, 1), list(row.names(dataMod), "(Intercept)"))
   }
+
   cf <- object$coefficients
   val <- c(X[, names(cf), drop = FALSE] %*% cf)
   lab <- "Predicted values"

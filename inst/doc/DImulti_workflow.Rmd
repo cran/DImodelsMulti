@@ -329,8 +329,7 @@ The R package, <span class="R">DImodelsVis</span>, is available on CRAN and make
 DI models fit using the R packages <span class="R">DImodels</span> or 
 <span class="R">DImodelsMulti</span> a simple process.
 
-
-
+Additionally, by calling the function <span class="R">DImultiApp()</span>, you can interact with the provided R Shiny App, which aids in fitting and visualising multivariate or repeated measures models through a user-friendly interface.
 
 <h2>References</h2>
 
